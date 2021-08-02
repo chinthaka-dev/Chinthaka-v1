@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "394317677096",
+    "project_id": "chinthakabeta",
+    "storage_bucket": "chinthakabeta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394317677096:android:a5d6af0182f4f7fda06b1d",
+        "android_client_info": {
+          "package_name": "com.chinthaka.chinthaka_beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394317677096-e7cagni6v3tcvp1l5ke0ec4mjptbfub9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1FGj-4g8h3Aa2wwNRmcQM3GYKJQ3iZ-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394317677096-e7cagni6v3tcvp1l5ke0ec4mjptbfub9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

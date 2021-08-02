@@ -1,0 +1,18 @@
+package com.chinthaka.chinthaka_beta.data.entities
+
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.IgnoreExtraProperties
+
+@IgnoreExtraProperties
+data class Post(
+    val id: String = "",
+    val authorUId: String = "",
+    @get:Exclude var authorUserName: String = "",
+    @get:Exclude var authorProfilePictureUrl : String = "",
+    val text: String = "",
+    val imageUrl: String = "",
+    val date: Long = 0L,
+    @get:Exclude var isLiked: Boolean = false, // if current user has already liked the current post
+    @get:Exclude var isLiking: Boolean = false, // during Network request, once Like button is pressed
+    var likedBy: List<String> = listOf() // Firebase Charges on Read Operations. So, this list can be huge. Please NOTE this!!!
+)
