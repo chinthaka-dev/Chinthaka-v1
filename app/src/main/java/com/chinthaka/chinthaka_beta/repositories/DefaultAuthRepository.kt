@@ -5,6 +5,7 @@ import com.chinthaka.chinthaka_beta.other.Resource
 import com.chinthaka.chinthaka_beta.other.safeCall
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -37,6 +38,21 @@ class DefaultAuthRepository : AuthRepository {
                 val user = User(userId, userName)
                 users.document(userId).set(user).await()
                 Resource.Success(result)
+            }
+        }
+    }
+
+    override suspend fun addNewUserViaSocialLogin(
+        user: FirebaseUser
+    ): Resource<FirebaseUser> {
+
+        return withContext(Dispatchers.IO){
+            safeCall {
+                val userId = user.uid
+                val displayName = user.displayName
+                val userToBeDocumented = User(userId, displayName!!)
+                users.document(userId).set(userToBeDocumented).await()
+                Resource.Success(user)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.chinthaka.chinthaka_beta.data.pagingsource
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.chinthaka.chinthaka_beta.data.entities.Post
@@ -26,13 +27,13 @@ class FollowPostsPagingSource(
 
             if(firstLoad){
                 follows = db.collection("users")
-                    .document(uid)
-                    .get()
-                    .await()
-                    .toObject(User::class.java)
-                    ?.follows ?: listOf()
+                        .get()
+                        .await()
+                        .toObjects(User::class.java).map { user -> user.userId }
                 firstLoad = false
             }
+
+            Log.i("FOLLOWS", follows.toString())
 
             val chunks = follows.chunked(10)
             val resultList = mutableListOf<Post>()
@@ -68,6 +69,7 @@ class FollowPostsPagingSource(
                 .startAfter(lastDocumentSnapshot)
                 .get()
                 .await()
+
 
             LoadResult.Page(
                 resultList,

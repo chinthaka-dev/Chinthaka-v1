@@ -4,18 +4,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.databinding.ActivityAuthBinding
+import com.chinthaka.chinthaka_beta.other.EventObserver
+import com.chinthaka.chinthaka_beta.ui.auth.AuthViewModel
 import com.chinthaka.chinthaka_beta.ui.main.MainActivity
+import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.tasks.await
+import com.chinthaka.chinthaka_beta.ui.snackbar
 
 @AndroidEntryPoint
 open class AuthActivity : AppCompatActivity() {
 
     private lateinit var activityAuthBinding: ActivityAuthBinding
+
+    private lateinit var viewModel: AuthViewModel
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -28,6 +39,10 @@ open class AuthActivity : AppCompatActivity() {
 
         activityAuthBinding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(activityAuthBinding.root)
+
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+
+        subscribeToObservers()
 
         // Stay Loggedin Functionality
         if(FirebaseAuth.getInstance().currentUser != null){
@@ -46,6 +61,7 @@ open class AuthActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
+            viewModel.addNewUserViaSocialLogin(user)
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)
                 finish()
@@ -88,6 +104,21 @@ open class AuthActivity : AppCompatActivity() {
             .build()
         signInLauncher.launch(signInIntent)
         // [END auth_fui_theme_logo]
+    }
+
+    private fun subscribeToObservers(){
+        viewModel.addNewUserStatus.observe(this, EventObserver(
+            onError = {
+                activityAuthBinding.addNewUserProgressBar.isVisible = false
+//                snackbar(it, rootView)
+            },
+            onLoading = {
+                activityAuthBinding.addNewUserProgressBar.isVisible = true
+            }
+        ){
+            activityAuthBinding.addNewUserProgressBar.isVisible = false
+//            snackbar(getString(R.string.success_registration))
+        })
     }
 
 }

@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/lightBackground"
         android:textSize="16dp"
         />
 

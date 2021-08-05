@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="chinthaka"
         android:textSize="70sp"
-        app:fontFamily="@font/tahoma_bold"
+        app:fontFamily="@font/roboto_bold"
         android:textFontWeight="900"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/tilEmail"

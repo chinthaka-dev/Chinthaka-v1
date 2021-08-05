@@ -5,17 +5,13 @@
         android:title="@string/home"
         android:icon="@drawable/ic_home" />
 
-    <item android:id="@id/createPostFragment"
-        android:title="@string/create"
-        android:icon="@drawable/ic_create" />
-
-    <item android:id="@id/bookmarksFragment"
-        android:title="@string/bookmarks"
-        android:icon="@drawable/ic_bookmark_outline" />
-
 <!--    <item android:id="@id/searchFragment"-->
 <!--        android:title="@string/search"-->
 <!--        android:icon="@drawable/ic_search" />-->
+
+    <item android:id="@id/interestsFragment"
+        android:title="@string/categories"
+        android:icon="@drawable/ic_like_white" />
 
 <!--    <item android:id="@+id/placeholder"-->
 <!--        android:title=""/>-->
@@ -24,8 +20,8 @@
         android:title="@string/profile"
         android:icon="@drawable/ic_person" />
 
-<!--    <item android:id="@id/settingsFragment"-->
-<!--        android:title="@string/settings"-->
-<!--        android:icon="@drawable/ic_settings" />-->
+    <item android:id="@id/settingsFragment"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings" />
 
 </menu>

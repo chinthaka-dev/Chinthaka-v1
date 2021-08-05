@@ -83,8 +83,9 @@ class DefaultMainRepository: MainRepository {
     override suspend fun getPostsForFollows() = withContext(Dispatchers.IO){
         safeCall {
             val userId = FirebaseAuth.getInstance().uid!!
-            val follows = getUser(userId).data!!.follows
-            val allPosts = posts.whereIn("authorUId", follows)
+//            val follows = getUser(userId).data!!.follows
+//            val allPosts = posts.whereIn("authorUId", follows)
+              val allPosts = posts
                 .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()

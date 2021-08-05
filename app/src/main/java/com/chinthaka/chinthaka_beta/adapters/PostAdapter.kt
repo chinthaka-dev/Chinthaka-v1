@@ -27,8 +27,10 @@ class PostAdapter @Inject constructor(
         val tvPostText: TextView = binding.tvPostText
         val tvLikedBy: TextView = binding.tvLikedBy
         val iblike: ImageButton = binding.ibLike
-        val ibComments: ImageButton = binding.ibComments
-        val ibDeletePost: ImageButton = binding.ibDeletePost
+        val ibComments: ImageButton = binding.ibAnswer
+        val ibDeletePost: ImageButton = binding.ibExpandPost
+        val ibViewAnswer: ImageButton = binding.ibViewAnswer
+        val ibShare: ImageButton = binding.ibShare
     }
 
     companion object : DiffUtil.ItemCallback<Post>(){
@@ -62,16 +64,17 @@ class PostAdapter @Inject constructor(
             tvPostAuthor.text = post.authorUserName
             tvPostText.text = post.text
             val likeCount = post.likedBy.size
-            tvLikedBy.text = when{
-                likeCount <= 0 -> "No Likes"
-                likeCount == 1 -> "Liked by 1 person"
-                else -> "Likey by $likeCount people"
-            }
+//            tvLikedBy.text = when{
+//                likeCount <= 0 -> "No Likes"
+//                likeCount == 1 -> "Liked by 1 person"
+//                else -> "Likey by $likeCount people"
+//            }
+            tvLikedBy.text = likeCount.toString()
             val userId = FirebaseAuth.getInstance().uid!!
-            ibDeletePost.isVisible = userId == post.authorUId
+//            ibDeletePost.isVisible = userId == post.authorUId
             iblike.setImageResource(if(post.isLiked){
-                R.drawable.ic_like
-            } else R.drawable.ic_like_white)
+                R.drawable.ic_thumbs_up_filled
+            } else R.drawable.ic_thumbs_up)
 
             tvPostAuthor.setOnClickListener{
                 onUserClickListener?.let { click ->
@@ -103,6 +106,18 @@ class PostAdapter @Inject constructor(
                 }
             }
 
+            ibViewAnswer.setOnClickListener {
+                onViewAnswerClickListener?.let { click ->
+                    click(post, holder.layoutPosition)
+                }
+            }
+
+            ibShare.setOnClickListener {
+                onShareClickListener?.let { click ->
+                    click(post)
+                }
+            }
+
             ibDeletePost.setOnClickListener {
                 onDeletePostClickListener?.let { click ->
                     click(post)
@@ -113,6 +128,8 @@ class PostAdapter @Inject constructor(
     }
 
     private var onLikeClickListener: ((Post, Int) -> Unit)? = null
+    private var onViewAnswerClickListener: ((Post, Int) -> Unit)? = null
+    private var onShareClickListener: ((Post) -> Unit )? = null
     private var onUserClickListener: ((String) -> Unit)? = null
     private var onDeletePostClickListener: ((Post) -> Unit)? = null
     private var onLikedByClickListener: ((Post) -> Unit)? = null
@@ -120,6 +137,14 @@ class PostAdapter @Inject constructor(
 
     fun setOnLikeClickListener(listener: (Post, Int) -> Unit){
         onLikeClickListener = listener
+    }
+
+    fun setOnViewAnswerClickListener(listener: (Post, Int) -> Unit){
+        onViewAnswerClickListener = listener
+    }
+
+    fun setOnShareClickListener(listener:(Post) -> Unit){
+        onShareClickListener = listener
     }
 
     fun setOnUserClickListener(listener: (String) -> Unit){

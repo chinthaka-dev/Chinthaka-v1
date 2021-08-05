@@ -1,10 +1,12 @@
 package com.chinthaka.chinthaka_beta.ui.main.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
+import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.adapters.PostAdapter
 import com.chinthaka.chinthaka_beta.adapters.UserAdapter
@@ -38,6 +40,21 @@ abstract class BasePostFragment(
             curLikedIndex = i
             post.isLiked = !post.isLiked
             basePostViewModel.toggleLikeForPost(post)
+        }
+
+        postAdapter.setOnViewAnswerClickListener { post, i ->
+            findNavController().navigate(
+                R.id.globalActionToViewAnswerDialog,
+                Bundle().apply { putString("postId", post.id) }
+            )
+        }
+
+        postAdapter.setOnShareClickListener { post ->
+            val intent: Intent = Intent(Intent.ACTION_SEND)
+            intent.setType("text/plain")
+            intent.putExtra(Intent.EXTRA_TEXT, "${post.authorUserName} has challenged you to answer the question.")
+            intent.putExtra(Intent.EXTRA_TEXT, "http://play.google.com")
+            startActivity(Intent.createChooser(intent, "Share using"))
         }
 
         postAdapter.setOnDeletePostClickListener { post ->

@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
@@ -29,34 +30,17 @@ class MainActivity: AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
                 as NavHostFragment
 
-//        activityMainBinding.bottomNavigationView.apply {
-//            background = null
+        activityMainBinding.bottomNavigationView.apply {
+            background = null
 //            menu.getItem(2).isVisible = false // Hiding the Placeholder Item
-//            setupWithNavController(navHostFragment.findNavController())
-//        }
+            setupWithNavController(navHostFragment.findNavController())
+        }
 
 //        activityMainBinding.fabNewPost.setOnClickListener{
 //            navHostFragment.findNavController().navigate(
 //                R.id.globalActionToCreatePostFragment
 //            )
 //        }
-
-        activityMainBinding.bottomNavigationView.setOnItemSelectedListener{
-
-            when(it.itemId){
-                R.id.homeFragment -> {
-                    navHostFragment.findNavController().navigate(R.id.globalActionToHomeFragment)
-                }
-                R.id.createPostFragment -> {
-                    navHostFragment.findNavController().navigate(R.id.globalActionToCreatePostFragment)
-                }
-                R.id.bookmarksFragment -> {
-                    navHostFragment.findNavController().navigate(R.id.globalActionToBookmarksFragment)
-                }
-            }
-
-            return@setOnItemSelectedListener true
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

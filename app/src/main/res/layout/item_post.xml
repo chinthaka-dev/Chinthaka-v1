@@ -6,32 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardElevation="3dp">
+    app:cardElevation="10dp"
+    app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="8dp">
 
-        <ImageView
-            android:id="@+id/ivPostImage"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivAuthorProfileImage"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/img_avatar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvPostAuthor"
@@ -41,33 +32,34 @@
             android:text="@string/example_post_username"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ivAuthorProfileImage"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintBottom_toTopOf="@id/tvPostCategory"
             app:layout_constraintStart_toEndOf="@+id/ivAuthorProfileImage"
             app:layout_constraintTop_toTopOf="@+id/ivAuthorProfileImage" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvLikedBy"
-            android:layout_width="match_parent"
+            android:id="@+id/tvPostCategory"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Liked by Philipp and 120 others"
-            android:textFontWeight="800"
-            app:fontFamily="@font/tahoma_bold"
-            app:layout_constraintTop_toBottomOf="@+id/ivAuthorProfileImage"
-            tools:layout_editor_absoluteX="8dp" />
+            android:text="@string/example_category_name"
+            android:textSize="12sp"
+            android:fontFamily="@font/roboto_light"
+            app:layout_constraintBottom_toBottomOf="@+id/ivAuthorProfileImage"
+            app:layout_constraintStart_toEndOf="@+id/ivAuthorProfileImage"
+            app:layout_constraintTop_toBottomOf="@id/tvPostCategory"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+        <ImageButton
+            android:id="@+id/ibExpandPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:background="@android:color/white"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_expand_more"
+            app:layout_constraintBottom_toBottomOf="@+id/ivAuthorProfileImage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvLikedBy" />
+            app:layout_constraintTop_toTopOf="@+id/ivAuthorProfileImage" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvPostText"
@@ -75,41 +67,166 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/example_post_text"
-            app:layout_constraintTop_toBottomOf="@+id/view"
+            android:fontFamily="@font/roboto_light"
+            app:layout_constraintTop_toBottomOf="@id/ivAuthorProfileImage"
             tools:layout_editor_absoluteX="8dp" />
 
-        <ImageButton
-            android:id="@+id/ibLike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+        <ImageView
+            android:id="@+id/ivPostImage"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
             android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_like_white"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPostText" />
+            app:layout_constraintTop_toBottomOf="@id/tvPostText" />
 
-        <ImageButton
-            android:id="@+id/ibComments"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvLikedBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="234"
+            android:textFontWeight="800"
+            android:drawableStart="@drawable/ic_thumbs_up_filled"
+            app:fontFamily="@font/roboto_bold"
+            app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvAnsweredBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="10002"
+            android:textFontWeight="800"
+            android:drawableStart="@drawable/ic_answered_by"
+            app:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLikedBy" />
+
+        <RelativeLayout
+            android:id="@+id/rlLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_comment"
-            app:layout_constraintStart_toEndOf="@+id/ibLike"
-            app:layout_constraintTop_toBottomOf="@+id/tvPostText" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view"
+            app:layout_constraintEnd_toStartOf="@id/rlAnswer"
+            app:layout_constraintHorizontal_chainStyle="spread_inside">
 
-        <ImageButton
-            android:id="@+id/ibDeletePost"
+            <ImageButton
+                android:id="@+id/ibLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_thumbs_up"
+                android:layout_centerInParent="true"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Like"
+                android:layout_below="@id/ibLike"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toBottomOf="@id/view"
+            app:layout_constraintStart_toEndOf="@id/rlLike"
+            app:layout_constraintEnd_toStartOf="@id/rlViewAnswer"
+            app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+            <ImageButton
+                android:id="@+id/ibAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_answer_outline"
+                android:layout_centerInParent="true"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Answer"
+                android:layout_below="@id/ibAnswer"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlViewAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toBottomOf="@id/view"
+            app:layout_constraintStart_toEndOf="@id/rlAnswer"
+            app:layout_constraintEnd_toStartOf="@id/rlShare"
+            app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+            <ImageButton
+                android:id="@+id/ibViewAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_view_answer_outline"
+                android:layout_centerInParent="true"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvViewAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="View Answer"
+                android:layout_below="@id/ibViewAnswer"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_delete_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/ivAuthorProfileImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ivAuthorProfileImage" />
+            app:layout_constraintTop_toBottomOf="@id/view"
+            app:layout_constraintStart_toEndOf="@id/rlViewAnswer"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/ibShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_share_outline"
+                android:layout_centerInParent="true"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Share"
+                android:layout_below="@id/ibShare"/>
+        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

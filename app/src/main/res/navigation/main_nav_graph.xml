@@ -1,42 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/main_nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.HomeFragment"
-        android:label="HomeFragment">
-    </fragment>
+        android:label="HomeFragment" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.ProfileFragment"
         android:label="ProfileFragment" />
-<!--    <fragment-->
-<!--        android:id="@+id/searchFragment"-->
-<!--        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SearchFragment"-->
-<!--        android:label="SearchFragment" />-->
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SearchFragment"
+        android:label="SearchFragment" />
     <fragment
         android:id="@+id/createPostFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.CreatePostFragment"
         android:label="CreatePostFragment" />
-<!--    <fragment-->
-<!--        android:id="@+id/settingsFragment"-->
-<!--        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SettingsFragment"-->
-<!--        android:label="SettingsFragment" />-->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SettingsFragment"
+        android:label="SettingsFragment" />
+
+    <fragment
+        android:id="@+id/interestsFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.InterestsFragment"
+        android:label="InterestsFragment" />
 
     <action
         android:id="@+id/globalActionToOthersProfileFragment"
         app:destination="@id/othersProfileFragment" />
-
-    <fragment
-        android:id="@+id/bookmarksFragment"
-        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.BookmarksFragment"
-        android:label="BookmarksFragment" />
-
-    <action
-        android:id="@+id/globalActionToHomeFragment"
-        app:destination="@id/homeFragment" />
 
     <action
         android:id="@+id/globalActionToCreatePostFragment"
@@ -47,8 +42,8 @@
         app:destination="@id/commentDialog" />
 
     <action
-        android:id="@+id/globalActionToBookmarksFragment"
-        app:destination="@id/bookmarksFragment" />
+        android:id="@+id/globalActionToViewAnswerDialog"
+        app:destination="@id/viewAnswerDialog" />
 
     <fragment
         android:id="@+id/othersProfileFragment"
@@ -62,6 +57,14 @@
         android:id="@+id/commentDialog"
         android:name="com.chinthaka.chinthaka_beta.ui.main.dialogs.CommentDialog"
         android:label="CommentDialog" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/viewAnswerDialog"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.dialogs.ViewAnswerDialog"
+        android:label="ViewAnswerDialog" >
         <argument
             android:name="postId"
             app:argType="string" />
