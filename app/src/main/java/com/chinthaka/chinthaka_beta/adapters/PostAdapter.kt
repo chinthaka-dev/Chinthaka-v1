@@ -26,8 +26,9 @@ class PostAdapter @Inject constructor(
         val tvPostAuthor: TextView = binding.tvPostAuthor
         val tvPostText: TextView = binding.tvPostText
         val tvLikedBy: TextView = binding.tvLikedBy
+        val tvAnsweredBy: TextView = binding.tvAnsweredBy
         val iblike: ImageButton = binding.ibLike
-        val ibComments: ImageButton = binding.ibAnswer
+        val ibAnswer: ImageButton = binding.ibAnswer
         val ibDeletePost: ImageButton = binding.ibExpandPost
         val ibViewAnswer: ImageButton = binding.ibViewAnswer
         val ibShare: ImageButton = binding.ibShare
@@ -64,12 +65,15 @@ class PostAdapter @Inject constructor(
             tvPostAuthor.text = post.authorUserName
             tvPostText.text = post.text
             val likeCount = post.likedBy.size
+            val answeredByCount = post.answeredBy.size
 //            tvLikedBy.text = when{
 //                likeCount <= 0 -> "No Likes"
 //                likeCount == 1 -> "Liked by 1 person"
 //                else -> "Likey by $likeCount people"
 //            }
             tvLikedBy.text = likeCount.toString()
+            tvAnsweredBy.text = answeredByCount.toString()
+//            ibAnswer.isClickable = post.isAnswered
             val userId = FirebaseAuth.getInstance().uid!!
 //            ibDeletePost.isVisible = userId == post.authorUId
             iblike.setImageResource(if(post.isLiked){
@@ -94,17 +98,29 @@ class PostAdapter @Inject constructor(
                 }
             }
 
+            tvAnsweredBy.setOnClickListener {
+                onAnsweredByClickListener?.let { click ->
+                    click(post)
+                }
+            }
+
             iblike.setOnClickListener{
                 onLikeClickListener?.let { click ->
                     if(!post.isLiking) click(post, holder.layoutPosition)
                 }
             }
 
-            ibComments.setOnClickListener {
-                onCommentsClickListener?.let { click ->
-                    click(post)
+            ibAnswer.setOnClickListener {
+                onAnswerClickListener?.let { click ->
+                    if(!post.isAnswering) click(post, holder.layoutPosition)
                 }
             }
+
+//            ibComments.setOnClickListener {
+//                onCommentsClickListener?.let { click ->
+//                    click(post)
+//                }
+//            }
 
             ibViewAnswer.setOnClickListener {
                 onViewAnswerClickListener?.let { click ->
@@ -128,15 +144,21 @@ class PostAdapter @Inject constructor(
     }
 
     private var onLikeClickListener: ((Post, Int) -> Unit)? = null
+    private var onAnswerClickListener: ((Post, Int) -> Unit)? = null
     private var onViewAnswerClickListener: ((Post, Int) -> Unit)? = null
     private var onShareClickListener: ((Post) -> Unit )? = null
     private var onUserClickListener: ((String) -> Unit)? = null
     private var onDeletePostClickListener: ((Post) -> Unit)? = null
     private var onLikedByClickListener: ((Post) -> Unit)? = null
-    private var onCommentsClickListener: ((Post) -> Unit)? = null
+    private var onAnsweredByClickListener: ((Post) -> Unit)? = null
+//    private var onCommentsClickListener: ((Post) -> Unit)? = null
 
     fun setOnLikeClickListener(listener: (Post, Int) -> Unit){
         onLikeClickListener = listener
+    }
+
+    fun setOnAnswerClickListener(listener: (Post, Int) -> Unit){
+        onAnswerClickListener = listener
     }
 
     fun setOnViewAnswerClickListener(listener: (Post, Int) -> Unit){
@@ -158,9 +180,12 @@ class PostAdapter @Inject constructor(
     fun setOnLikedByClickListener(listener: (Post) -> Unit){
         onLikedByClickListener = listener
     }
-
-    fun setOnCommentsClickListener(listener: (Post) -> Unit){
-        onCommentsClickListener = listener
+    fun setOnAnsweredByClickListener(listener: (Post) -> Unit){
+        onAnsweredByClickListener = listener
     }
+
+//    fun setOnCommentsClickListener(listener: (Post) -> Unit){
+//        onCommentsClickListener = listener
+//    }
 
 }

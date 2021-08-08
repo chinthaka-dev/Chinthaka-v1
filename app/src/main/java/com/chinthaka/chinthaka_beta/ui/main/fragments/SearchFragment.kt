@@ -53,12 +53,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
 
-        userAdapter.setOnUserClickListener {  user ->
-            findNavController()
-                .navigate(
-                    SearchFragmentDirections.globalActionToOthersProfileFragment(user.userId)
-                )
-        }
+//        userAdapter.setOnUserClickListener {  user ->
+//            findNavController()
+//                .navigate(
+//                    SearchFragmentDirections.globalActionToOthersProfileFragment(user.userId)
+//                )
+//        }
     }
 
     private fun subscribeToObservers(){

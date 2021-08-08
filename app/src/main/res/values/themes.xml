@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Chinthaka" parent="Theme.MaterialComponents">
+    <style name="Theme.Chinthaka" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/darkBackground</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/darkBackground</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="materialButtonStyle">@style/GreenButtonStyle</item>
         <item name="bottomAppBarStyle">@style/BottomAppBarStyle</item>
@@ -17,8 +17,9 @@
     </style>
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:textColorHint">@color/colorPrimary</item>
-        <item name="startIconTint">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/darkBackground</item>
+        <item name="startIconTint">@color/darkBackground</item>
+        <item name="background">@color/darkBackground</item>
         <item name="boxStrokeColor">@drawable/edit_text_box_border</item>
         <item name="boxCornerRadiusTopEnd">0dp</item>
         <item name="boxCornerRadiusBottomEnd">0dp</item>
@@ -34,7 +35,7 @@
     <style name="ToolbarStyle" parent="Widget.MaterialComponents.ActionBar.Primary">
 <!--        <item name="background">@color/mediumDarkBackground</item>-->
 <!--        <item name="android:textColor">@android:color/white</item>-->
-        <item name="background">@color/mediumDarkBackground</item>
+        <item name="background">@color/whiteBackground</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
@@ -46,7 +47,7 @@
     <style name="GreenButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="cornerRadius">0dp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="RedButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -57,7 +58,7 @@
     </style>
 
     <style name="FloatingActionButtonStyle" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="backgroundTint">@color/whiteBackground</item>
         <!--<item name="shapeAppearanceOverlay">@style/FabDiamondOverlay</item>-->
     </style>
 
@@ -74,7 +75,11 @@
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
         <item name="fontFamily">@font/roboto_light</item>
-        <item name="android:textColor">@android:color/black</item>
+<!--        <item name="android:textColor">@android:color/black</item>-->
     </style>
+
+    <style name="Theme.DrawerLayout.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DrawerLayout.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -8,4 +8,5 @@
     <color name="lightBackground">#808080</color>
     <color name="whiteBackground">#FFFFFF</color>
     <color name="grayBackground">#F4F2F2</color>
+    <color name="black">#000000</color>
 </resources>

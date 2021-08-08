@@ -32,6 +32,7 @@
             android:text="@string/example_post_username"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:fontFamily="@font/roboto_regular"
             app:layout_constraintBottom_toTopOf="@id/tvPostCategory"
             app:layout_constraintStart_toEndOf="@+id/ivAuthorProfileImage"
@@ -44,6 +45,7 @@
             android:layout_margin="8dp"
             android:text="@string/example_category_name"
             android:textSize="12sp"
+            android:textColor="@color/black"
             android:fontFamily="@font/roboto_light"
             app:layout_constraintBottom_toBottomOf="@+id/ivAuthorProfileImage"
             app:layout_constraintStart_toEndOf="@+id/ivAuthorProfileImage"
@@ -67,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/example_post_text"
+            android:textColor="@color/black"
             android:fontFamily="@font/roboto_light"
             app:layout_constraintTop_toBottomOf="@id/ivAuthorProfileImage"
             tools:layout_editor_absoluteX="8dp" />
@@ -89,6 +92,7 @@
             android:layout_margin="8dp"
             android:text="234"
             android:textFontWeight="800"
+            android:textColor="@color/black"
             android:drawableStart="@drawable/ic_thumbs_up_filled"
             app:fontFamily="@font/roboto_bold"
             app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
@@ -101,6 +105,7 @@
             android:layout_margin="8dp"
             android:text="10002"
             android:textFontWeight="800"
+            android:textColor="@color/black"
             android:drawableStart="@drawable/ic_answered_by"
             app:fontFamily="@font/roboto_regular"
             app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
@@ -142,6 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Like"
+                android:textColor="@color/black"
                 android:layout_below="@id/ibLike"/>
         </RelativeLayout>
 
@@ -170,6 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Answer"
+                android:textColor="@color/black"
                 android:layout_below="@id/ibAnswer"/>
         </RelativeLayout>
 
@@ -198,6 +205,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="View Answer"
+                android:textColor="@color/black"
                 android:layout_below="@id/ibViewAnswer"/>
         </RelativeLayout>
 
@@ -225,6 +233,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Share"
+                android:textColor="@color/black"
                 android:layout_below="@id/ibShare"/>
         </RelativeLayout>
 

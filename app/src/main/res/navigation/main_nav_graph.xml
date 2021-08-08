@@ -1,33 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="Chinthaka"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_submitAnswerFragment"
+            app:destination="@id/submitAnswerFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile"/>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="Search"
+        tools:layout="@layout/fragment_search"/>
     <fragment
         android:id="@+id/createPostFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.CreatePostFragment"
-        android:label="CreatePostFragment" />
+        android:label="Create Post"
+        tools:layout="@layout/fragment_create_post"/>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings"/>
 
     <fragment
         android:id="@+id/interestsFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.InterestsFragment"
-        android:label="InterestsFragment" />
+        android:label="Interests"
+        tools:layout="@layout/fragment_interests"/>
+
+    <fragment
+        android:id="@+id/bookmarksFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.BookmarksFragment"
+        android:label="Bookmarks"
+        tools:layout="@layout/fragment_bookmarks"/>
+
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.BookmarksFragment"
+        android:label="Privacy Policy"
+        tools:layout="@layout/fragment_privacy_policy"/>
+
+    <fragment
+        android:id="@+id/inviteFriendsFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.InviteFriendsFragment"
+        android:label="Invite Friends"
+        tools:layout="@layout/fragment_invite_friends"/>
+
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.FeedbackFragment"
+        android:label="Submit Feedback"
+        tools:layout="@layout/fragment_feedback"/>
+
+    <fragment
+        android:id="@+id/viewAnswerFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.ViewAnswerFragment"
+        android:label="View Answer"
+        tools:layout="@layout/fragment_view_answer" />
 
     <action
         android:id="@+id/globalActionToOthersProfileFragment"
@@ -37,20 +83,37 @@
         android:id="@+id/globalActionToCreatePostFragment"
         app:destination="@id/createPostFragment" />
 
-    <action
-        android:id="@+id/globalActionToCommentDialog"
-        app:destination="@id/commentDialog" />
+<!--    <action-->
+<!--        android:id="@+id/globalActionToCommentDialog"-->
+<!--        app:destination="@id/commentDialog" />-->
+
+<!--    <action-->
+<!--        android:id="@+id/globalActionToSubmitAnswerFragment"-->
+<!--        app:destination="@id/submitAnswerFragment" />-->
 
     <action
         android:id="@+id/globalActionToViewAnswerDialog"
         app:destination="@id/viewAnswerDialog" />
 
+    <action
+        android:id="@+id/globalActionToViewAnswerFragment"
+        app:destination="@id/viewAnswerFragment" />
+
     <fragment
         android:id="@+id/othersProfileFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.OthersProfileFragment"
-        android:label="OthersProfileFragment" >
+        android:label="OthersProfileFragment">
         <argument
             android:name="userId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/submitAnswerFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SubmitAnswerFragment"
+        android:label="SubmitAnswer">
+        <argument
+            android:name="answer"
             app:argType="string" />
     </fragment>
     <dialog

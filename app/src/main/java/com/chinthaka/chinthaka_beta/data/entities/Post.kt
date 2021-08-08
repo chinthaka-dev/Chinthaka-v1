@@ -10,9 +10,13 @@ data class Post(
     @get:Exclude var authorUserName: String = "",
     @get:Exclude var authorProfilePictureUrl : String = "",
     val text: String = "",
+    val answer: String = "",
     val imageUrl: String = "",
     val date: Long = 0L,
     @get:Exclude var isLiked: Boolean = false, // if current user has already liked the current post
     @get:Exclude var isLiking: Boolean = false, // during Network request, once Like button is pressed
-    var likedBy: List<String> = listOf() // Firebase Charges on Read Operations. So, this list can be huge. Please NOTE this!!!
+    var likedBy: List<String> = listOf(), // Firebase Charges on Read Operations. So, this list can be huge. Please NOTE this!!!
+    @get:Exclude var isAnswered: Boolean = false, // if current user has already answered the current post
+    @get:Exclude var isAnswering: Boolean = false, // during Network request, once Done button of Submit Answer fragment is pressed
+    var answeredBy: List<String> = listOf()
 )

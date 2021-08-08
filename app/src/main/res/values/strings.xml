@@ -62,7 +62,20 @@
     <string name="unfollow">Unfollow</string>
     <string name="follow">Follow</string>
     <string name="liked_by_dialog_title">Liked by</string>
+    <string name="answered_by_dialog_title">Answered by</string>
     <string name="error_no_image_chosen">Please choose an image for the post</string>
     <string name="enter_comment">Enter Comment</string>
     <string name="comments">Comments</string>
+    <string name="nav_header_title">Pradyumna Yogan</string>
+    <string name="nav_header_desc">Chinthaka</string>
+    <string name="start">Start</string>
+    <string name="close">Close</string>
+    <string name="explanation">Explanation</string>
+    <string name="sounds_fine">Sounds Fine</string>
+    <string name="sounds_incorrect">Sounds Incorrect</string>
+    <string name="submit">Submit</string>
+    <string name="type_your_answer_here">Type your answer here</string>
+    <string name="get_help">Get Help</string>
+    <string name="sample_answer">Lorem Ipsum can I have a candy can I have a candy</string>
+    <string name="answer_explanation">android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."</string>
 </resources>

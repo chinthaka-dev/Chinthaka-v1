@@ -244,4 +244,26 @@ class DefaultMainRepository: MainRepository {
         storageRef.putFile(imageUri).await().metadata?.reference?.downloadUrl?.await()
     }
 
+    override suspend fun submitAnswerForPost(post: Post) = withContext(Dispatchers.IO) {
+        safeCall {
+            var isAnswered = false
+
+            // For Reading and Writing Documents
+            firestore.runTransaction{ transaction ->
+                val userId = FirebaseAuth.getInstance().uid!!
+                val postResult = transaction.get(posts.document(post.id))
+                val currentAnsweredBy = postResult.toObject(Post::class.java)?.answeredBy ?: listOf()
+                transaction.update(posts.document(post.id),
+                    "answeredBy",
+                    if(userId in currentAnsweredBy) currentAnsweredBy - userId else {
+                        isAnswered = true
+                        currentAnsweredBy + userId
+                    }
+                )
+            }.await()
+
+            Resource.Success(isAnswered)
+        }
+    }
+
 }

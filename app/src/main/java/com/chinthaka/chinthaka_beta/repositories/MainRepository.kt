@@ -37,4 +37,6 @@ interface MainRepository {
     suspend fun updateProfile(profileUpdate: ProfileUpdate): Resource<Any>
 
     suspend fun updateProfilePicture(uid: String, imageUri: Uri): Uri?
+
+    suspend fun submitAnswerForPost(post: Post): Resource<Boolean>
 }
