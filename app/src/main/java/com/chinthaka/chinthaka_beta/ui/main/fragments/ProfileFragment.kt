@@ -32,7 +32,7 @@ open class ProfileFragment : BasePostFragment(R.layout.fragment_profile) {
         setUpRecyclerView()
         subscribeToObservers()
 
-        fragmentProfileBinding.btnToggleFollow.isVisible = false
+//        fragmentProfileBinding.btnToggleFollow.isVisible = false
         viewModel.loadProfile(userId)
 
         //Paging is being integrated

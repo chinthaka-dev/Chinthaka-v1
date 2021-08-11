@@ -33,25 +33,26 @@ class OthersProfileFragment : ProfileFragment() {
 
         subscribeToObservers()
 
-        fragmentOthersProfileBinding.btnToggleFollow.setOnClickListener {
-            viewModel.toggleFollowForUser(userId)
-        }
+//        fragmentOthersProfileBinding.btnToggleFollow.setOnClickListener {
+//            viewModel.toggleFollowForUser(userId)
+//        }
     }
 
     private fun subscribeToObservers() {
 
         viewModel.profileMeta.observe(viewLifecycleOwner, EventObserver{
-            fragmentOthersProfileBinding.btnToggleFollow.isVisible = true
-            setupToggleFollowButton(it)
+//            fragmentOthersProfileBinding.btnToggleFollow.isVisible = true
+//            setupToggleFollowButton(it)
             currentUser = it
         })
 
         viewModel.followStatus.observe(viewLifecycleOwner, EventObserver{
             currentUser?.isFollowing = it
-            setupToggleFollowButton(currentUser ?: return@EventObserver)
+//            setupToggleFollowButton(currentUser ?: return@EventObserver)
         })
     }
 
+    /**
     private fun setupToggleFollowButton(user: User) {
         fragmentOthersProfileBinding.btnToggleFollow.apply {
             val changeBounds = ChangeBounds().apply {
@@ -78,5 +79,5 @@ class OthersProfileFragment : ProfileFragment() {
                 set2.applyTo(fragmentOthersProfileBinding.clProfile)
             }
         }
-    }
+    } */
 }

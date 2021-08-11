@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Invite Friends Fragment"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/CardView.Dark"/>

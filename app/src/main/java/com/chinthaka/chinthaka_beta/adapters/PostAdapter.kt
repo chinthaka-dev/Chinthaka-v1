@@ -139,6 +139,13 @@ class PostAdapter @Inject constructor(
                     click(post)
                 }
             }
+
+            ivAuthorProfileImage.setOnClickListener{
+                onAuthorImageClickListener?.let { click ->
+                    click(post)
+                }
+            }
+
         }
 
     }
@@ -152,6 +159,7 @@ class PostAdapter @Inject constructor(
     private var onLikedByClickListener: ((Post) -> Unit)? = null
     private var onAnsweredByClickListener: ((Post) -> Unit)? = null
 //    private var onCommentsClickListener: ((Post) -> Unit)? = null
+    private var onAuthorImageClickListener: ((Post) -> Unit)? = null
 
     fun setOnLikeClickListener(listener: (Post, Int) -> Unit){
         onLikeClickListener = listener
@@ -180,6 +188,7 @@ class PostAdapter @Inject constructor(
     fun setOnLikedByClickListener(listener: (Post) -> Unit){
         onLikedByClickListener = listener
     }
+
     fun setOnAnsweredByClickListener(listener: (Post) -> Unit){
         onAnsweredByClickListener = listener
     }
@@ -187,5 +196,9 @@ class PostAdapter @Inject constructor(
 //    fun setOnCommentsClickListener(listener: (Post) -> Unit){
 //        onCommentsClickListener = listener
 //    }
+
+    fun setOnAuthorImageClickListener(listener: (Post) -> Unit){
+        onAuthorImageClickListener = listener
+    }
 
 }

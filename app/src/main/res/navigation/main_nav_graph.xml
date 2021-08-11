@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/privacyPolicyFragment"
-        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.BookmarksFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.PrivacyPolicyFragment"
         android:label="Privacy Policy"
         tools:layout="@layout/fragment_privacy_policy"/>
 
@@ -102,7 +102,7 @@
     <fragment
         android:id="@+id/othersProfileFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.OthersProfileFragment"
-        android:label="OthersProfileFragment">
+        android:label="OthersProfile">
         <argument
             android:name="userId"
             app:argType="string" />

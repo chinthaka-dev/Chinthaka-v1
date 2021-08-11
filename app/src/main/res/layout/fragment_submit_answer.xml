@@ -43,6 +43,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:text="@string/get_help"
+                android:background="@color/whiteBackground"
                 app:cornerRadius="10dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -68,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/submit"
+        android:background="@color/whiteBackground"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

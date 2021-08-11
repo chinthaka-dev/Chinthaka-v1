@@ -12,9 +12,7 @@ import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.adapters.PostAdapter
 import com.chinthaka.chinthaka_beta.adapters.UserAdapter
 import com.chinthaka.chinthaka_beta.other.EventObserver
-import com.chinthaka.chinthaka_beta.ui.main.dialogs.AnsweredByDialog
-import com.chinthaka.chinthaka_beta.ui.main.dialogs.DeletePostDialog
-import com.chinthaka.chinthaka_beta.ui.main.dialogs.LikedByDialog
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.*
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -56,10 +54,14 @@ abstract class BasePostFragment(
         }
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
-            findNavController().navigate(
-                R.id.globalActionToViewAnswerDialog,
-                Bundle().apply { putString("postId", post.id) }
-            )
+            ViewAnswerDialog().apply {
+                setPositiveListener {
+                    findNavController().popBackStack()
+                    findNavController().navigate(
+                        R.id.globalActionToViewAnswerFragment,
+                    )
+                }
+            }.show(childFragmentManager, null)
         }
 
         postAdapter.setOnShareClickListener { post ->
@@ -92,6 +94,13 @@ abstract class BasePostFragment(
 //                Bundle().apply { putString("postId", post.id) }
 //            )
 //        }
+
+        postAdapter.setOnAuthorImageClickListener { post ->
+            findNavController().navigate(
+                R.id.globalActionToOthersProfileFragment,
+                Bundle().apply { putString("userId", post.authorUId) }
+            )
+        }
     }
 
     private fun subscribeToObservers(){
@@ -128,25 +137,25 @@ abstract class BasePostFragment(
 
         basePostViewModel.answerPostStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
-                curLikedIndex?.let { index ->
+                curAnsweredIndex?.let { index ->
                     postAdapter.peek(index)?.isAnswering = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)
             },
             onLoading = {
-                curLikedIndex?.let { index ->
+                curAnsweredIndex?.let { index ->
                     postAdapter.peek(index)?.isAnswering = true
                     postAdapter.notifyItemChanged(index)
                 }
             }
         ) { isAnswered ->
-            curLikedIndex?.let{index ->
+            curAnsweredIndex?.let{index ->
                 val userId = FirebaseAuth.getInstance().uid!!
                 postAdapter.peek(index)?.apply {
                     this.isAnswered = isAnswered
                     isAnswering = false
-                    if(isLiked){
+                    if(isAnswered){
                         answeredBy += userId
                     } else{
                         answeredBy -= userId

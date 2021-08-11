@@ -22,14 +22,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ivProfileImage" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnToggleFollow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/follow"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/tvProfileDescription" />
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/btnToggleFollow"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:text="@string/follow"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tvProfileDescription" />-->
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileImage"
@@ -47,6 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textSize="20sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,6 +61,7 @@
         android:layout_marginEnd="8dp"
         android:lines="3"
         android:maxLines="3"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
@@ -71,6 +73,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/posts"
+        android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

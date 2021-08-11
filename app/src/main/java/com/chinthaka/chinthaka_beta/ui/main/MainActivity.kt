@@ -45,8 +45,6 @@ class MainActivity: AppCompatActivity(){
 
         actionBarDrawerToggle.syncState()
 
-        activityMainBinding.appBarMain.toolbar.setNavigationIcon(R.drawable.img_avatar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navController = navHostFragment.findNavController()
@@ -56,6 +54,8 @@ class MainActivity: AppCompatActivity(){
                 R.id.homeFragment, R.id.profileFragment, R.id.settingsFragment, R.id.interestsFragment, R.id.bookmarksFragment, R.id.othersProfileFragment
             ), drawerLayout
         )
+
+        activityMainBinding.appBarMain.toolbar.setupWithNavController(navController, drawerLayout)
 
         navView.setNavigationItemSelectedListener{
             when(it.itemId){
@@ -87,8 +87,10 @@ class MainActivity: AppCompatActivity(){
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.navHostFragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+//        val navController = findNavController(R.id.navHostFragment)
+//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        onBackPressed()
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
