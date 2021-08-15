@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@id/homeFragment"
-    android:title="@string/home"
-    android:icon="@drawable/ic_home_black_24dp" />
+        android:title="@string/home"
+        android:icon="@drawable/ic_home_black_24dp" />
 
-    <item android:id="@id/createPostFragment"
-        android:title="@string/create"
-        android:icon="@drawable/ic_create" />
+    <item android:id="@id/interestsFragment"
+        android:title="@string/interests"
+        android:icon="@drawable/ic_update_interests" />
 
     <item android:id="@id/bookmarksFragment"
         android:title="@string/bookmarks"
