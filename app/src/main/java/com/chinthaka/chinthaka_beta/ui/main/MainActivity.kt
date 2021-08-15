@@ -1,11 +1,19 @@
 package com.chinthaka.chinthaka_beta.ui.main
 
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -34,6 +42,9 @@ class MainActivity: AppCompatActivity(){
         setContentView(activityMainBinding.root)
 
         setSupportActionBar(activityMainBinding.appBarMain.toolbar)
+        activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.whiteBackground)
+        activityMainBinding.appBarMain.toolbar.setTitleTextColor(AppCompatResources.getColorStateList(this, R.color.black))
+        WindowInsetsControllerCompat(window,window.decorView).isAppearanceLightStatusBars = true
 
         // This is being done as we are having a FragmentContainerView, not a direct Fragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
