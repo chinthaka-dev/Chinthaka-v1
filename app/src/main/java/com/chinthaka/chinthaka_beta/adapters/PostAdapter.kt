@@ -29,7 +29,8 @@ class PostAdapter @Inject constructor(
         val tvAnsweredBy: TextView = binding.tvAnsweredBy
         val iblike: ImageButton = binding.ibLike
         val ibAnswer: ImageButton = binding.ibAnswer
-        val ibDeletePost: ImageButton = binding.ibExpandPost
+//        val ibDeletePost: ImageButton = binding.ibExpandPost
+        val ibExpandPost: ImageButton = binding.ibExpandPost
         val ibViewAnswer: ImageButton = binding.ibViewAnswer
         val ibShare: ImageButton = binding.ibShare
     }
@@ -134,8 +135,13 @@ class PostAdapter @Inject constructor(
                 }
             }
 
-            ibDeletePost.setOnClickListener {
-                onDeletePostClickListener?.let { click ->
+//            ibDeletePost.setOnClickListener {
+//                onDeletePostClickListener?.let { click ->
+//                    click(post)
+//                }
+//            }
+            ibExpandPost.setOnClickListener {
+                onExpandClickListener?.let { click ->
                     click(post)
                 }
             }
@@ -160,6 +166,7 @@ class PostAdapter @Inject constructor(
     private var onAnsweredByClickListener: ((Post) -> Unit)? = null
 //    private var onCommentsClickListener: ((Post) -> Unit)? = null
     private var onAuthorImageClickListener: ((Post) -> Unit)? = null
+    private var onExpandClickListener: ((Post) -> Unit)? = null
 
     fun setOnLikeClickListener(listener: (Post, Int) -> Unit){
         onLikeClickListener = listener
@@ -199,6 +206,10 @@ class PostAdapter @Inject constructor(
 
     fun setOnAuthorImageClickListener(listener: (Post) -> Unit){
         onAuthorImageClickListener = listener
+    }
+
+    fun setOnExpandClickListener(listener: (Post) -> Unit){
+        onExpandClickListener = listener
     }
 
 }

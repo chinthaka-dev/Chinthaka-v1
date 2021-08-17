@@ -33,8 +33,6 @@ class FollowPostsPagingSource(
                 firstLoad = false
             }
 
-            Log.i("FOLLOWS", follows.toString())
-
             val chunks = follows.chunked(10)
             val resultList = mutableListOf<Post>()
 
@@ -49,11 +47,14 @@ class FollowPostsPagingSource(
                 // curPage -> Query Snapshot
 
                 val parsedPage = curPage!!.toObjects(Post::class.java).onEach { post ->
+
+                    Log.i("FOLLOW_POSTS", "Post : $post")
                     val user = db.collection("users")
                         .document(post.authorUId).get().await().toObject(User::class.java)!!
                     post.authorProfilePictureUrl = user.profilePictureUrl
                     post.authorUserName = user.userName
                     post.isLiked = uid in post.likedBy
+//                    post.answer = answer
                 }
 
                 resultList.addAll(parsedPage)

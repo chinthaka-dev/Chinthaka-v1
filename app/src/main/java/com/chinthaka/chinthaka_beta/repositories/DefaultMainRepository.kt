@@ -1,10 +1,8 @@
 package com.chinthaka.chinthaka_beta.repositories
 
 import android.net.Uri
-import com.chinthaka.chinthaka_beta.data.entities.Comment
-import com.chinthaka.chinthaka_beta.data.entities.Post
-import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
-import com.chinthaka.chinthaka_beta.data.entities.User
+import com.chinthaka.chinthaka_beta.R
+import com.chinthaka.chinthaka_beta.data.entities.*
 import com.chinthaka.chinthaka_beta.other.Constants.DEFAULT_PROFILE_PICTURE_URL
 import com.chinthaka.chinthaka_beta.other.Resource
 import com.chinthaka.chinthaka_beta.other.safeCall

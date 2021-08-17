@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chinthaka">
         <activity android:name=".ui.main.MainActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ChooseInterestsActivity" android:screenOrientation="portrait"/>
         <activity android:name="com.canhub.cropper.CropImageActivity"/>
         <activity
             android:name=".AuthActivity"

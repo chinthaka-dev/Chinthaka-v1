@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_popup_save_this_post"
+        android:title="Save this Post"
+        android:icon="@drawable/ic_bookmark_filled"/>
+
+    <item
+        android:id="@+id/action_popup_report_this_post"
+        android:title="Report this Post"
+        android:icon="@drawable/ic_flag_filled"/>
+</menu>

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
@@ -28,6 +30,8 @@ abstract class BasePostFragment(
     @Inject
     lateinit var postAdapter: PostAdapter
 
+    private lateinit var popupMenu: PopupMenu
+
     protected abstract val basePostViewModel: BasePostViewModel
 
     private var curLikedIndex: Int? = null
@@ -48,17 +52,23 @@ abstract class BasePostFragment(
 
             findNavController().navigate(
                 R.id.action_homeFragment_to_submitAnswerFragment,
-                Bundle().apply { putString("answer", post.answer) },
+                Bundle().apply { putString("answer", post.answer.getValue("text")) },
             )
 
         }
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
+            Log.i("BASE_POST", "Post : ${post.answer}")
             ViewAnswerDialog().apply {
                 setPositiveListener {
                     findNavController().popBackStack()
                     findNavController().navigate(
                         R.id.globalActionToViewAnswerFragment,
+                        Bundle().apply {
+                            putString("answer", post.answer.getValue("text"))
+                            putString("description", post.answer.getValue("description"))
+                            putString("imageUrl", post.answer.getValue("imageUrl"))
+                        }
                     )
                 }
             }.show(childFragmentManager, null)
@@ -101,6 +111,8 @@ abstract class BasePostFragment(
                 Bundle().apply { putString("userId", post.authorUId) }
             )
         }
+
+        postAdapter.setOnExpandClickListener {  }
     }
 
     private fun subscribeToObservers(){
@@ -108,7 +120,7 @@ abstract class BasePostFragment(
         basePostViewModel.likePostStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 curLikedIndex?.let { index ->
-                    postAdapter.peek(index)?.isLiking = false
+                    postAdapter.peek(index) ?.isLiking = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)

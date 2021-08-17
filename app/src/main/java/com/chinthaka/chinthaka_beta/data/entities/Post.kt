@@ -8,9 +8,9 @@ data class Post(
     val id: String = "",
     val authorUId: String = "",
     @get:Exclude var authorUserName: String = "",
-    @get:Exclude var authorProfilePictureUrl : String = "",
+    @get:Exclude var authorProfilePictureUrl: String = "",
     val text: String = "",
-    val answer: String = "",
+    val answer: Map<String, String> = mapOf(),
     val imageUrl: String = "",
     val date: Long = 0L,
     @get:Exclude var isLiked: Boolean = false, // if current user has already liked the current post

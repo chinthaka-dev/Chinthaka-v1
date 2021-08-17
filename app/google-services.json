@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "394317677096-8kua8ptv3lnt62jctetsqa982r9inqts.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chinthaka.chinthaka_beta",
+            "certificate_hash": "22e3463a4a29a7c7deb242584c6edd1f05e02476"
+          }
+        },
+        {
+          "client_id": "394317677096-mmavn3g88n2stuhtm8s7b20h4id8q60m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chinthaka.chinthaka_beta",
+            "certificate_hash": "9642979c7b2647f90755288513565d9c7e6d2c30"
+          }
+        },
+        {
           "client_id": "394317677096-e7cagni6v3tcvp1l5ke0ec4mjptbfub9.apps.googleusercontent.com",
           "client_type": 3
         }
