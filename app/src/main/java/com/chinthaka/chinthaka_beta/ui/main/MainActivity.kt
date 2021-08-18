@@ -2,12 +2,11 @@ package com.chinthaka.chinthaka_beta.ui.main
 
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -27,6 +26,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity(){
 
@@ -42,9 +42,8 @@ class MainActivity: AppCompatActivity(){
         setContentView(activityMainBinding.root)
 
         setSupportActionBar(activityMainBinding.appBarMain.toolbar)
-        activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.whiteBackground)
-        activityMainBinding.appBarMain.toolbar.setTitleTextColor(AppCompatResources.getColorStateList(this, R.color.black))
-        WindowInsetsControllerCompat(window,window.decorView).isAppearanceLightStatusBars = true
+        activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.black)
+        activityMainBinding.appBarMain.toolbar.setTitleTextColor(AppCompatResources.getColorStateList(this, R.color.white))
 
         // This is being done as we are having a FragmentContainerView, not a direct Fragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)

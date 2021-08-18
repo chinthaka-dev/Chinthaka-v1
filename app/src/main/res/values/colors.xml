@@ -6,7 +6,9 @@
     <color name="mediumDarkBackground">#404040</color>
     <color name="darkBackground">#202020</color>
     <color name="lightBackground">#808080</color>
-    <color name="whiteBackground">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="grayBackground">#DFDFDF</color>
     <color name="black">#000000</color>
+    <color name="green">#5ACC5F</color>
+    <color name="red">#E36740</color>
 </resources>

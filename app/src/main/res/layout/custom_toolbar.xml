@@ -4,7 +4,7 @@
     android:layout_height="?attr/actionBarSize"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/customToolbar"
-    android:background="@color/whiteBackground"
+    android:background="@color/white"
     app:popupTheme="@style/Widget.MaterialComponents.Toolbar">
 
     <de.hdodenhof.circleimageview.CircleImageView

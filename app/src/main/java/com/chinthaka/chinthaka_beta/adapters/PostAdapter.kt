@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
@@ -33,6 +34,14 @@ class PostAdapter @Inject constructor(
         val ibExpandPost: ImageButton = binding.ibExpandPost
         val ibViewAnswer: ImageButton = binding.ibViewAnswer
         val ibShare: ImageButton = binding.ibShare
+        val tvLike: TextView = binding.tvLike
+        val tvAnswer: TextView = binding.tvAnswer
+        val tvViewAnswer: TextView = binding.tvViewAnswer
+        val tvShare: TextView = binding.tvShare
+        val rlLike: RelativeLayout = binding.rlLike
+        val rlAnswer: RelativeLayout = binding.rlAnswer
+        val rlViewAnswer: RelativeLayout = binding.rlViewAnswer
+        val rlShare: RelativeLayout = binding.rlShare
     }
 
     companion object : DiffUtil.ItemCallback<Post>(){
@@ -81,6 +90,12 @@ class PostAdapter @Inject constructor(
                 R.drawable.ic_thumbs_up_filled
             } else R.drawable.ic_thumbs_up)
 
+            if(post.isLiked){
+                tvLike.text = "Unlike"
+            } else {
+                tvLike.text = "Like"
+            }
+
             tvPostAuthor.setOnClickListener{
                 onUserClickListener?.let { click ->
                     click(post.authorUId)
@@ -111,7 +126,31 @@ class PostAdapter @Inject constructor(
                 }
             }
 
+            tvLike.setOnClickListener{
+                onLikeClickListener?.let { click ->
+                    if(!post.isLiking) click(post, holder.layoutPosition)
+                }
+            }
+
+            rlLike.setOnClickListener{
+                onLikeClickListener?.let { click ->
+                    if(!post.isLiking) click(post, holder.layoutPosition)
+                }
+            }
+
             ibAnswer.setOnClickListener {
+                onAnswerClickListener?.let { click ->
+                    if(!post.isAnswering) click(post, holder.layoutPosition)
+                }
+            }
+
+            tvAnswer.setOnClickListener {
+                onAnswerClickListener?.let { click ->
+                    if(!post.isAnswering) click(post, holder.layoutPosition)
+                }
+            }
+
+            rlAnswer.setOnClickListener {
                 onAnswerClickListener?.let { click ->
                     if(!post.isAnswering) click(post, holder.layoutPosition)
                 }
@@ -129,7 +168,31 @@ class PostAdapter @Inject constructor(
                 }
             }
 
+            tvViewAnswer.setOnClickListener {
+                onViewAnswerClickListener?.let { click ->
+                    click(post, holder.layoutPosition)
+                }
+            }
+
+            rlViewAnswer.setOnClickListener {
+                onViewAnswerClickListener?.let { click ->
+                    click(post, holder.layoutPosition)
+                }
+            }
+
             ibShare.setOnClickListener {
+                onShareClickListener?.let { click ->
+                    click(post)
+                }
+            }
+
+            tvShare.setOnClickListener {
+                onShareClickListener?.let { click ->
+                    click(post)
+                }
+            }
+
+            rlShare.setOnClickListener {
                 onShareClickListener?.let { click ->
                     click(post)
                 }

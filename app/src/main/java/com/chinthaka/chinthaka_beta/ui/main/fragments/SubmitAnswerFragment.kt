@@ -94,6 +94,8 @@ class SubmitAnswerFragment : BasePostFragment(R.layout.fragment_submit_answer) {
             Toast.makeText(requireContext(), "Answer Submitted", Toast.LENGTH_SHORT).show()
         }
 
+        submitAnswerFragmentBinding.tvAnswerDetails.text = prepareAnswerDetails(answer)
+
     }
 
     private fun prepareTextForCorrectAnswer(correctAnswer: String, userAnswer: String): String? {
@@ -104,7 +106,7 @@ class SubmitAnswerFragment : BasePostFragment(R.layout.fragment_submit_answer) {
             for (ch in userAnswerCharArray) {
                 if (ch == correctAnswer.lowercase()[i]) {
                     if (ch == ' ') {
-                        sb.append(ch).append("\n")
+                        sb.append(ch).append("   ")
                     } else {
                         sb.append(correctAnswer[i]).append(" ")
                     }
@@ -118,7 +120,7 @@ class SubmitAnswerFragment : BasePostFragment(R.layout.fragment_submit_answer) {
             if (correctAnswer[j] != ' ') {
                 sb.append("_ ")
             } else {
-                sb.append("\n")
+                sb.append("   ")
             }
         }
         return sb.toString()
@@ -134,6 +136,37 @@ class SubmitAnswerFragment : BasePostFragment(R.layout.fragment_submit_answer) {
                 0
             )
         }
+    }
+
+    private fun prepareAnswerDetails(correctAnswer: String): String? {
+        val sb = StringBuilder()
+        sb.append("Words: ")
+            .append(calculateWordsForAnswer(correctAnswer))
+            .append(", Characters: ")
+            .append(calculateCharactersForAnswer(correctAnswer))
+        return sb.toString()
+    }
+
+    private fun calculateWordsForAnswer(correctAnswer: String): Int {
+        val chars = correctAnswer.toCharArray()
+        var countOfWords = 1;
+        for(ch in chars){
+            if(ch == ' ' || ch == '\n') {
+                countOfWords++
+            }
+        }
+        return countOfWords
+    }
+
+    private fun calculateCharactersForAnswer(correctAnswer: String): Int {
+        val chars = correctAnswer.toCharArray()
+        var countOfChars = 0;
+        for(ch in chars){
+            if(ch != ' ' || ch == '\n') {
+                countOfChars++
+            }
+        }
+        return countOfChars
     }
 
     override val basePostViewModel: BasePostViewModel

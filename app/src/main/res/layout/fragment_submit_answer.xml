@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,21 +20,26 @@
                 android:id="@+id/tvCorrectAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp"
-                android:textSize="25sp"
+                android:paddingTop="25dp"
+                android:paddingBottom="35dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:textSize="35sp"
+                android:textStyle="bold"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                android:background="@color/green"
+                android:textColor="@color/white"
                 android:text="@string/sample_answer" />
 
-            <View
-                android:id="@+id/view"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAnswerDetails"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="10dp"
-                android:background="@android:color/darker_gray"/>
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:text="@string/sample_answer" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGetHelp"
@@ -42,21 +47,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="@string/get_help"
-                android:background="@color/whiteBackground"
-                app:cornerRadius="10dp" />
+                android:text="@string/get_help"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etUserAnswer"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="30dp"
+                android:textSize="30sp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
-                android:gravity="top"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
                 android:hint="@string/type_your_answer_here"
                 android:background="@drawable/edit_text_border"/>
 
@@ -69,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/submit"
-        android:background="@color/whiteBackground"
+        android:background="@color/white"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

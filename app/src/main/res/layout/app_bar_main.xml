@@ -10,13 +10,15 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="left">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            app:layout_scrollFlags="scroll|enterAlways">
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -59,7 +61,7 @@
             app:menu="@menu/bottom_nav_menu"
             app:itemIconTint="@drawable/bottom_nav_selector"
             app:itemTextColor="@drawable/bottom_nav_selector"
-            android:background="@color/whiteBackground"/>
+            android:background="@color/white"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="materialButtonStyle">@style/GreenButtonStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="bottomAppBarStyle">@style/BottomAppBarStyle</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle</item>
         <item name="android:windowBackground">@color/darkBackground</item>
@@ -39,7 +39,7 @@
         <item name="backgroundTint">@color/mediumDarkBackground</item>
     </style>
 
-    <style name="GreenButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="cornerRadius">0dp</item>
         <item name="android:textColor">@android:color/black</item>

@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.Chinthaka" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/darkBackground</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/darkBackground</item>
+        <item name="colorAccent">@color/black</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="materialButtonStyle">@style/GreenButtonStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="bottomAppBarStyle">@style/BottomAppBarStyle</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle</item>
 <!--        <item name="android:windowBackground">@color/darkBackground</item>-->
@@ -16,7 +16,6 @@
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
-        <item name="android:statusBarColor">@android:color/white</item>
     </style>
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -32,19 +31,19 @@
 
     <style name="CardViewStyle" parent="Widget.MaterialComponents.CardView">
 <!--        <item name="cardBackgroundColor">@color/mediumDarkBackground</item>-->
-        <item name="cardBackgroundColor">@color/whiteBackground</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="ToolbarStyle" parent="Widget.MaterialComponents.Light.ActionBar.Solid">
 <!--        <item name="background">@color/mediumDarkBackground</item>-->
 <!--        <item name="android:textColor">@android:color/white</item>-->
-        <item name="android:background">@color/whiteBackground</item>
-        <item name="android:textColor">@android:color/black</item>
+        <!--<item name="android:background">@color/black</item>
+        <item name="android:textColor">@android:color/white</item>-->
     </style>
 
     <!--REQUIRED -->
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@android:color/black</item>
+        <item name="color">@android:color/white</item>
     </style>
 
     <!--REQUIRED -->
@@ -55,13 +54,13 @@
 
     <style name="BottomAppBarStyle" parent="Widget.MaterialComponents.BottomAppBar">
 <!--        <item name="backgroundTint">@color/mediumDarkBackground</item>-->
-        <item name="backgroundTint">@color/whiteBackground</item>
+        <item name="backgroundTint">@color/white</item>
         <item name="color">@android:color/black</item>
     </style>
 
-    <style name="GreenButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/roboto_regular</item>
-        <item name="cornerRadius">0dp</item>
+        <item name="cornerRadius">10dp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -73,7 +72,7 @@
     </style>
 
     <style name="FloatingActionButtonStyle" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">@color/whiteBackground</item>
+        <item name="backgroundTint">@color/white</item>
         <!--<item name="shapeAppearanceOverlay">@style/FabDiamondOverlay</item>-->
     </style>
 
