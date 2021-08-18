@@ -3,6 +3,44 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/bottom_nav_selector.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/fab_shape.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_add.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_like_border.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_like_white.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_menu.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_person.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_search.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable-v24/ic_settings.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/bottom_nav_icon_color_selector.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_answer.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_create.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_expand_more.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_feedback.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_invite_friends.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_logout.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_my_posts.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_privacy_policy.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_share.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_thumbs_up.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_thumbs_up_filled.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_update_interests.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_view_answer.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/ic_view_answer_outline.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/drawable/side_nav_bar.xml" value="0.2703125" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/activity_main.xml" value="0.18840579710144928" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/app_bar_main.xml" value="0.18840579710144928" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/custom_toolbar.xml" value="0.2477355072463768" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/fragment_home.xml" value="0.18840579710144928" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/fragment_submit_answer.xml" value="0.2477355072463768" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/fragment_view_answer.xml" value="0.2477355072463768" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/item_post.xml" value="0.536" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/layout/nav_header_main.xml" value="0.2477355072463768" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/menu/bottom_nav_icon_color_selector.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/menu/main_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/AndroidProjects/Chinthaka-v1/app/src/main/res/menu/nav_drawer.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/drawable-v24/edit_text_box_border.xml" value="0.1037037037037037" />
         <entry key="app/src/main/res/drawable/category_border.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/drawable/ic_bookmark_outline.xml" value="0.19947916666666668" />
