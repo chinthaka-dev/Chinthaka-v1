@@ -33,8 +33,8 @@ abstract class BasePostViewModel(
     private val _answeredByUsers = MutableLiveData<Event<Resource<List<User>>>>()
     val answeredByUsers: LiveData<Event<Resource<List<User>>>> = _answeredByUsers
 
-    private val _currentPost = MutableLiveData<Post>()
-    val currentPost: LiveData<Post> = _currentPost
+    private val _bookmarkPostStatus = MutableLiveData<Event<Resource<Boolean>>>()
+    val bookmarkPostStatus: LiveData<Event<Resource<Boolean>>> = _bookmarkPostStatus
 
     fun getUsers(userIds: List<String>){
         if(userIds.isEmpty()) return
@@ -61,19 +61,11 @@ abstract class BasePostViewModel(
         }
     }
 
-    fun submitAnswerForPost(post: Post){
-        _answerPostStatus.postValue(Event(Resource.Loading()))
+    fun toggleBookmarkForPost(post: Post){
+        _bookmarkPostStatus.postValue(Event(Resource.Loading()))
         viewModelScope.launch(dispatcher){
-            val result = repository.submitAnswerForPost(post)
-            _answerPostStatus.postValue(Event(result))
+            val result = repository.toggleBookmarkForPost(post.id)
+            _bookmarkPostStatus.postValue(Event(result))
         }
     }
-
-    fun setCurrentPost(post: Post){
-        viewModelScope.launch(dispatcher){
-            _currentPost.postValue(post)
-        }
-    }
-
-    fun getCurrentPost(): Post = currentPost.value as Post
 }

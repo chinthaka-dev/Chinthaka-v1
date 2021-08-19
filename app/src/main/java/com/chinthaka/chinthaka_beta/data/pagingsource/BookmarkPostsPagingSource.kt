@@ -11,12 +11,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
-class FollowPostsPagingSource(
-    private val db: FirebaseFirestore
+class BookmarkPostsPagingSource(
+    private val db: FirebaseFirestore,
 ) : PagingSource<QuerySnapshot, Post>() {
-
-    var firstLoad = true
-    lateinit var follows: List<String>
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> {
         // Load the posts
@@ -24,27 +21,20 @@ class FollowPostsPagingSource(
 
         return try {
             val uid = FirebaseAuth.getInstance().uid!!
+
             val currentUser = db.collection("users")
                 .document(uid)
                 .get()
                 .await()
                 .toObject(User::class.java)
 
-            if(firstLoad){
-                follows = db.collection("users")
-                        .get()
-                        .await()
-                        .toObjects(User::class.java).map { user -> user.userId }
-                firstLoad = false
-            }
-
-            val chunks = follows.chunked(10)
+            val chunks = currentUser!!.bookmarks.chunked(10)
             val resultList = mutableListOf<Post>()
 
             var curPage = params.key
-            chunks.forEach{ chunk ->
+            chunks.forEach { chunk ->
                 curPage = params.key ?: db.collection("posts")
-                    .whereIn("authorUId", chunk)
+                    .whereIn("id", chunk)
                     .orderBy("date", Query.Direction.DESCENDING)
                     .get()
                     .await()
@@ -53,14 +43,14 @@ class FollowPostsPagingSource(
 
                 val parsedPage = curPage!!.toObjects(Post::class.java).onEach { post ->
 
+                    Log.i("BOOKMARK_POSTS", "Post : $post")
                     val user = db.collection("users")
                         .document(post.authorUId).get().await().toObject(User::class.java)!!
-                    Log.i("FOLLOW_POSTS", "User : ${user.bookmarks}, Post : ${post.id}")
-
                     post.authorProfilePictureUrl = user.profilePictureUrl
                     post.authorUserName = user.userName
                     post.isLiked = uid in post.likedBy
-                    post.isBookmarked = post.id in currentUser!!.bookmarks
+                    post.isBookmarked = post.id in currentUser.bookmarks
+//                    post.answer = answer
                 }
 
                 resultList.addAll(parsedPage)
@@ -71,7 +61,7 @@ class FollowPostsPagingSource(
 
             // And we load the nextPage using the lastDocument of the previous page
             val nextPage = db.collection("posts")
-                .whereIn("authorUId", if(chunks.isNotEmpty()) chunks[0] else listOf())
+                .whereIn("authorUId", if (chunks.isNotEmpty()) chunks[0] else listOf())
                 .orderBy("date", Query.Direction.DESCENDING)
                 .startAfter(lastDocumentSnapshot)
                 .get()
@@ -83,7 +73,7 @@ class FollowPostsPagingSource(
                 null,
                 nextPage
             )
-        } catch (e : Exception){
+        } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }

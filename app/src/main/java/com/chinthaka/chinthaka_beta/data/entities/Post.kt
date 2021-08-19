@@ -18,5 +18,7 @@ data class Post(
     var likedBy: List<String> = listOf(), // Firebase Charges on Read Operations. So, this list can be huge. Please NOTE this!!!
     @get:Exclude var isAnswered: Boolean = false, // if current user has already answered the current post
     @get:Exclude var isAnswering: Boolean = false, // during Network request, once Done button of Submit Answer fragment is pressed
-    var answeredBy: List<String> = listOf()
+    var answeredBy: List<String> = listOf(),
+    @get:Exclude var isBookmarked: Boolean = false,
+    @get:Exclude var isBookmarking: Boolean = false
 )

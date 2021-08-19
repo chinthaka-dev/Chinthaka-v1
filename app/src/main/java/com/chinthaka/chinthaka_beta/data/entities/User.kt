@@ -12,7 +12,6 @@ data class User(
     val description: String = "",
     var follows: List<String> = listOf(),
     val selectedInterests: List<String> = listOf(),
-
-    @get:Exclude
-    var isFollowing: Boolean = false
+    var bookmarks: List<String> = listOf(),
+    @get:Exclude var isFollowing: Boolean = false,
 )

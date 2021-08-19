@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.FragmentBookmarksBinding
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
+import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BookmarksViewModel
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -21,7 +22,7 @@ class BookmarksFragment : BasePostFragment(R.layout.fragment_bookmarks) {
 
     private lateinit var fragmentBookmarksBinding: FragmentBookmarksBinding
 
-    private val viewModel: HomeViewModel by lazy { basePostViewModel as HomeViewModel }
+    private val viewModel: BookmarksViewModel by lazy { basePostViewModel as BookmarksViewModel }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +54,7 @@ class BookmarksFragment : BasePostFragment(R.layout.fragment_bookmarks) {
 
     override val basePostViewModel: BasePostViewModel
         get() {
-            val viewModel : HomeViewModel by viewModels()
+            val viewModel : BookmarksViewModel by viewModels()
             return viewModel
         }
 }

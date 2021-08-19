@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.chinthaka.chinthaka_beta.data.pagingsource.BookmarkPostsPagingSource
 import com.chinthaka.chinthaka_beta.data.pagingsource.FollowPostsPagingSource
 import com.chinthaka.chinthaka_beta.other.Constants
 import com.chinthaka.chinthaka_beta.repositories.MainRepository
@@ -20,6 +21,6 @@ class BookmarksViewModel @Inject constructor(
 ) : BasePostViewModel(repository, dispatcher) {
 
     val pagingFlow = Pager(PagingConfig(Constants.PAGE_SIZE)){
-        FollowPostsPagingSource(FirebaseFirestore.getInstance())
+        BookmarkPostsPagingSource(FirebaseFirestore.getInstance())
     }.flow.cachedIn(viewModelScope)
 }

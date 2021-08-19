@@ -96,6 +96,10 @@ class PostAdapter @Inject constructor(
                 tvLike.text = "Like"
             }
 
+            ibExpandPost.setImageResource(if(post.isBookmarked){
+                R.drawable.ic_bookmark_filled
+            } else R.drawable.ic_bookmark_outline)
+
             tvPostAuthor.setOnClickListener{
                 onUserClickListener?.let { click ->
                     click(post.authorUId)
@@ -205,7 +209,7 @@ class PostAdapter @Inject constructor(
 //            }
             ibExpandPost.setOnClickListener {
                 onExpandClickListener?.let { click ->
-                    click(post)
+                    click(post, holder.layoutPosition)
                 }
             }
 
@@ -229,7 +233,7 @@ class PostAdapter @Inject constructor(
     private var onAnsweredByClickListener: ((Post) -> Unit)? = null
 //    private var onCommentsClickListener: ((Post) -> Unit)? = null
     private var onAuthorImageClickListener: ((Post) -> Unit)? = null
-    private var onExpandClickListener: ((Post) -> Unit)? = null
+    private var onExpandClickListener: ((Post, Int) -> Unit)? = null
 
     fun setOnLikeClickListener(listener: (Post, Int) -> Unit){
         onLikeClickListener = listener
@@ -271,7 +275,7 @@ class PostAdapter @Inject constructor(
         onAuthorImageClickListener = listener
     }
 
-    fun setOnExpandClickListener(listener: (Post) -> Unit){
+    fun setOnExpandClickListener(listener: (Post, Int) -> Unit){
         onExpandClickListener = listener
     }
 

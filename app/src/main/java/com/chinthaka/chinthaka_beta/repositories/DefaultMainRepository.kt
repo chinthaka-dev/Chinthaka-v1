@@ -1,6 +1,7 @@
 package com.chinthaka.chinthaka_beta.repositories
 
 import android.net.Uri
+import android.util.Log
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.data.entities.*
 import com.chinthaka.chinthaka_beta.other.Constants.DEFAULT_PROFILE_PICTURE_URL
@@ -261,6 +262,27 @@ class DefaultMainRepository: MainRepository {
             }.await()
 
             Resource.Success(isAnswered)
+        }
+    }
+
+    override suspend fun toggleBookmarkForPost(postId: String) = withContext(Dispatchers.IO) {
+        safeCall {
+            var hasBookmarked = false
+            Log.i("MAIN_REPOSITORY", "Post : $postId is being bookmarked")
+            firestore.runTransaction{ transaction ->
+                val currentUserId = auth.uid!!
+                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
+                hasBookmarked = postId in currentUser.bookmarks
+                transaction.update(users.document(currentUserId), "bookmarks",
+                    if(hasBookmarked){
+                        hasBookmarked = false
+                        currentUser.bookmarks - postId
+                    } else {
+                        hasBookmarked = true
+                        currentUser.bookmarks + postId
+                    })
+            }.await()
+            Resource.Success(hasBookmarked)
         }
     }
 

@@ -38,6 +38,8 @@ abstract class BasePostFragment(
 
     private var curAnsweredIndex: Int? = null
 
+    var curBookmarkedIndex: Int? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeToObservers()
@@ -55,6 +57,12 @@ abstract class BasePostFragment(
                 Bundle().apply { putString("answer", post.answer.getValue("text")) },
             )
 
+        }
+
+        postAdapter.setOnExpandClickListener { post, i ->
+            curBookmarkedIndex = i
+            post.isBookmarked = !post.isBookmarked
+            basePostViewModel.toggleBookmarkForPost(post)
         }
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
@@ -111,8 +119,6 @@ abstract class BasePostFragment(
                 Bundle().apply { putString("userId", post.authorUId) }
             )
         }
-
-        postAdapter.setOnExpandClickListener {  }
     }
 
     private fun subscribeToObservers(){
@@ -138,7 +144,7 @@ abstract class BasePostFragment(
                     this.isLiked = isLiked
                     isLiking = false
                     if(isLiked){
-                        likedBy += userId
+
                     } else{
                         likedBy -= userId
                     }
@@ -172,6 +178,30 @@ abstract class BasePostFragment(
                     } else{
                         answeredBy -= userId
                     }
+                }
+                postAdapter.notifyItemChanged(index)
+            }
+        })
+
+        basePostViewModel.bookmarkPostStatus.observe(viewLifecycleOwner, EventObserver(
+            onError = {
+                curBookmarkedIndex?.let { index ->
+                    postAdapter.peek(index) ?.isBookmarking = false
+                    postAdapter.notifyItemChanged(index)
+                }
+                snackbar(it)
+            },
+            onLoading = {
+                curBookmarkedIndex?.let { index ->
+                    postAdapter.peek(index)?.isBookmarking = true
+                    postAdapter.notifyItemChanged(index)
+                }
+            }
+        ) { isBookmarked ->
+            curBookmarkedIndex?.let{index ->
+                postAdapter.peek(index)?.apply {
+                    this.isBookmarked = isBookmarked
+                    isBookmarking = false
                 }
                 postAdapter.notifyItemChanged(index)
             }

@@ -2,6 +2,7 @@ package com.chinthaka.chinthaka_beta.ui.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
