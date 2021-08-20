@@ -11,10 +11,10 @@
             android:icon="@drawable/ic_my_posts"
             android:title="@string/view_my_posts" />
 
-        <item
-            android:id="@id/interestsFragment"
-            android:icon="@drawable/ic_update_interests"
-            android:title="@string/update_interests" />
+<!--        <item-->
+<!--            android:id="@id/interestsFragment"-->
+<!--            android:icon="@drawable/ic_update_interests"-->
+<!--            android:title="@string/update_interests" />-->
 
         <item
             android:id="@id/privacyPolicyFragment"

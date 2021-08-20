@@ -1,6 +1,5 @@
 package com.chinthaka.chinthaka_beta.data.pagingsource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.chinthaka.chinthaka_beta.data.entities.Post
@@ -30,11 +29,11 @@ class FollowPostsPagingSource(
                 .await()
                 .toObject(User::class.java)
 
-            if(firstLoad){
+            if (firstLoad) {
                 follows = db.collection("users")
-                        .get()
-                        .await()
-                        .toObjects(User::class.java).map { user -> user.userId }
+                    .get()
+                    .await()
+                    .toObjects(User::class.java).map { user -> user.userId }
                 firstLoad = false
             }
 
@@ -42,7 +41,7 @@ class FollowPostsPagingSource(
             val resultList = mutableListOf<Post>()
 
             var curPage = params.key
-            chunks.forEach{ chunk ->
+            chunks.forEach { chunk ->
                 curPage = params.key ?: db.collection("posts")
                     .whereIn("authorUId", chunk)
                     .orderBy("date", Query.Direction.DESCENDING)
@@ -55,7 +54,6 @@ class FollowPostsPagingSource(
 
                     val user = db.collection("users")
                         .document(post.authorUId).get().await().toObject(User::class.java)!!
-                    Log.i("FOLLOW_POSTS", "User : ${user.bookmarks}, Post : ${post.id}")
 
                     post.authorProfilePictureUrl = user.profilePictureUrl
                     post.authorUserName = user.userName
@@ -71,7 +69,7 @@ class FollowPostsPagingSource(
 
             // And we load the nextPage using the lastDocument of the previous page
             val nextPage = db.collection("posts")
-                .whereIn("authorUId", if(chunks.isNotEmpty()) chunks[0] else listOf())
+                .whereIn("authorUId", if (chunks.isNotEmpty()) chunks[0] else listOf())
                 .orderBy("date", Query.Direction.DESCENDING)
                 .startAfter(lastDocumentSnapshot)
                 .get()
@@ -83,7 +81,7 @@ class FollowPostsPagingSource(
                 null,
                 nextPage
             )
-        } catch (e : Exception){
+        } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }

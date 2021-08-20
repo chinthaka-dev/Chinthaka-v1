@@ -25,22 +25,17 @@ class DefaultCategoryRepository : CategoryRepository {
             // Chunks are important as Firebase limits the results of wherein queries to 10.
 
             val currentUserId = FirebaseAuth.getInstance().uid!!
-            Log.i("CATEGORY_REPOSITORY","CurrentUserId : $currentUserId")
             val currentUser =  users.document(currentUserId).get().await().toObject(User::class.java)
-            Log.i("CATEGORY_REPOSITORY","CurrentUser : $currentUser")
-            Log.i("CATEGORY_REPOSITORY", "Name : ${currentUser?.userName}, Selected Interests : ${currentUser?.selectedInterests}")
 
-            var resultList = categories
+            val resultList = categories
                 .get()
                 .await()
                 .toObjects(Category::class.java)
-//                .onEach { category ->
-//                    if (currentUser != null) {
-//                        category.isSelected = category.categoryName in currentUser.selectedInterests
-//                    }
-//                }
-
-            Log.i("CATEGORY_REPOSITORY", "Result List: $resultList")
+                .onEach { category ->
+                    if (currentUser != null) {
+                        category.isSelected = category.categoryName in currentUser.selectedInterests
+                    }
+                }
 
             Resource.Success(resultList.toList())
         }

@@ -13,6 +13,7 @@ data class Post(
     val answer: Map<String, String> = mapOf(),
     val imageUrl: String = "",
     val date: Long = 0L,
+    val category: String = "",
     @get:Exclude var isLiked: Boolean = false, // if current user has already liked the current post
     @get:Exclude var isLiking: Boolean = false, // during Network request, once Like button is pressed
     var likedBy: List<String> = listOf(), // Firebase Charges on Read Operations. So, this list can be huge. Please NOTE this!!!

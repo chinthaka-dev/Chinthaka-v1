@@ -54,18 +54,13 @@ open class AuthActivity : AppCompatActivity() {
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
-            if(response!!.isNewUser){
-                viewModel.addNewUserViaSocialLogin(FirebaseAuth.getInstance().currentUser)
-                Intent(this, ChooseInterestsActivity::class.java).also {
-                    startActivity(it)
-                    finish()
+            Intent(this, MainActivity::class.java).also {
+                if(response!!.isNewUser){
+                    viewModel.addNewUserViaSocialLogin(FirebaseAuth.getInstance().currentUser)
                 }
-            } else {
-                Intent(this, MainActivity::class.java).also {
-                    startActivity(it)
-                    finish()
-                }
+                it.putExtra(R.string.is_new_user.toString(), response.isNewUser)
+                startActivity(it)
+                finish()
             }
 
         } else {

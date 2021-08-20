@@ -1,8 +1,6 @@
 package com.chinthaka.chinthaka_beta.ui.main.fragments
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,7 +12,6 @@ import com.chinthaka.chinthaka_beta.adapters.CategoryAdapter
 import com.chinthaka.chinthaka_beta.data.entities.CategoryUpdate
 import com.chinthaka.chinthaka_beta.databinding.FragmentInterestsBinding
 import com.chinthaka.chinthaka_beta.other.EventObserver
-import com.chinthaka.chinthaka_beta.ui.main.MainActivity
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.InterestsViewModel
 import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -78,7 +75,7 @@ class InterestsFragment : Fragment(R.layout.fragment_interests) {
             onError = { snackbar(it) },
             onLoading = { fragmentInterestsBinding.allInterestsProgressBar.isVisible = true }
         ) {
-            findNavController().popBackStack()
+            findNavController().navigate(InterestsFragmentDirections.actionInterestsFragmentToHomeFragment())
         })
     }
 }

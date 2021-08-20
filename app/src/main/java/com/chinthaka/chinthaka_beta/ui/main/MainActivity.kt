@@ -22,6 +22,7 @@ import androidx.navigation.ui.*
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.ActivityMainBinding
+import com.chinthaka.chinthaka_beta.ui.main.fragments.InterestsFragmentDirections
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,9 +60,14 @@ class MainActivity: AppCompatActivity(){
 
         navController = navHostFragment.findNavController()
 
+        val extras = intent.extras?.get(R.string.is_new_user.toString())
+
+        if(extras == true)
+            navController.navigate(R.id.globalActionToInterestsFragment)
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment, R.id.profileFragment, R.id.settingsFragment, R.id.interestsFragment, R.id.bookmarksFragment, R.id.othersProfileFragment
+                R.id.homeFragment, R.id.profileFragment, R.id.settingsFragment, R.id.bookmarksFragment, R.id.othersProfileFragment
             ), drawerLayout
         )
 

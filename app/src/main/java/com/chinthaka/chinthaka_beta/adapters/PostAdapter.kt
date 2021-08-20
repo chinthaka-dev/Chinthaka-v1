@@ -26,6 +26,7 @@ class PostAdapter @Inject constructor(
         val ivAuthorProfileImage: ImageView = binding.ivAuthorProfileImage
         val tvPostAuthor: TextView = binding.tvPostAuthor
         val tvPostText: TextView = binding.tvPostText
+        val tvPostCategory: TextView = binding.tvPostCategory
         val tvLikedBy: TextView = binding.tvLikedBy
         val tvAnsweredBy: TextView = binding.tvAnsweredBy
         val iblike: ImageButton = binding.ibLike
@@ -74,6 +75,7 @@ class PostAdapter @Inject constructor(
             glide.load(post.authorProfilePictureUrl).into(ivAuthorProfileImage)
             tvPostAuthor.text = post.authorUserName
             tvPostText.text = post.text
+            tvPostCategory.text = post.category
             val likeCount = post.likedBy.size
             val answeredByCount = post.answeredBy.size
 //            tvLikedBy.text = when{
@@ -89,12 +91,6 @@ class PostAdapter @Inject constructor(
             iblike.setImageResource(if(post.isLiked){
                 R.drawable.ic_thumbs_up_filled
             } else R.drawable.ic_thumbs_up)
-
-            if(post.isLiked){
-                tvLike.text = "Unlike"
-            } else {
-                tvLike.text = "Like"
-            }
 
             ibExpandPost.setImageResource(if(post.isBookmarked){
                 R.drawable.ic_bookmark_filled

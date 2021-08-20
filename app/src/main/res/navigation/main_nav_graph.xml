@@ -42,7 +42,15 @@
         android:id="@+id/interestsFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.InterestsFragment"
         android:label="Interests"
-        tools:layout="@layout/fragment_interests" />
+        tools:layout="@layout/fragment_interests">
+        <action
+            android:id="@+id/action_interestsFragment_to_HomeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/bookmarksFragment"
