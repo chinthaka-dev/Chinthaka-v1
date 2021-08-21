@@ -4,9 +4,12 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -19,6 +22,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
+import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.ActivityMainBinding
@@ -26,6 +30,7 @@ import com.chinthaka.chinthaka_beta.ui.main.fragments.InterestsFragmentDirection
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -73,6 +78,17 @@ class MainActivity: AppCompatActivity(){
 
         activityMainBinding.appBarMain.toolbar.setupWithNavController(navController, drawerLayout)
 
+        navView.getHeaderView(0).setOnClickListener {
+            drawerLayout.close()
+            navController.navigate(R.id.action_homeFragment_to_settingsFragment)
+        }
+
+        // Accessing Drawer Header Views
+//        val ivProfileImage = navView.getHeaderView(0).findViewById<ImageView>(R.id.ivProfileImage)
+//        val tvProfileName = navView.getHeaderView(0).findViewById<TextView>(R.id.tvProfileName)
+
+
+
         navView.setNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.nav_logout -> {
@@ -112,11 +128,6 @@ class MainActivity: AppCompatActivity(){
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
-    }
-
-    fun setBottomNavigationVisibility(visibility: Int) {
-        // get the reference of the bottomNavigationView and set the visibility.
-        activityMainBinding.appBarMain.bottomNavigationView.visibility = visibility
     }
 
 }

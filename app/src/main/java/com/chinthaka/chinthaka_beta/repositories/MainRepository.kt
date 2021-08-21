@@ -38,7 +38,11 @@ interface MainRepository {
 
     suspend fun updateProfilePicture(uid: String, imageUri: Uri): Uri?
 
-    suspend fun submitAnswerForPost(post: Post): Resource<Boolean>
+    suspend fun submitAnswerForPost(postId: String): Resource<Boolean>
 
     suspend fun toggleBookmarkForPost(postId: String): Resource<Boolean>
+
+    suspend fun updateAnswerViewedByForPost(post: Post): Resource<Boolean>
+
+    suspend fun updateAttemptedByForPost(post: Post): Resource<Boolean>
 }

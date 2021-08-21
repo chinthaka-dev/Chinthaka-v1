@@ -1,5 +1,6 @@
 package com.chinthaka.chinthaka_beta.repositories
 
+import com.chinthaka.chinthaka_beta.data.entities.Category
 import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.other.Resource
 import com.chinthaka.chinthaka_beta.other.safeCall
@@ -14,7 +15,9 @@ import kotlinx.coroutines.withContext
 class DefaultAuthRepository : AuthRepository {
 
     val auth = FirebaseAuth.getInstance()
-    val users = FirebaseFirestore.getInstance().collection("users")
+    val firestore = FirebaseFirestore.getInstance()
+    val users = firestore.collection("users")
+    val categories = firestore.collection("categories")
 
     override suspend fun login(email: String, password: String): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
@@ -50,7 +53,17 @@ class DefaultAuthRepository : AuthRepository {
             safeCall {
                 val userId = user.uid
                 val displayName = user.displayName
-                val userToBeDocumented = User(userId, displayName!!)
+                val selectedInterests = categories
+                    .get()
+                    .await()
+                    .toObjects(Category::class.java)
+                    .map { category -> category.categoryName }
+                val userToBeDocumented = User(
+                    userId = userId,
+                    userName = displayName!!,
+                    selectedInterests = selectedInterests
+                )
+
                 users.document(userId).set(userToBeDocumented).await()
                 Resource.Success(user)
             }

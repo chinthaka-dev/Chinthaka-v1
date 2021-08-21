@@ -21,5 +21,10 @@ data class Post(
     @get:Exclude var isAnswering: Boolean = false, // during Network request, once Done button of Submit Answer fragment is pressed
     var answeredBy: List<String> = listOf(),
     @get:Exclude var isBookmarked: Boolean = false,
-    @get:Exclude var isBookmarking: Boolean = false
+    @get:Exclude var isBookmarking: Boolean = false,
+    @get:Exclude var isAttempting: Boolean = false,
+    var attemptedBy: List<String> = listOf(),
+    @get:Exclude var isViewingAnswer:Boolean = false,
+    var answerViewedBy: List<String> = listOf()
+
 )

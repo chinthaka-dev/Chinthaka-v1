@@ -16,6 +16,13 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -136,6 +143,12 @@
         <argument
             android:name="answer"
             app:argType="string" />
+        <argument
+            android:name="postId"
+            app:argType="string" />
+        <argument
+            android:name="currentIndex"
+            app:argType="integer" />
     </fragment>
     <dialog
         android:id="@+id/commentDialog"

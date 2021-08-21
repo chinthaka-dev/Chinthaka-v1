@@ -2,27 +2,27 @@ package com.chinthaka.chinthaka_beta.ui.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
-import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.adapters.PostAdapter
 import com.chinthaka.chinthaka_beta.adapters.UserAdapter
 import com.chinthaka.chinthaka_beta.other.EventObserver
-import com.chinthaka.chinthaka_beta.ui.main.dialogs.*
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.AnsweredByDialog
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.DeletePostDialog
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.LikedByDialog
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.ViewAnswerDialog
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 abstract class BasePostFragment(
-    layoutId : Int
-): Fragment(layoutId) {
+    layoutId: Int
+) : Fragment(layoutId) {
 
     @Inject
     lateinit var glide: RequestManager
@@ -38,23 +38,28 @@ abstract class BasePostFragment(
 
     private var curAnsweredIndex: Int? = null
 
-    var curBookmarkedIndex: Int? = null
+    private var curBookmarkedIndex: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeToObservers()
 
-        postAdapter.setOnLikeClickListener{post, i ->
+        postAdapter.setOnLikeClickListener { post, i ->
             curLikedIndex = i
             post.isLiked = !post.isLiked
             basePostViewModel.toggleLikeForPost(post)
         }
 
         postAdapter.setOnAnswerClickListener { post, i ->
-
+            curAnsweredIndex = i
+            basePostViewModel.updateAttemptedByForPost(post)
             findNavController().navigate(
                 R.id.action_homeFragment_to_submitAnswerFragment,
-                Bundle().apply { putString("answer", post.answer.getValue("text")) },
+                Bundle().apply {
+                    putString("answer", post.answer.getValue("text"))
+                    putString("postId", post.id)
+                    putInt("currentIndex", curAnsweredIndex!!)
+                },
             )
 
         }
@@ -66,9 +71,10 @@ abstract class BasePostFragment(
         }
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
-            Log.i("BASE_POST", "Post : ${post.answer}")
+            curAnsweredIndex = i
             ViewAnswerDialog().apply {
                 setPositiveListener {
+                    basePostViewModel.updateAnswerViewedByForPost(post)
                     findNavController().popBackStack()
                     findNavController().navigate(
                         R.id.globalActionToViewAnswerFragment,
@@ -85,7 +91,10 @@ abstract class BasePostFragment(
         postAdapter.setOnShareClickListener { post ->
             val intent: Intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, "${post.authorUserName} has challenged you to answer the question.")
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                "${post.authorUserName} has challenged you to answer the question."
+            )
             intent.putExtra(Intent.EXTRA_TEXT, "http://play.google.com")
             startActivity(Intent.createChooser(intent, "Share using"))
         }
@@ -121,12 +130,12 @@ abstract class BasePostFragment(
         }
     }
 
-    private fun subscribeToObservers(){
+    private fun subscribeToObservers() {
 
         basePostViewModel.likePostStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 curLikedIndex?.let { index ->
-                    postAdapter.peek(index) ?.isLiking = false
+                    postAdapter.peek(index)?.isLiking = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)
@@ -138,45 +147,15 @@ abstract class BasePostFragment(
                 }
             }
         ) { isLiked ->
-            curLikedIndex?.let{index ->
+            curLikedIndex?.let { index ->
                 val userId = FirebaseAuth.getInstance().uid!!
                 postAdapter.peek(index)?.apply {
                     this.isLiked = isLiked
                     isLiking = false
-                    if(isLiked){
+                    if (isLiked) {
 
-                    } else{
+                    } else {
                         likedBy -= userId
-                    }
-                }
-                postAdapter.notifyItemChanged(index)
-            }
-        })
-
-        basePostViewModel.answerPostStatus.observe(viewLifecycleOwner, EventObserver(
-            onError = {
-                curAnsweredIndex?.let { index ->
-                    postAdapter.peek(index)?.isAnswering = false
-                    postAdapter.notifyItemChanged(index)
-                }
-                snackbar(it)
-            },
-            onLoading = {
-                curAnsweredIndex?.let { index ->
-                    postAdapter.peek(index)?.isAnswering = true
-                    postAdapter.notifyItemChanged(index)
-                }
-            }
-        ) { isAnswered ->
-            curAnsweredIndex?.let{index ->
-                val userId = FirebaseAuth.getInstance().uid!!
-                postAdapter.peek(index)?.apply {
-                    this.isAnswered = isAnswered
-                    isAnswering = false
-                    if(isAnswered){
-                        answeredBy += userId
-                    } else{
-                        answeredBy -= userId
                     }
                 }
                 postAdapter.notifyItemChanged(index)
@@ -186,7 +165,7 @@ abstract class BasePostFragment(
         basePostViewModel.bookmarkPostStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 curBookmarkedIndex?.let { index ->
-                    postAdapter.peek(index) ?.isBookmarking = false
+                    postAdapter.peek(index)?.isBookmarking = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)
@@ -198,7 +177,7 @@ abstract class BasePostFragment(
                 }
             }
         ) { isBookmarked ->
-            curBookmarkedIndex?.let{index ->
+            curBookmarkedIndex?.let { index ->
                 postAdapter.peek(index)?.apply {
                     this.isBookmarked = isBookmarked
                     isBookmarking = false
@@ -207,8 +186,31 @@ abstract class BasePostFragment(
             }
         })
 
+        basePostViewModel.attemptedByUpdateStatus.observe(viewLifecycleOwner, EventObserver(
+            onError = {
+                curAnsweredIndex?.let { index ->
+                    postAdapter.peek(index)?.isAttempting = false
+                    postAdapter.notifyItemChanged(index)
+                }
+                snackbar(it)
+            },
+            onLoading = {
+                curAnsweredIndex?.let { index ->
+                    postAdapter.peek(index)?.isAttempting = true
+                    postAdapter.notifyItemChanged(index)
+                }
+            }
+        ) { isAttempted ->
+            curAnsweredIndex?.let { index ->
+                postAdapter.peek(index)?.apply {
+                    isAttempting = false
+                }
+                postAdapter.notifyItemChanged(index)
+            }
+        })
+
         basePostViewModel.likedByUsers.observe(viewLifecycleOwner, EventObserver(
-            onError = {snackbar(it)}
+            onError = { snackbar(it) }
         ) { users ->
             val userAdapter = UserAdapter(glide)
             userAdapter.users = users
@@ -216,7 +218,7 @@ abstract class BasePostFragment(
         })
 
         basePostViewModel.answeredByUsers.observe(viewLifecycleOwner, EventObserver(
-            onError = {snackbar(it)}
+            onError = { snackbar(it) }
         ) { users ->
             val userAdapter = UserAdapter(glide)
             userAdapter.users = users

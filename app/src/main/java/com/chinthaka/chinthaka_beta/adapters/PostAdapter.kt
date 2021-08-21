@@ -6,7 +6,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,7 @@ class PostAdapter @Inject constructor(
     private val glide: RequestManager
 ) : PagingDataAdapter<Post, PostAdapter.PostViewHolder>(Companion) {
 
-    inner class PostViewHolder(binding: ItemPostBinding): RecyclerView.ViewHolder(binding.root){
+    inner class PostViewHolder(binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
         val ivPostImage: ImageView = binding.ivPostImage
         val ivAuthorProfileImage: ImageView = binding.ivAuthorProfileImage
         val tvPostAuthor: TextView = binding.tvPostAuthor
@@ -45,7 +44,7 @@ class PostAdapter @Inject constructor(
         val rlShare: RelativeLayout = binding.rlShare
     }
 
-    companion object : DiffUtil.ItemCallback<Post>(){
+    companion object : DiffUtil.ItemCallback<Post>() {
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
@@ -76,39 +75,44 @@ class PostAdapter @Inject constructor(
             tvPostAuthor.text = post.authorUserName
             tvPostText.text = post.text
             tvPostCategory.text = post.category
+
             val likeCount = post.likedBy.size
             val answeredByCount = post.answeredBy.size
-//            tvLikedBy.text = when{
-//                likeCount <= 0 -> "No Likes"
-//                likeCount == 1 -> "Liked by 1 person"
-//                else -> "Likey by $likeCount people"
-//            }
+            val userId = FirebaseAuth.getInstance().uid!!
+
             tvLikedBy.text = likeCount.toString()
             tvAnsweredBy.text = answeredByCount.toString()
-//            ibAnswer.isClickable = post.isAnswered
-            val userId = FirebaseAuth.getInstance().uid!!
-//            ibDeletePost.isVisible = userId == post.authorUId
-            iblike.setImageResource(if(post.isLiked){
-                R.drawable.ic_thumbs_up_filled
-            } else R.drawable.ic_thumbs_up)
+            rlAnswer.isClickable = userId !in post.answeredBy
+            tvAnswer.isClickable = rlAnswer.isClickable
+            ibAnswer.isClickable = rlAnswer.isClickable
+            rlViewAnswer.isClickable = userId !in post.answeredBy && userId !in post.answerViewedBy
+            tvViewAnswer.isClickable = rlViewAnswer.isClickable
+            ibViewAnswer.isClickable = rlViewAnswer.isClickable
+            iblike.setImageResource(
+                if (post.isLiked) {
+                    R.drawable.ic_thumbs_up_filled
+                } else R.drawable.ic_thumbs_up
+            )
 
-            ibExpandPost.setImageResource(if(post.isBookmarked){
-                R.drawable.ic_bookmark_filled
-            } else R.drawable.ic_bookmark_outline)
+            ibExpandPost.setImageResource(
+                if (post.isBookmarked) {
+                    R.drawable.ic_bookmark_filled
+                } else R.drawable.ic_bookmark_outline
+            )
 
-            tvPostAuthor.setOnClickListener{
+            tvPostAuthor.setOnClickListener {
                 onUserClickListener?.let { click ->
                     click(post.authorUId)
                 }
             }
 
-            ivAuthorProfileImage.setOnClickListener{
+            ivAuthorProfileImage.setOnClickListener {
                 onUserClickListener?.let { click ->
                     click(post.authorUId)
                 }
             }
 
-            tvLikedBy.setOnClickListener{
+            tvLikedBy.setOnClickListener {
                 onLikedByClickListener?.let { click ->
                     click(post)
                 }
@@ -120,63 +124,63 @@ class PostAdapter @Inject constructor(
                 }
             }
 
-            iblike.setOnClickListener{
+            rlLike.setOnClickListener {
                 onLikeClickListener?.let { click ->
-                    if(!post.isLiking) click(post, holder.layoutPosition)
+                    if (!post.isLiking) click(post, holder.layoutPosition)
                 }
             }
 
-            tvLike.setOnClickListener{
+            iblike.setOnClickListener {
                 onLikeClickListener?.let { click ->
-                    if(!post.isLiking) click(post, holder.layoutPosition)
+                    if (!post.isLiking) click(post, holder.layoutPosition)
                 }
             }
 
-            rlLike.setOnClickListener{
+            tvLike.setOnClickListener {
                 onLikeClickListener?.let { click ->
-                    if(!post.isLiking) click(post, holder.layoutPosition)
+                    if (!post.isLiking) click(post, holder.layoutPosition)
                 }
             }
 
-            ibAnswer.setOnClickListener {
-                onAnswerClickListener?.let { click ->
-                    if(!post.isAnswering) click(post, holder.layoutPosition)
+            if (rlAnswer.isClickable) {
+                rlAnswer.setOnClickListener {
+                    onAnswerClickListener?.let { click ->
+                        if (!post.isAnswering) click(post, holder.layoutPosition)
+                    }
+                }
+                ibAnswer.setOnClickListener {
+                    onAnswerClickListener?.let { click ->
+                        if(!post.isAnswering) click(post, holder.layoutPosition)
+                    }
+                }
+                tvAnswer.setOnClickListener {
+                    onAnswerClickListener?.let { click ->
+                        if(!post.isAnswering) click(post, holder.layoutPosition)
+                    }
                 }
             }
 
-            tvAnswer.setOnClickListener {
-                onAnswerClickListener?.let { click ->
-                    if(!post.isAnswering) click(post, holder.layoutPosition)
+            if (rlViewAnswer.isClickable) {
+                rlViewAnswer.setOnClickListener {
+                    onViewAnswerClickListener?.let { click ->
+                        click(post, holder.layoutPosition)
+                    }
+                }
+                ibViewAnswer.setOnClickListener {
+                    onViewAnswerClickListener?.let { click ->
+                        click(post, holder.layoutPosition)
+                    }
+                }
+                tvViewAnswer.setOnClickListener {
+                    onViewAnswerClickListener?.let { click ->
+                        click(post, holder.layoutPosition)
+                    }
                 }
             }
 
-            rlAnswer.setOnClickListener {
-                onAnswerClickListener?.let { click ->
-                    if(!post.isAnswering) click(post, holder.layoutPosition)
-                }
-            }
-
-//            ibComments.setOnClickListener {
-//                onCommentsClickListener?.let { click ->
-//                    click(post)
-//                }
-//            }
-
-            ibViewAnswer.setOnClickListener {
-                onViewAnswerClickListener?.let { click ->
-                    click(post, holder.layoutPosition)
-                }
-            }
-
-            tvViewAnswer.setOnClickListener {
-                onViewAnswerClickListener?.let { click ->
-                    click(post, holder.layoutPosition)
-                }
-            }
-
-            rlViewAnswer.setOnClickListener {
-                onViewAnswerClickListener?.let { click ->
-                    click(post, holder.layoutPosition)
+            rlShare.setOnClickListener {
+                onShareClickListener?.let { click ->
+                    click(post)
                 }
             }
 
@@ -192,24 +196,13 @@ class PostAdapter @Inject constructor(
                 }
             }
 
-            rlShare.setOnClickListener {
-                onShareClickListener?.let { click ->
-                    click(post)
-                }
-            }
-
-//            ibDeletePost.setOnClickListener {
-//                onDeletePostClickListener?.let { click ->
-//                    click(post)
-//                }
-//            }
             ibExpandPost.setOnClickListener {
                 onExpandClickListener?.let { click ->
                     click(post, holder.layoutPosition)
                 }
             }
 
-            ivAuthorProfileImage.setOnClickListener{
+            ivAuthorProfileImage.setOnClickListener {
                 onAuthorImageClickListener?.let { click ->
                     click(post)
                 }
@@ -222,56 +215,51 @@ class PostAdapter @Inject constructor(
     private var onLikeClickListener: ((Post, Int) -> Unit)? = null
     private var onAnswerClickListener: ((Post, Int) -> Unit)? = null
     private var onViewAnswerClickListener: ((Post, Int) -> Unit)? = null
-    private var onShareClickListener: ((Post) -> Unit )? = null
+    private var onShareClickListener: ((Post) -> Unit)? = null
     private var onUserClickListener: ((String) -> Unit)? = null
     private var onDeletePostClickListener: ((Post) -> Unit)? = null
     private var onLikedByClickListener: ((Post) -> Unit)? = null
     private var onAnsweredByClickListener: ((Post) -> Unit)? = null
-//    private var onCommentsClickListener: ((Post) -> Unit)? = null
     private var onAuthorImageClickListener: ((Post) -> Unit)? = null
     private var onExpandClickListener: ((Post, Int) -> Unit)? = null
 
-    fun setOnLikeClickListener(listener: (Post, Int) -> Unit){
+    fun setOnLikeClickListener(listener: (Post, Int) -> Unit) {
         onLikeClickListener = listener
     }
 
-    fun setOnAnswerClickListener(listener: (Post, Int) -> Unit){
+    fun setOnAnswerClickListener(listener: (Post, Int) -> Unit) {
         onAnswerClickListener = listener
     }
 
-    fun setOnViewAnswerClickListener(listener: (Post, Int) -> Unit){
+    fun setOnViewAnswerClickListener(listener: (Post, Int) -> Unit) {
         onViewAnswerClickListener = listener
     }
 
-    fun setOnShareClickListener(listener:(Post) -> Unit){
+    fun setOnShareClickListener(listener: (Post) -> Unit) {
         onShareClickListener = listener
     }
 
-    fun setOnUserClickListener(listener: (String) -> Unit){
+    fun setOnUserClickListener(listener: (String) -> Unit) {
         onUserClickListener = listener
     }
 
-    fun setOnDeletePostClickListener(listener: (Post) -> Unit){
+    fun setOnDeletePostClickListener(listener: (Post) -> Unit) {
         onDeletePostClickListener = listener
     }
 
-    fun setOnLikedByClickListener(listener: (Post) -> Unit){
+    fun setOnLikedByClickListener(listener: (Post) -> Unit) {
         onLikedByClickListener = listener
     }
 
-    fun setOnAnsweredByClickListener(listener: (Post) -> Unit){
+    fun setOnAnsweredByClickListener(listener: (Post) -> Unit) {
         onAnsweredByClickListener = listener
     }
 
-//    fun setOnCommentsClickListener(listener: (Post) -> Unit){
-//        onCommentsClickListener = listener
-//    }
-
-    fun setOnAuthorImageClickListener(listener: (Post) -> Unit){
+    fun setOnAuthorImageClickListener(listener: (Post) -> Unit) {
         onAuthorImageClickListener = listener
     }
 
-    fun setOnExpandClickListener(listener: (Post, Int) -> Unit){
+    fun setOnExpandClickListener(listener: (Post, Int) -> Unit) {
         onExpandClickListener = listener
     }
 

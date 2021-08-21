@@ -21,9 +21,6 @@ abstract class BasePostViewModel(
     private val _likePostStatus = MutableLiveData<Event<Resource<Boolean>>>()
     val likePostStatus: LiveData<Event<Resource<Boolean>>> = _likePostStatus
 
-    private val _answerPostStatus = MutableLiveData<Event<Resource<Boolean>>>()
-    val answerPostStatus: LiveData<Event<Resource<Boolean>>> = _answerPostStatus
-
     private val _deletePostStatus = MutableLiveData<Event<Resource<Post>>>()
     val deletePostStatus: LiveData<Event<Resource<Post>>> = _deletePostStatus
 
@@ -35,6 +32,12 @@ abstract class BasePostViewModel(
 
     private val _bookmarkPostStatus = MutableLiveData<Event<Resource<Boolean>>>()
     val bookmarkPostStatus: LiveData<Event<Resource<Boolean>>> = _bookmarkPostStatus
+
+    private val _answerViewedByUpdateStatus = MutableLiveData<Event<Resource<Boolean>>>()
+    val answerViewedByUpdateStatus: LiveData<Event<Resource<Boolean>>> = _answerViewedByUpdateStatus
+
+    private val _attemptedByUpdateStatus = MutableLiveData<Event<Resource<Boolean>>>()
+    val attemptedByUpdateStatus: LiveData<Event<Resource<Boolean>>> = _attemptedByUpdateStatus
 
     fun getUsers(userIds: List<String>){
         if(userIds.isEmpty()) return
@@ -66,6 +69,22 @@ abstract class BasePostViewModel(
         viewModelScope.launch(dispatcher){
             val result = repository.toggleBookmarkForPost(post.id)
             _bookmarkPostStatus.postValue(Event(result))
+        }
+    }
+
+    fun updateAnswerViewedByForPost(post: Post){
+        _answerViewedByUpdateStatus.postValue(Event(Resource.Loading()))
+        viewModelScope.launch(dispatcher) {
+            val result = repository.updateAnswerViewedByForPost(post)
+            _answerViewedByUpdateStatus.postValue(Event(result))
+        }
+    }
+
+    fun updateAttemptedByForPost(post: Post){
+        _attemptedByUpdateStatus.postValue(Event(Resource.Loading()))
+        viewModelScope.launch(dispatcher) {
+            val result = repository.updateAttemptedByForPost(post)
+            _attemptedByUpdateStatus.postValue(Event(result))
         }
     }
 }

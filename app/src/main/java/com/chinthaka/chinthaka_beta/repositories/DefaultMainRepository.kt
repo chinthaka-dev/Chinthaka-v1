@@ -2,8 +2,10 @@ package com.chinthaka.chinthaka_beta.repositories
 
 import android.net.Uri
 import android.util.Log
-import com.chinthaka.chinthaka_beta.R
-import com.chinthaka.chinthaka_beta.data.entities.*
+import com.chinthaka.chinthaka_beta.data.entities.Comment
+import com.chinthaka.chinthaka_beta.data.entities.Post
+import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
+import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.other.Constants.DEFAULT_PROFILE_PICTURE_URL
 import com.chinthaka.chinthaka_beta.other.Resource
 import com.chinthaka.chinthaka_beta.other.safeCall
@@ -20,7 +22,7 @@ import java.util.*
 
 
 @ActivityScoped     // @ActivityScoped is used to make sure we always pick the single instance always.
-class DefaultMainRepository: MainRepository {
+class DefaultMainRepository : MainRepository {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
@@ -54,7 +56,7 @@ class DefaultMainRepository: MainRepository {
             val chunks = userIds.chunked(10)
             var resultList = mutableListOf<User>()
 
-            chunks.forEach{ chunk ->
+            chunks.forEach { chunk ->
                 val userList = users.whereIn("userId", userIds)
                     .orderBy("userName")
                     .get()
@@ -72,19 +74,19 @@ class DefaultMainRepository: MainRepository {
             val user = users.document(userId).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
             val currentUserId = FirebaseAuth.getInstance().uid!!
-            val currentUser =   users.document(currentUserId).get().await().toObject(User::class.java)
+            val currentUser = users.document(currentUserId).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
             user.isFollowing = userId in currentUser.follows
             Resource.Success(user)
         }
     }
 
-    override suspend fun getPostsForFollows() = withContext(Dispatchers.IO){
+    override suspend fun getPostsForFollows() = withContext(Dispatchers.IO) {
         safeCall {
             val userId = FirebaseAuth.getInstance().uid!!
 //            val follows = getUser(userId).data!!.follows
 //            val allPosts = posts.whereIn("authorUId", follows)
-              val allPosts = posts
+            val allPosts = posts
                 .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()
@@ -104,13 +106,14 @@ class DefaultMainRepository: MainRepository {
             var isLiked = false
 
             // For Reading and Writing Documents
-            firestore.runTransaction{ transaction ->
+            firestore.runTransaction { transaction ->
                 val userId = FirebaseAuth.getInstance().uid!!
                 val postResult = transaction.get(posts.document(post.id))
                 val currentLikes = postResult.toObject(Post::class.java)?.likedBy ?: listOf()
-                transaction.update(posts.document(post.id),
+                transaction.update(
+                    posts.document(post.id),
                     "likedBy",
-                    if(userId in currentLikes) currentLikes - userId else {
+                    if (userId in currentLikes) currentLikes - userId else {
                         isLiked = true
                         currentLikes + userId
                     }
@@ -150,46 +153,50 @@ class DefaultMainRepository: MainRepository {
     override suspend fun toggleFollowForUser(userId: String) = withContext(Dispatchers.IO) {
         safeCall {
             var isFollowing = false
-            firestore.runTransaction{ transaction ->
+            firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
-                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
+                val currentUser =
+                    transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 isFollowing = userId in currentUser.follows
-                val newFollows = if(isFollowing) currentUser.follows - userId else currentUser.follows + userId
+                val newFollows =
+                    if (isFollowing) currentUser.follows - userId else currentUser.follows + userId
                 transaction.update(users.document(currentUserId), "follows", newFollows)
             }.await()
             Resource.Success(isFollowing)
         }
     }
 
-    override suspend fun searchUser(query: String) = withContext(Dispatchers.IO){
+    override suspend fun searchUser(query: String) = withContext(Dispatchers.IO) {
         safeCall {
-            val userResults = users.whereGreaterThanOrEqualTo("userName", query.uppercase(Locale.ROOT))
-                .get()
-                .await()
-                .toObjects(User::class.java)
+            val userResults =
+                users.whereGreaterThanOrEqualTo("userName", query.uppercase(Locale.ROOT))
+                    .get()
+                    .await()
+                    .toObjects(User::class.java)
 
             Resource.Success(userResults)
         }
     }
 
-    override suspend fun createComment(commentText: String, postId: String) = withContext(Dispatchers.IO) {
-        safeCall {
-            val userId = auth.uid!!
-            val commentId = UUID.randomUUID().toString()
-            val user = getUser(userId).data!!
-            val comment = Comment(
-                commentId,
-                postId,
-                userId,
-                user.userName,
-                user.profilePictureUrl,
-                commentText
-            )
+    override suspend fun createComment(commentText: String, postId: String) =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                val userId = auth.uid!!
+                val commentId = UUID.randomUUID().toString()
+                val user = getUser(userId).data!!
+                val comment = Comment(
+                    commentId,
+                    postId,
+                    userId,
+                    user.userName,
+                    user.profilePictureUrl,
+                    commentText
+                )
 
-            comments.document(commentId).set(comment).await()
-            Resource.Success(comment)
+                comments.document(commentId).set(comment).await()
+                Resource.Success(comment)
+            }
         }
-    }
 
     override suspend fun deleteComment(comment: Comment) = withContext(Dispatchers.IO) {
         safeCall {
@@ -198,7 +205,7 @@ class DefaultMainRepository: MainRepository {
         }
     }
 
-    override suspend fun getCommentsForPost(postId: String) = withContext(Dispatchers.IO){
+    override suspend fun getCommentsForPost(postId: String) = withContext(Dispatchers.IO) {
         safeCall {
             val commentsForPost = comments
                 .whereEqualTo("postId", postId)
@@ -233,32 +240,34 @@ class DefaultMainRepository: MainRepository {
         }
     }
 
-    override suspend fun updateProfilePicture(uid: String, imageUri: Uri) = withContext(Dispatchers.IO) {
-        val storageRef = storage.getReference(uid)
-        val user = getUser(uid).data!!
-        if(user.profilePictureUrl != DEFAULT_PROFILE_PICTURE_URL){
-            storage.getReferenceFromUrl(user.profilePictureUrl).delete().await()
+    override suspend fun updateProfilePicture(uid: String, imageUri: Uri) =
+        withContext(Dispatchers.IO) {
+            val storageRef = storage.getReference(uid)
+            val user = getUser(uid).data!!
+            if (user.profilePictureUrl != DEFAULT_PROFILE_PICTURE_URL) {
+                storage.getReferenceFromUrl(user.profilePictureUrl).delete().await()
+            }
+
+            storageRef.putFile(imageUri).await().metadata?.reference?.downloadUrl?.await()
         }
 
-        storageRef.putFile(imageUri).await().metadata?.reference?.downloadUrl?.await()
-    }
-
-    override suspend fun submitAnswerForPost(post: Post) = withContext(Dispatchers.IO) {
+    override suspend fun submitAnswerForPost(postId: String) = withContext(Dispatchers.IO) {
         safeCall {
             var isAnswered = false
 
             // For Reading and Writing Documents
-            firestore.runTransaction{ transaction ->
+            firestore.runTransaction { transaction ->
                 val userId = FirebaseAuth.getInstance().uid!!
-                val postResult = transaction.get(posts.document(post.id))
+                val postResult = transaction.get(posts.document(postId))
                 val currentAnsweredBy = postResult.toObject(Post::class.java)?.answeredBy ?: listOf()
-                transaction.update(posts.document(post.id),
-                    "answeredBy",
-                    if(userId in currentAnsweredBy) currentAnsweredBy - userId else {
-                        isAnswered = true
+                if (userId !in currentAnsweredBy) {
+                    isAnswered = true
+                    transaction.update(
+                        posts.document(postId),
+                        "answeredBy",
                         currentAnsweredBy + userId
-                    }
-                )
+                    )
+                }
             }.await()
 
             Resource.Success(isAnswered)
@@ -269,20 +278,59 @@ class DefaultMainRepository: MainRepository {
         safeCall {
             var hasBookmarked = false
             Log.i("MAIN_REPOSITORY", "Post : $postId is being bookmarked")
-            firestore.runTransaction{ transaction ->
+            firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
-                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
+                val currentUser =
+                    transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 hasBookmarked = postId in currentUser.bookmarks
-                transaction.update(users.document(currentUserId), "bookmarks",
-                    if(hasBookmarked){
+                transaction.update(
+                    users.document(currentUserId), "bookmarks",
+                    if (hasBookmarked) {
                         hasBookmarked = false
                         currentUser.bookmarks - postId
                     } else {
                         hasBookmarked = true
                         currentUser.bookmarks + postId
-                    })
+                    }
+                )
             }.await()
             Resource.Success(hasBookmarked)
+        }
+    }
+
+    override suspend fun updateAnswerViewedByForPost(post: Post) = withContext(Dispatchers.IO) {
+        safeCall {
+            var hasViewedAnswer = false
+            firestore.runTransaction { transaction ->
+                val currentUserId = auth.uid!!
+                hasViewedAnswer = currentUserId in post.answerViewedBy
+                if (!hasViewedAnswer) {
+                    hasViewedAnswer = true
+                    transaction.update(
+                        posts.document(post.id),
+                        "answerViewedBy", post.answerViewedBy + currentUserId
+                    )
+                }
+            }.await()
+            Resource.Success(hasViewedAnswer)
+        }
+    }
+
+    override suspend fun updateAttemptedByForPost(post: Post) = withContext(Dispatchers.IO) {
+        safeCall {
+            var hasAttempted = false
+            firestore.runTransaction { transaction ->
+                val currentUserId = auth.uid!!
+                hasAttempted = currentUserId in post.attemptedBy
+                if (!hasAttempted) {
+                    hasAttempted = true
+                    transaction.update(
+                        posts.document(post.id),
+                        "attemptedBy", post.attemptedBy + currentUserId
+                    )
+                }
+            }.await()
+            Resource.Success(hasAttempted)
         }
     }
 
