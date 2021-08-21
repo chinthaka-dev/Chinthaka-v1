@@ -53,15 +53,19 @@ abstract class BasePostFragment(
         postAdapter.setOnAnswerClickListener { post, i ->
             curAnsweredIndex = i
             basePostViewModel.updateAttemptedByForPost(post)
-            findNavController().navigate(
-                R.id.action_homeFragment_to_submitAnswerFragment,
-                Bundle().apply {
-                    putString("answer", post.answer.getValue("text"))
-                    putString("postId", post.id)
-                    putInt("currentIndex", curAnsweredIndex!!)
-                },
-            )
-
+            if(userId in post.answeredBy){
+                snackbar("This post has already been answered by you!")
+            }
+            else {
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_submitAnswerFragment,
+                    Bundle().apply {
+                        putString("answer", post.answer.getValue("text"))
+                        putString("postId", post.id)
+                        putInt("currentIndex", curAnsweredIndex!!)
+                    },
+                )
+            }
         }
 
         postAdapter.setOnExpandClickListener { post, i ->
@@ -72,20 +76,31 @@ abstract class BasePostFragment(
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
             curAnsweredIndex = i
-            ViewAnswerDialog().apply {
-                setPositiveListener {
-                    basePostViewModel.updateAnswerViewedByForPost(post)
-                    findNavController().popBackStack()
-                    findNavController().navigate(
-                        R.id.globalActionToViewAnswerFragment,
-                        Bundle().apply {
-                            putString("answer", post.answer.getValue("text"))
-                            putString("description", post.answer.getValue("description"))
-                            putString("imageUrl", post.answer.getValue("imageUrl"))
-                        }
-                    )
-                }
-            }.show(childFragmentManager, null)
+            if(userId in post.answerViewedBy){
+                findNavController().navigate(
+                    R.id.globalActionToViewAnswerFragment,
+                    Bundle().apply {
+                        putString("answer", post.answer.getValue("text"))
+                        putString("description", post.answer.getValue("description"))
+                        putString("imageUrl", post.answer.getValue("imageUrl"))
+                    }
+                )
+            } else {
+                ViewAnswerDialog().apply {
+                    setPositiveListener {
+                        basePostViewModel.updateAnswerViewedByForPost(post)
+                        findNavController().popBackStack()
+                        findNavController().navigate(
+                            R.id.globalActionToViewAnswerFragment,
+                            Bundle().apply {
+                                putString("answer", post.answer.getValue("text"))
+                                putString("description", post.answer.getValue("description"))
+                                putString("imageUrl", post.answer.getValue("imageUrl"))
+                            }
+                        )
+                    }
+                }.show(childFragmentManager, null)
+            }
         }
 
         postAdapter.setOnShareClickListener { post ->
@@ -226,4 +241,7 @@ abstract class BasePostFragment(
         })
 
     }
+
+    open val userId: String
+        get() = FirebaseAuth.getInstance().uid!!
 }

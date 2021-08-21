@@ -13,7 +13,6 @@ import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.databinding.ItemPostBinding
-import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class PostAdapter @Inject constructor(
@@ -30,7 +29,8 @@ class PostAdapter @Inject constructor(
         val tvAnsweredBy: TextView = binding.tvAnsweredBy
         val iblike: ImageButton = binding.ibLike
         val ibAnswer: ImageButton = binding.ibAnswer
-//        val ibDeletePost: ImageButton = binding.ibExpandPost
+
+        //        val ibDeletePost: ImageButton = binding.ibExpandPost
         val ibExpandPost: ImageButton = binding.ibExpandPost
         val ibViewAnswer: ImageButton = binding.ibViewAnswer
         val ibShare: ImageButton = binding.ibShare
@@ -78,16 +78,10 @@ class PostAdapter @Inject constructor(
 
             val likeCount = post.likedBy.size
             val answeredByCount = post.answeredBy.size
-            val userId = FirebaseAuth.getInstance().uid!!
 
             tvLikedBy.text = likeCount.toString()
             tvAnsweredBy.text = answeredByCount.toString()
-            rlAnswer.isClickable = userId !in post.answeredBy
-            tvAnswer.isClickable = rlAnswer.isClickable
-            ibAnswer.isClickable = rlAnswer.isClickable
-            rlViewAnswer.isClickable = userId !in post.answeredBy && userId !in post.answerViewedBy
-            tvViewAnswer.isClickable = rlViewAnswer.isClickable
-            ibViewAnswer.isClickable = rlViewAnswer.isClickable
+
             iblike.setImageResource(
                 if (post.isLiked) {
                     R.drawable.ic_thumbs_up_filled
@@ -142,41 +136,38 @@ class PostAdapter @Inject constructor(
                 }
             }
 
-            if (rlAnswer.isClickable) {
-                rlAnswer.setOnClickListener {
-                    onAnswerClickListener?.let { click ->
-                        if (!post.isAnswering) click(post, holder.layoutPosition)
-                    }
+            rlAnswer.setOnClickListener {
+                onAnswerClickListener?.let { click ->
+                    if (!post.isAnswering) click(post, holder.layoutPosition)
                 }
-                ibAnswer.setOnClickListener {
-                    onAnswerClickListener?.let { click ->
-                        if(!post.isAnswering) click(post, holder.layoutPosition)
-                    }
+            }
+            ibAnswer.setOnClickListener {
+                onAnswerClickListener?.let { click ->
+                    if (!post.isAnswering) click(post, holder.layoutPosition)
                 }
-                tvAnswer.setOnClickListener {
-                    onAnswerClickListener?.let { click ->
-                        if(!post.isAnswering) click(post, holder.layoutPosition)
-                    }
+            }
+            tvAnswer.setOnClickListener {
+                onAnswerClickListener?.let { click ->
+                    if (!post.isAnswering) click(post, holder.layoutPosition)
                 }
             }
 
-            if (rlViewAnswer.isClickable) {
-                rlViewAnswer.setOnClickListener {
-                    onViewAnswerClickListener?.let { click ->
-                        click(post, holder.layoutPosition)
-                    }
-                }
-                ibViewAnswer.setOnClickListener {
-                    onViewAnswerClickListener?.let { click ->
-                        click(post, holder.layoutPosition)
-                    }
-                }
-                tvViewAnswer.setOnClickListener {
-                    onViewAnswerClickListener?.let { click ->
-                        click(post, holder.layoutPosition)
-                    }
+            rlViewAnswer.setOnClickListener {
+                onViewAnswerClickListener?.let { click ->
+                    click(post, holder.layoutPosition)
                 }
             }
+            ibViewAnswer.setOnClickListener {
+                onViewAnswerClickListener?.let { click ->
+                    click(post, holder.layoutPosition)
+                }
+            }
+            tvViewAnswer.setOnClickListener {
+                onViewAnswerClickListener?.let { click ->
+                    click(post, holder.layoutPosition)
+                }
+            }
+
 
             rlShare.setOnClickListener {
                 onShareClickListener?.let { click ->

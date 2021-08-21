@@ -88,7 +88,4 @@ open class ProfileFragment : BasePostFragment(R.layout.fragment_profile) {
 
     protected val viewModel: ProfileViewModel
         get() = basePostViewModel as ProfileViewModel
-
-    protected open val userId: String
-        get() = FirebaseAuth.getInstance().uid!!
 }
