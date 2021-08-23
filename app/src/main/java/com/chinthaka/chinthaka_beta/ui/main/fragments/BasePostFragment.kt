@@ -10,6 +10,7 @@ import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.adapters.PostAdapter
 import com.chinthaka.chinthaka_beta.adapters.UserAdapter
+import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.other.EventObserver
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.AnsweredByDialog
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.DeletePostDialog
@@ -56,6 +57,9 @@ abstract class BasePostFragment(
             if(userId in post.answeredBy){
                 snackbar("This post has already been answered by you!")
             }
+            else if(userId in post.answerViewedBy){
+                snackbar("You have already viewed the answer for this post!")
+            }
             else {
                 findNavController().navigate(
                     R.id.action_homeFragment_to_submitAnswerFragment,
@@ -66,12 +70,6 @@ abstract class BasePostFragment(
                     },
                 )
             }
-        }
-
-        postAdapter.setOnExpandClickListener { post, i ->
-            curBookmarkedIndex = i
-            post.isBookmarked = !post.isBookmarked
-            basePostViewModel.toggleBookmarkForPost(post)
         }
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
@@ -168,7 +166,7 @@ abstract class BasePostFragment(
                     this.isLiked = isLiked
                     isLiking = false
                     if (isLiked) {
-
+                        likedBy += userId
                     } else {
                         likedBy -= userId
                     }

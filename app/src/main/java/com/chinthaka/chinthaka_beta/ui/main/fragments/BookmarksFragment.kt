@@ -11,7 +11,6 @@ import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.FragmentBookmarksBinding
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BookmarksViewModel
-import com.chinthaka.chinthaka_beta.ui.main.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest

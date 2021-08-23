@@ -75,15 +75,15 @@ class CategoryAdapter @Inject constructor(
 
             itemView.setOnClickListener{
                 onViewClickListener?.let { click ->
-                    click(category, position)
+                    click(position)
                 }
             }
         }
     }
 
-    private var onViewClickListener: ((Category, Int) -> Unit)? = null
+    private var onViewClickListener: ((Int) -> Unit)? = null
 
-    fun setOnViewClickListener(listener: (Category, Int) -> Unit){
+    fun setOnViewClickListener(listener: (Int) -> Unit){
         onViewClickListener = listener
     }
 }

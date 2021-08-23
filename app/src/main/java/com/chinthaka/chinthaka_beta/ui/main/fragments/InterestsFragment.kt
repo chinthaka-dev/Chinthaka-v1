@@ -1,6 +1,7 @@
 package com.chinthaka.chinthaka_beta.ui.main.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -40,8 +41,8 @@ class InterestsFragment : Fragment(R.layout.fragment_interests) {
 
         viewModel.loadInterests()
 
-        categoryAdapter.setOnViewClickListener { category, i ->
-            category.isSelected = !category.isSelected
+        categoryAdapter.setOnViewClickListener { i ->
+            categoryAdapter.categories[i].isSelected = !categoryAdapter.categories[i].isSelected
             categoryAdapter.notifyItemChanged(i)
         }
 
