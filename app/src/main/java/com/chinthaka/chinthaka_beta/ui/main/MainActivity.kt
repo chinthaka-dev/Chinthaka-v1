@@ -43,6 +43,7 @@ class MainActivity: AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_Chinthaka)
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
@@ -67,8 +68,9 @@ class MainActivity: AppCompatActivity(){
 
         val extras = intent.extras?.get(R.string.is_new_user.toString())
 
-        if(extras == true)
-            navController.navigate(R.id.globalActionToInterestsFragment)
+        if(extras == true) {
+            navController.navigate(R.id.globalActionToSettingsFragment)
+        }
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -86,21 +88,6 @@ class MainActivity: AppCompatActivity(){
         // Accessing Drawer Header Views
 //        val ivProfileImage = navView.getHeaderView(0).findViewById<ImageView>(R.id.ivProfileImage)
 //        val tvProfileName = navView.getHeaderView(0).findViewById<TextView>(R.id.tvProfileName)
-
-
-
-        navView.setNavigationItemSelectedListener{
-            when(it.itemId){
-                R.id.nav_logout -> {
-                    FirebaseAuth.getInstance().signOut()
-                    Intent(this, AuthActivity::class.java).also {
-                        startActivity(it)
-                    }
-                    finish()
-                }
-            }
-            true
-        }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

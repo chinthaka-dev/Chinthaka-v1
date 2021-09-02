@@ -96,4 +96,14 @@
 
     <style name="Theme.DrawerLayout.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_image</item>
+    </style>
+
+    <style name="noActionBarTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>

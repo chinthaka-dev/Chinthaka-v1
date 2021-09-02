@@ -43,7 +43,15 @@
         android:id="@+id/settingsFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SettingsFragment"
         android:label="Settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_InterestsFragment"
+            app:destination="@id/interestsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/interestsFragment"
@@ -57,6 +65,10 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <argument
+            android:name="is_new_user"
+            app:argType="boolean"
+            />
     </fragment>
 
     <fragment
@@ -126,6 +138,10 @@
     <action
         android:id="@+id/globalActionToInterestsFragment"
         app:destination="@id/interestsFragment" />
+
+    <action
+        android:id="@+id/globalActionToSettingsFragment"
+        app:destination="@id/settingsFragment" />
 
     <fragment
         android:id="@+id/othersProfileFragment"

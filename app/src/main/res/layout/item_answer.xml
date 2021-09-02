@@ -53,7 +53,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/explanationTitle" />
 
-            <ImageView
+            <com.jsibbold.zoomage.ZoomageView
                 android:id="@+id/ivAnswerImage"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"

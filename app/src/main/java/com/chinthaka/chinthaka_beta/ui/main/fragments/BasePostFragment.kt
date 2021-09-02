@@ -51,6 +51,12 @@ abstract class BasePostFragment(
             basePostViewModel.toggleLikeForPost(post)
         }
 
+        postAdapter.setOnExpandClickListener{ post, i ->
+            curBookmarkedIndex = i
+            post.isBookmarked = !post.isBookmarked
+            basePostViewModel.toggleBookmarkForPost(post)
+        }
+
         postAdapter.setOnAnswerClickListener { post, i ->
             curAnsweredIndex = i
             basePostViewModel.updateAttemptedByForPost(post)
@@ -127,13 +133,6 @@ abstract class BasePostFragment(
         postAdapter.setOnAnsweredByClickListener { post ->
             basePostViewModel.getUsers(post.answeredBy)
         }
-
-//        postAdapter.setOnCommentsClickListener { post ->
-//            findNavController().navigate(
-//                R.id.globalActionToCommentDialog,
-//                Bundle().apply { putString("postId", post.id) }
-//            )
-//        }
 
         postAdapter.setOnAuthorImageClickListener { post ->
             findNavController().navigate(

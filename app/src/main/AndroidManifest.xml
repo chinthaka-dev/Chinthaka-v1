@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Chinthaka">
+        android:theme="@style/splashScreenTheme">
         <activity android:name=".ui.main.MainActivity" android:screenOrientation="portrait"/>
         <activity android:name="com.canhub.cropper.CropImageActivity" android:theme="@style/Base.Theme.AppCompat"/>
         <activity

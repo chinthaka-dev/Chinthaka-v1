@@ -50,7 +50,8 @@ class FollowPostsPagingSource(
 
                 // curPage -> Query Snapshot
 
-                val parsedPage = curPage!!.toObjects(Post::class.java).onEach { post ->
+                val parsedPage = curPage!!.toObjects(Post::class.java).filter { post -> !post.answeredBy.contains(uid) || (post.category in currentUser!!.selectedInterests) }
+                    .onEach { post ->
 
                     val user = db.collection("users")
                         .document(post.authorUId).get().await().toObject(User::class.java)!!

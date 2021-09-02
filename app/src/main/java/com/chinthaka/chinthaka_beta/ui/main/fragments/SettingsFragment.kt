@@ -4,24 +4,30 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
+import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.databinding.FragmentSettingsBinding
 import com.chinthaka.chinthaka_beta.other.EventObserver
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.SettingsViewModel
 import com.chinthaka.chinthaka_beta.ui.slideUpViews
 import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.zxing.common.StringUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,11 +55,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         fragmentSettingsBinding.btnUpdateProfile.isEnabled = false
 
         fragmentSettingsBinding.etUsername.addTextChangedListener{
-            fragmentSettingsBinding.btnUpdateProfile.isEnabled = true
+            if(fragmentSettingsBinding.etUsername.text!!.isNotEmpty() &&
+                    fragmentSettingsBinding.etDescription.text!!.isNotEmpty()){
+                fragmentSettingsBinding.btnUpdateProfile.isEnabled = true
+            }
         }
 
         fragmentSettingsBinding.etDescription.addTextChangedListener{
-            fragmentSettingsBinding.btnUpdateProfile.isEnabled = true
+            if(fragmentSettingsBinding.etUsername.text!!.isNotEmpty() &&
+                fragmentSettingsBinding.etDescription.text!!.isNotEmpty()){
+                fragmentSettingsBinding.btnUpdateProfile.isEnabled = true
+            }
         }
 
         fragmentSettingsBinding.ivProfileImage.setOnClickListener {
@@ -65,6 +77,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val description = fragmentSettingsBinding.etDescription.text.toString()
             val profileUpdate = ProfileUpdate(userId, userName, description, curImageUri)
             viewModel.updateProfile(profileUpdate)
+            findNavController().navigate(R.id.action_settingsFragment_to_InterestsFragment)
         }
 
         slideUpViews(

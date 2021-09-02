@@ -1,6 +1,7 @@
 package com.chinthaka.chinthaka_beta
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -85,37 +86,23 @@ open class AuthActivity : AppCompatActivity() {
             .createSignInIntentBuilder()
             .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
+            .setLogo(R.drawable.ic_dashboard_black_24dp) // Set logo drawable
+            .setTheme(R.style.noActionBarTheme) // Set theme
             .build()
         signInLauncher.launch(signInIntent)
         // [END auth_fui_create_intent]
-    }
-
-    private fun themeAndLogo() {
-        val providers = emptyList<AuthUI.IdpConfig>()
-
-        // [START auth_fui_theme_logo]
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .setLogo(R.drawable.ic_dashboard_black_24dp) // Set logo drawable
-//            .setTheme(R.style.MySuperAppTheme) // Set theme
-            .build()
-        signInLauncher.launch(signInIntent)
-        // [END auth_fui_theme_logo]
     }
 
     private fun subscribeToObservers() {
         viewModel.addNewUserStatus.observe(this, EventObserver(
             onError = {
                 activityAuthBinding.addNewUserProgressBar.isVisible = false
-//                snackbar(it, rootView)
             },
             onLoading = {
                 activityAuthBinding.addNewUserProgressBar.isVisible = true
             }
         ) {
             activityAuthBinding.addNewUserProgressBar.isVisible = false
-//            snackbar(getString(R.string.success_registration))
         })
     }
 
