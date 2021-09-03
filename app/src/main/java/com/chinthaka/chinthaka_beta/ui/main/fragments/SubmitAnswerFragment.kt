@@ -109,9 +109,9 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
             for (ch in userAnswerCharArray) {
                 if (ch == correctAnswer.lowercase()[i]) {
                     if (ch == ' ') {
-                        sb.append(ch).append("   ")
+                        sb.append(ch).append(" ")
                     } else {
-                        sb.append(correctAnswer[i]).append(" ")
+                        sb.append(correctAnswer[i])
                     }
                 } else {
                     break
@@ -121,9 +121,9 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
         }
         for (j in i until correctAnswer.length) {
             if (correctAnswer[j] != ' ') {
-                sb.append("_ ")
+                sb.append("_")
             } else {
-                sb.append("   ")
+                sb.append(" ")
             }
         }
         return sb.toString()
