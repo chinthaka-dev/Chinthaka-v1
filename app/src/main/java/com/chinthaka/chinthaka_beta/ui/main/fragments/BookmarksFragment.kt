@@ -9,8 +9,10 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.FragmentBookmarksBinding
+import com.chinthaka.chinthaka_beta.other.EventObserver
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BookmarksViewModel
+import com.chinthaka.chinthaka_beta.ui.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -43,6 +45,13 @@ class BookmarksFragment : BasePostFragment(R.layout.fragment_bookmarks) {
                     it.refresh is LoadState.Loading || it.append is LoadState.Loading
             }
         }
+
+        postAdapter.setOnExpandClickListener{ post, i ->
+            curBookmarkedIndex = i
+            post.isBookmarked = !post.isBookmarked
+            viewModel.toggleBookmarkForPost(post)
+        }
+
     }
 
     private fun setUpRecyclerView() = fragmentBookmarksBinding.rvAllPosts.apply {

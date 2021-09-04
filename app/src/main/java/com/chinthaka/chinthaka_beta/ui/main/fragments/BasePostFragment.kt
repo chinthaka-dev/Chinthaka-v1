@@ -39,7 +39,7 @@ abstract class BasePostFragment(
 
     private var curAnsweredIndex: Int? = null
 
-    private var curBookmarkedIndex: Int? = null
+    var curBookmarkedIndex: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

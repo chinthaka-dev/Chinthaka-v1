@@ -1,40 +1,30 @@
 package com.chinthaka.chinthaka_beta.ui.main
 
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.media.Image
-import android.os.Build
 import android.os.Bundle
-import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.ActionBar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.*
-import com.bumptech.glide.RequestManager
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.ActivityMainBinding
-import com.chinthaka.chinthaka_beta.ui.main.fragments.InterestsFragmentDirections
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity: AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -49,15 +39,27 @@ class MainActivity: AppCompatActivity(){
         setContentView(activityMainBinding.root)
 
         setSupportActionBar(activityMainBinding.appBarMain.toolbar)
-        activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.black)
-        activityMainBinding.appBarMain.toolbar.setTitleTextColor(AppCompatResources.getColorStateList(this, R.color.white))
+        activityMainBinding.appBarMain.toolbar.background =
+            AppCompatResources.getDrawable(this, R.color.black)
+        activityMainBinding.appBarMain.toolbar.setTitleTextColor(
+            AppCompatResources.getColorStateList(
+                this,
+                R.color.white
+            )
+        )
 
         // This is being done as we are having a FragmentContainerView, not a direct Fragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
                 as NavHostFragment
         val drawerLayout: DrawerLayout = activityMainBinding.drawerLayout
         val navView: NavigationView = activityMainBinding.navigationView
-        actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, activityMainBinding.appBarMain.toolbar, R.string.start, R.string.close)
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            activityMainBinding.appBarMain.toolbar,
+            R.string.start,
+            R.string.close
+        )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
 
         actionBarDrawerToggle.syncState()
@@ -68,13 +70,17 @@ class MainActivity: AppCompatActivity(){
 
         val extras = intent.extras?.get(R.string.is_new_user.toString())
 
-        if(extras == true) {
+        if (extras == true) {
             navController.navigate(R.id.globalActionToSettingsFragment)
         }
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment, R.id.profileFragment, R.id.settingsFragment, R.id.bookmarksFragment, R.id.othersProfileFragment
+                R.id.homeFragment,
+                R.id.profileFragment,
+                R.id.settingsFragment,
+                R.id.bookmarksFragment,
+                R.id.othersProfileFragment
             ), drawerLayout
         )
 
@@ -82,7 +88,17 @@ class MainActivity: AppCompatActivity(){
 
         navView.getHeaderView(0).setOnClickListener {
             drawerLayout.close()
-            navController.navigate(R.id.action_homeFragment_to_settingsFragment)
+            navController.navigate(R.id.action_homeFragment_to_settingsFragment,
+                Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
+        }
+
+        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+            FirebaseAuth.getInstance().signOut()
+            Intent(this, AuthActivity::class.java).also {
+                startActivity(it)
+            }
+            finish()
+            true
         }
 
         // Accessing Drawer Header Views

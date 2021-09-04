@@ -6,7 +6,11 @@ import com.chinthaka.chinthaka_beta.data.entities.Comment
 import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
 import com.chinthaka.chinthaka_beta.data.entities.User
+import com.chinthaka.chinthaka_beta.other.Constants.ANSWERED_BY_WEIGHT
+import com.chinthaka.chinthaka_beta.other.Constants.ANSWER_VIEWED_BY_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Constants.DEFAULT_PROFILE_PICTURE_URL
+import com.chinthaka.chinthaka_beta.other.Constants.LIKED_BY_WEIGHT
+import com.chinthaka.chinthaka_beta.other.Constants.RECENTNESS_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Resource
 import com.chinthaka.chinthaka_beta.other.safeCall
 import com.google.firebase.auth.FirebaseAuth
@@ -119,6 +123,8 @@ class DefaultMainRepository : MainRepository {
                     }
                 )
             }.await()
+
+            updatePopularityIndexForPost(post.id)
 
             Resource.Success(isLiked)
         }
@@ -254,7 +260,6 @@ class DefaultMainRepository : MainRepository {
     override suspend fun submitAnswerForPost(postId: String) = withContext(Dispatchers.IO) {
         safeCall {
             var isAnswered = false
-
             // For Reading and Writing Documents
             firestore.runTransaction { transaction ->
                 val userId = FirebaseAuth.getInstance().uid!!
@@ -270,6 +275,7 @@ class DefaultMainRepository : MainRepository {
                 }
             }.await()
 
+            updatePopularityIndexForPost(postId)
             Resource.Success(isAnswered)
         }
     }
@@ -312,6 +318,7 @@ class DefaultMainRepository : MainRepository {
                     )
                 }
             }.await()
+            updatePopularityIndexForPost(post.id)
             Resource.Success(hasViewedAnswer)
         }
     }
@@ -330,7 +337,31 @@ class DefaultMainRepository : MainRepository {
                     )
                 }
             }.await()
+            updatePopularityIndexForPost(post.id)
             Resource.Success(hasAttempted)
+        }
+    }
+
+    override suspend fun updatePopularityIndexForPost(postId: String) = withContext(Dispatchers.IO) {
+        safeCall {
+            var isPopularityIndexUpdated = false
+            val totalUsers = users.get().await().size()
+            firestore.runTransaction { transaction ->
+                val post = transaction.get(posts.document(postId)).toObject(Post::class.java)!!
+                val recentness = (System.currentTimeMillis() - post.date)/ (System.currentTimeMillis())
+                val popularityIndexNumerator = ((RECENTNESS_WEIGHT * recentness) + (LIKED_BY_WEIGHT * post.likedBy.size) +
+                        (ANSWERED_BY_WEIGHT * post.answeredBy.size) + (ANSWER_VIEWED_BY_WEIGHT * post.answerViewedBy.size))
+                val popularityIndexDenominator = 4 * totalUsers
+                val newPopularityIndex = (popularityIndexNumerator / popularityIndexDenominator)
+                if(!isPopularityIndexUpdated){
+                    isPopularityIndexUpdated = true
+                    transaction.update(
+                        posts.document(post.id),
+                        "popularityIndex", newPopularityIndex.coerceAtLeast(0.5)
+                    )
+                }
+            }.await()
+            Resource.Success(isPopularityIndexUpdated)
         }
     }
 

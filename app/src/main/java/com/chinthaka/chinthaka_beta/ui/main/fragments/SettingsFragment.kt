@@ -15,6 +15,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.RequestManager
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
@@ -43,11 +44,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var curImageUri: Uri? = null
 
+    private val args: SettingsFragmentArgs by navArgs()
+
     private lateinit var cropContent: ActivityResultLauncher<Any?>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentSettingsBinding = FragmentSettingsBinding.bind(view)
+
+        val isNavigatedFromDrawer: Boolean = args.isNavigatedFromDrawer
 
         subscribeToObservers()
         val userId = FirebaseAuth.getInstance().uid!!
@@ -77,7 +82,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val description = fragmentSettingsBinding.etDescription.text.toString()
             val profileUpdate = ProfileUpdate(userId, userName, description, curImageUri)
             viewModel.updateProfile(profileUpdate)
-            findNavController().navigate(R.id.action_settingsFragment_to_InterestsFragment)
+            if(!isNavigatedFromDrawer){
+                findNavController().navigate(R.id.action_settingsFragment_to_InterestsFragment)
+            }
         }
 
         slideUpViews(
@@ -127,7 +134,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             glide.load(user.profilePictureUrl).into(fragmentSettingsBinding.ivProfileImage)
             fragmentSettingsBinding.etUsername.setText(user.userName)
             fragmentSettingsBinding.etDescription.setText(user.description)
-            fragmentSettingsBinding.btnUpdateProfile.isEnabled = false
         })
 
         viewModel.curImageUri.observe(viewLifecycleOwner) { uri ->

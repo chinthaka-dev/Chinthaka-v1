@@ -45,4 +45,6 @@ interface MainRepository {
     suspend fun updateAnswerViewedByForPost(post: Post): Resource<Boolean>
 
     suspend fun updateAttemptedByForPost(post: Post): Resource<Boolean>
+
+    suspend fun updatePopularityIndexForPost(postId: String): Resource<Boolean>
 }

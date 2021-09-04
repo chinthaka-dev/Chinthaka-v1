@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item
-            android:id="@id/profileFragment"
-            android:icon="@drawable/ic_my_posts"
-            android:title="@string/view_my_posts" />
-
-        <item
             android:id="@id/privacyPolicyFragment"
             android:icon="@drawable/ic_privacy_policy"
             android:title="@string/privacy_policy" />

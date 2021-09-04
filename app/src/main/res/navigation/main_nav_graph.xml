@@ -51,6 +51,10 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <argument
+            android:name="is_navigated_from_drawer"
+            app:argType="boolean"
+            />
     </fragment>
 
     <fragment
