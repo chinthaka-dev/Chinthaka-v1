@@ -18,7 +18,7 @@ class LikedByDialog(
             adapter = userAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        return MaterialAlertDialogBuilder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
             .setTitle(R.string.liked_by_dialog_title)
             .setView(rvLikedBy)
             .create()

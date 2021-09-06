@@ -52,6 +52,24 @@
         <item name="android:background">?android:attr/actionBarItemBackground</item>
     </style>
 
+    <!--REQUIRED -->
+    <style name="AlertDialogCustom" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <!--REQUIRED -->
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/grayBackground</item>
+    </style>
+
+    <!--REQUIRED -->
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="BottomAppBarStyle" parent="Widget.MaterialComponents.BottomAppBar">
 <!--        <item name="backgroundTint">@color/mediumDarkBackground</item>-->
         <item name="backgroundTint">@color/white</item>

@@ -18,7 +18,7 @@ class AnsweredByDialog(
             adapter = userAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        return MaterialAlertDialogBuilder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
             .setTitle(R.string.answered_by_dialog_title)
             .setView(rvAnsweredBy)
             .create()

@@ -40,20 +40,20 @@
             app:layout_constraintTop_toBottomOf="@id/tvCorrectAnswer" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGetHelp"
+            android:id="@+id/btnGetHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/get_help"
+            android:text="@string/get_hint"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAnswerDetails" />
+            app:layout_constraintTop_toBottomOf="@id/etUserAnswer" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etUserAnswer"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_marginLeft="@dimen/activity_small_horizontal_margin"
             android:layout_marginRight="@dimen/activity_small_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_small_horizontal_margin"
@@ -67,7 +67,20 @@
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnGetHelp" />
+            app:layout_constraintTop_toBottomOf="@id/tvAnswerDetails" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHintsRemaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/sample_answer"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnGetHint" />
 
         <ProgressBar
             android:id="@+id/submitAnswerProgressBar"
@@ -75,22 +88,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@id/btnSubmit"
-            app:layout_constraintEnd_toStartOf="@id/btnSubmit"
-            app:layout_constraintBottom_toBottomOf="@id/btnSubmit"
-            />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSubmit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/white"
-            android:text="@string/submit"
-            app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etUserAnswer" />
+            app:layout_constraintTop_toBottomOf="@+id/etUserAnswer"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

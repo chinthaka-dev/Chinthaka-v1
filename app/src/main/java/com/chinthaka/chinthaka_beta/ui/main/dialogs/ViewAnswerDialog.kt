@@ -15,7 +15,7 @@ class ViewAnswerDialog: DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
             .setMessage(R.string.view_answer_dialog_message)
             .setIcon(R.drawable.ic_view_answer_outline)
             .setPositiveButton(R.string.view_answer_dialog_positive){ _, _ ->
