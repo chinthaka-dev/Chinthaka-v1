@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.databinding.ActivityMainBinding
+import com.chinthaka.chinthaka_beta.repositories.MetricRepository
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_Chinthaka)
+
+        val metricRepository = MetricRepository()
+        metricRepository.recordDailyLogin()
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)

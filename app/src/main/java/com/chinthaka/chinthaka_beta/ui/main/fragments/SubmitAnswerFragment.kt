@@ -24,6 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
 import android.view.Gravity
 import androidx.core.content.ContextCompat.getSystemService
+import com.chinthaka.chinthaka_beta.data.entities.Metric
+import com.chinthaka.chinthaka_beta.repositories.MetricRepository
 
 
 @AndroidEntryPoint
@@ -43,6 +45,9 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val metricRepository = MetricRepository()
+        metricRepository.recordClicksOnMetric(Metric.NUMBER_OF_ATTEMPTS)
 
         subscribeToObservers()
 
@@ -75,6 +80,7 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                     hideSoftKeyboard(requireActivity())
                     submitAnswerFragmentBinding.etUserAnswer.inputType = InputType.TYPE_NULL
                     viewModel.submitAnswerForPost(postId = args.postId)
+                    metricRepository.recordClicksOnMetric(Metric.NUMBER_OF_ANSWERS_SUBMITTED)
                 }
             }
 

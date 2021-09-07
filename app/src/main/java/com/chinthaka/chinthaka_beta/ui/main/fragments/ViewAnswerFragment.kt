@@ -9,8 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.R
+import com.chinthaka.chinthaka_beta.data.entities.Metric
 import com.chinthaka.chinthaka_beta.databinding.FragmentProfileBinding
 import com.chinthaka.chinthaka_beta.databinding.FragmentViewAnswerBinding
+import com.chinthaka.chinthaka_beta.repositories.MetricRepository
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +30,9 @@ class ViewAnswerFragment: Fragment(R.layout.fragment_view_answer) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val metricRepository = MetricRepository()
+        metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_VIEW_SOLUTIONS)
 
         fragmentViewAnswerBinding = FragmentViewAnswerBinding.bind(view)
 

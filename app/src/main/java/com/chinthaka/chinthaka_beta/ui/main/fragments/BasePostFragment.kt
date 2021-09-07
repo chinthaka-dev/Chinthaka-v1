@@ -10,8 +10,9 @@ import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.adapters.PostAdapter
 import com.chinthaka.chinthaka_beta.adapters.UserAdapter
-import com.chinthaka.chinthaka_beta.data.entities.Post
+import com.chinthaka.chinthaka_beta.data.entities.Metric
 import com.chinthaka.chinthaka_beta.other.EventObserver
+import com.chinthaka.chinthaka_beta.repositories.MetricRepository
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.AnsweredByDialog
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.DeletePostDialog
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.LikedByDialog
@@ -41,6 +42,8 @@ abstract class BasePostFragment(
 
     var curBookmarkedIndex: Int? = null
 
+    val metricRepository = MetricRepository()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeToObservers()
@@ -49,12 +52,14 @@ abstract class BasePostFragment(
             curLikedIndex = i
             post.isLiked = !post.isLiked
             basePostViewModel.toggleLikeForPost(post)
+            metricRepository.recordClicksOnMetric(Metric.NUMBER_OF_LIKES)
         }
 
         postAdapter.setOnExpandClickListener{ post, i ->
             curBookmarkedIndex = i
             post.isBookmarked = !post.isBookmarked
             basePostViewModel.toggleBookmarkForPost(post)
+            metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_BOOKMARK)
         }
 
         postAdapter.setOnAnswerClickListener { post, i ->
@@ -115,6 +120,7 @@ abstract class BasePostFragment(
                 "${post.authorUserName} has challenged you to answer the question."
             )
             intent.putExtra(Intent.EXTRA_TEXT, "http://play.google.com")
+            metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
             startActivity(Intent.createChooser(intent, "Share using"))
         }
 
