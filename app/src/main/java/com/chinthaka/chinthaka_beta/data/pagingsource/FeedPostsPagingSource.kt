@@ -11,7 +11,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
-class FollowPostsPagingSource(
+class FeedPostsPagingSource(
     private val db: FirebaseFirestore
 ) : PagingSource<QuerySnapshot, Post>() {
 
@@ -28,7 +28,7 @@ class FollowPostsPagingSource(
                 .document(uid)
                 .get()
                 .await()
-                .toObject(User::class.java)
+                .toObject(User::class.java)!!
 
             if (firstLoad) {
                 adminUser = db.collection("users")
@@ -39,20 +39,63 @@ class FollowPostsPagingSource(
                 firstLoad = false
             }
 
+            val postIdsAnsweredByCurrentUser = currentUser.postsAnswered
+            val postIdsAttemptedByCurrentUser = currentUser.postsAttempted
+            val interestsForCurrentUser = currentUser.selectedInterests
+
+            val attemptedButUnansweredPostIds = postIdsAttemptedByCurrentUser.filter { postId -> postId !in postIdsAnsweredByCurrentUser }
+
+            val popularPostsForTopics = db.collection("posts")
+                .whereIn("category", interestsForCurrentUser)
+                .orderBy("popularityIndex", Query.Direction.DESCENDING)
+                .get()
+                .await()
+                .toObjects(Post::class.java)
+
+            val recentPostsForTopics =  db.collection("posts")
+                .whereIn("category", interestsForCurrentUser)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .get()
+                .await()
+                .toObjects(Post::class.java)
+
+            // Combining Popular Posts And Recent Posts
+            val combinedPostIdsOfPopularAndRecentPosts = sequence {
+                val popularPosts = popularPostsForTopics.iterator()
+                val recentPosts = recentPostsForTopics.iterator()
+                while (popularPosts.hasNext() && recentPosts.hasNext()) {
+                    yield(popularPosts.next())
+                    yield(recentPosts.next())
+                }
+
+                yieldAll(popularPosts)
+                yieldAll(recentPosts)
+            }.toList()
+
+            val unansweredCombinedPostIds = combinedPostIdsOfPopularAndRecentPosts.filter { post -> uid !in post.answeredBy }.map { post -> post.id }
+
+            val finalListOfPostIds = sequence {
+                val attemptedButUnansweredPosts = attemptedButUnansweredPostIds.iterator()
+                val unansweredCombinedPosts = unansweredCombinedPostIds.iterator()
+                while (attemptedButUnansweredPosts.hasNext() && unansweredCombinedPosts.hasNext()) {
+                    yield(attemptedButUnansweredPosts.next())
+                    yield(unansweredCombinedPosts.next())
+                }
+
+                yieldAll(attemptedButUnansweredPosts)
+                yieldAll(unansweredCombinedPosts)
+            }.toSet()
+
             val resultList = mutableListOf<Post>()
 
-            var curPage = params.key
-
-            curPage = params.key ?: db.collection("posts")
-                .whereEqualTo("authorUId", adminUser.userId)
-                .orderBy("popularityIndex", Query.Direction.DESCENDING)
+            var curPage = params.key ?: db.collection("posts")
+                .whereIn("id", finalListOfPostIds.toList())
                 .get()
                 .await()
 
             // curPage -> Query Snapshot
 
             val parsedPage = curPage!!.toObjects(Post::class.java)
-                .filter { post -> !post.answeredBy.contains(uid) || (post.category in currentUser!!.selectedInterests) }
                 .onEach { post ->
 
                     val user = db.collection("users")
@@ -71,8 +114,7 @@ class FollowPostsPagingSource(
 
             // And we load the nextPage using the lastDocument of the previous page
             val nextPage = db.collection("posts")
-                .whereEqualTo("authorUId", adminUser.userId)
-                .orderBy("popularityIndex", Query.Direction.DESCENDING)
+                .whereIn("id", finalListOfPostIds.toList())
                 .startAfter(lastDocumentSnapshot)
                 .get()
                 .await()

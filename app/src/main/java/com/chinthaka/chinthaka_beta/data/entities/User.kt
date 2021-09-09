@@ -13,5 +13,7 @@ data class User(
     var follows: List<String> = listOf(),
     val selectedInterests: List<String> = listOf(),
     var bookmarks: List<String> = listOf(),
+    var postsAnswered: List<String> = listOf(),
+    var postsAttempted: List<String> = listOf(),
     @get:Exclude var isFollowing: Boolean = false,
 )

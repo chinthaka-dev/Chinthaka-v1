@@ -8,9 +8,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chinthaka.chinthaka_beta.R
+import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.databinding.FragmentHomeBinding
+import com.chinthaka.chinthaka_beta.other.EventObserver
+import com.chinthaka.chinthaka_beta.ui.main.listeners.NavigationUpdateListener
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.HomeViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest

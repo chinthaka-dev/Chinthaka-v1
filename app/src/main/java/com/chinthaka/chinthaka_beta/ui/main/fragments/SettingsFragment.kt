@@ -24,6 +24,7 @@ import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
 import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.databinding.FragmentSettingsBinding
 import com.chinthaka.chinthaka_beta.other.EventObserver
+import com.chinthaka.chinthaka_beta.ui.main.listeners.NavigationUpdateListener
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.SettingsViewModel
 import com.chinthaka.chinthaka_beta.ui.slideUpViews
 import com.chinthaka.chinthaka_beta.ui.snackbar
@@ -134,6 +135,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             glide.load(user.profilePictureUrl).into(fragmentSettingsBinding.ivProfileImage)
             fragmentSettingsBinding.etUsername.setText(user.userName)
             fragmentSettingsBinding.etDescription.setText(user.description)
+            (requireActivity() as NavigationUpdateListener).onUserDataChanged(user)
         })
 
         viewModel.curImageUri.observe(viewLifecycleOwner) { uri ->

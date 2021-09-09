@@ -365,4 +365,23 @@ class DefaultMainRepository : MainRepository {
         }
     }
 
+    override suspend fun getBookmarksForUser(userId: String) = withContext(Dispatchers.IO)  {
+        safeCall {
+            val bookmarks = getUser(userId).data!!.bookmarks
+            val allPosts = posts
+                .whereIn("postId", bookmarks)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .get()
+                .await()
+                .toObjects(Post::class.java)
+                .onEach { post ->
+                    val user = getUser(post.authorUId).data!!
+                    post.authorProfilePictureUrl = user.profilePictureUrl
+                    post.authorUserName = user.userName
+                    post.isLiked = userId in post.likedBy
+                }
+            Resource.Success(allPosts)
+        }
+    }
+
 }

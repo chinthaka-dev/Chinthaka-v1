@@ -1,31 +1,42 @@
 package com.chinthaka.chinthaka_beta.ui.main
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
+import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.databinding.ActivityMainBinding
 import com.chinthaka.chinthaka_beta.repositories.MetricRepository
+import com.chinthaka.chinthaka_beta.ui.main.listeners.NavigationUpdateListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationUpdateListener {
+
+    @Inject
+    lateinit var glide: RequestManager
 
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -105,6 +116,13 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        navView.menu.findItem(R.id.settingsFragment).setOnMenuItemClickListener {
+            drawerLayout.close()
+            navController.navigate(R.id.action_homeFragment_to_settingsFragment,
+                Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
+            true
+        }
+
         // Accessing Drawer Header Views
 //        val ivProfileImage = navView.getHeaderView(0).findViewById<ImageView>(R.id.ivProfileImage)
 //        val tvProfileName = navView.getHeaderView(0).findViewById<TextView>(R.id.tvProfileName)
@@ -135,6 +153,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onUserDataChanged(user: User) {
+        updateNavigationUserDetails(user)
+    }
+
+    private fun updateNavigationUserDetails(user: User){
+
+        val ivDrawerImage : ImageView = activityMainBinding.navigationView.findViewById(R.id.ivProfileImage)
+
+        glide.load(user.profilePictureUrl).into(ivDrawerImage)
+
+        val userName : TextView = activityMainBinding.navigationView.findViewById(R.id.tvProfileName)
+        userName.text = user.userName
+
     }
 
 }

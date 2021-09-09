@@ -5,7 +5,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.chinthaka.chinthaka_beta.data.pagingsource.BookmarkPostsPagingSource
-import com.chinthaka.chinthaka_beta.data.pagingsource.FollowPostsPagingSource
 import com.chinthaka.chinthaka_beta.other.Constants
 import com.chinthaka.chinthaka_beta.repositories.MainRepository
 import com.google.firebase.firestore.FirebaseFirestore

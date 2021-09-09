@@ -54,6 +54,7 @@
         <argument
             android:name="is_navigated_from_drawer"
             app:argType="boolean"
+            android:defaultValue="false"
             />
     </fragment>
 

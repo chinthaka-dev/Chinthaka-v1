@@ -41,7 +41,7 @@ class BookmarksFragment : BasePostFragment(R.layout.fragment_bookmarks) {
         // Prorgress Bar during Paging
         lifecycleScope.launch {
             postAdapter.loadStateFlow.collectLatest {
-                fragmentBookmarksBinding.allPostsProgressBar?.isVisible =
+                fragmentBookmarksBinding.bookmarksPostsProgressBar?.isVisible =
                     it.refresh is LoadState.Loading || it.append is LoadState.Loading
             }
         }

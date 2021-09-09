@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="15"
-                android:maxLength="12"
+                android:maxLength="30"
                 android:textColor="@android:color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
