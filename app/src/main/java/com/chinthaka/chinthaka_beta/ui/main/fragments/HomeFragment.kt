@@ -63,6 +63,7 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
             },
             onLoading = {fragmentHomeBinding.allPostsProgressBar.isVisible = true }
         ) { user ->
+            fragmentHomeBinding.allPostsProgressBar.isVisible = false
             (requireActivity() as NavigationUpdateListener).onUserDataChanged(user)
         })
     }
