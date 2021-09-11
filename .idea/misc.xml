@@ -69,6 +69,7 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_submit_answer.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_user.xml" value="0.39402173913043476" />
         <entry key="app/src/main/res/layout/fragment_view_answer.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_answer.xml" value="0.2726449275362319" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.2726449275362319" />

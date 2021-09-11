@@ -116,6 +116,16 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.UsersFragment"
+        android:label="Users"
+        tools:layout="@layout/fragment_user">
+        <argument
+            android:name="userIds"
+            app:argType="string[]" />
+    </fragment>
+
     <action
         android:id="@+id/globalActionToOthersProfileFragment"
         app:destination="@id/othersProfileFragment" />
@@ -147,6 +157,10 @@
     <action
         android:id="@+id/globalActionToSettingsFragment"
         app:destination="@id/settingsFragment" />
+
+    <action
+        android:id="@+id/globalActionToUsersFragment"
+        app:destination="@id/usersFragment" />
 
     <fragment
         android:id="@+id/othersProfileFragment"

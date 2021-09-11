@@ -98,7 +98,6 @@ abstract class BasePostFragment(
                 ViewAnswerDialog().apply {
                     setPositiveListener {
                         basePostViewModel.updateAnswerViewedByForPost(post)
-                        findNavController().popBackStack()
                         findNavController().navigate(
                             R.id.globalActionToViewAnswerFragment,
                             Bundle().apply {
@@ -133,11 +132,21 @@ abstract class BasePostFragment(
         }
 
         postAdapter.setOnLikedByClickListener { post ->
-            basePostViewModel.getUsers(post.likedBy)
+            findNavController().navigate(
+                R.id.globalActionToUsersFragment,
+                Bundle().apply {
+                    putStringArray("userIds", post.likedBy.toTypedArray())
+                }
+            )
         }
 
         postAdapter.setOnAnsweredByClickListener { post ->
-            basePostViewModel.getUsers(post.answeredBy)
+            findNavController().navigate(
+                R.id.globalActionToUsersFragment,
+                Bundle().apply {
+                    putStringArray("userIds", post.answeredBy.toTypedArray())
+                }
+            )
         }
 
         postAdapter.setOnAuthorImageClickListener { post ->
@@ -225,22 +234,6 @@ abstract class BasePostFragment(
                 }
                 postAdapter.notifyItemChanged(index)
             }
-        })
-
-        basePostViewModel.likedByUsers.observe(viewLifecycleOwner, EventObserver(
-            onError = { snackbar(it) }
-        ) { users ->
-            val userAdapter = UserAdapter(glide)
-            userAdapter.users = users
-            LikedByDialog(userAdapter).show(childFragmentManager, null)
-        })
-
-        basePostViewModel.answeredByUsers.observe(viewLifecycleOwner, EventObserver(
-            onError = { snackbar(it) }
-        ) { users ->
-            val userAdapter = UserAdapter(glide)
-            userAdapter.users = users
-            AnsweredByDialog(userAdapter).show(childFragmentManager, null)
         })
 
     }

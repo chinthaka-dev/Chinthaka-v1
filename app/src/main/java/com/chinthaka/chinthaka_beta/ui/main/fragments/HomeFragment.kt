@@ -14,6 +14,7 @@ import com.chinthaka.chinthaka_beta.other.EventObserver
 import com.chinthaka.chinthaka_beta.ui.main.listeners.NavigationUpdateListener
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.HomeViewModel
+import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,9 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
         fragmentHomeBinding = FragmentHomeBinding.bind(view)
 
         setUpRecyclerView()
+        subscribeToObservers()
+
+        viewModel.getUser(FirebaseAuth.getInstance().uid!!)
 
         //Paging is being integrated
         lifecycleScope.launch {
@@ -48,6 +52,19 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
                     it.refresh is LoadState.Loading || it.append is LoadState.Loading
             }
         }
+
+    }
+
+    private fun subscribeToObservers() {
+        viewModel.getUserStatus.observe(viewLifecycleOwner, EventObserver(
+            onError = {
+                fragmentHomeBinding.allPostsProgressBar.isVisible = false
+                snackbar(it)
+            },
+            onLoading = {fragmentHomeBinding.allPostsProgressBar.isVisible = true }
+        ) { user ->
+            (requireActivity() as NavigationUpdateListener).onUserDataChanged(user)
+        })
     }
 
     private fun setUpRecyclerView() = fragmentHomeBinding.rvAllPosts.apply {

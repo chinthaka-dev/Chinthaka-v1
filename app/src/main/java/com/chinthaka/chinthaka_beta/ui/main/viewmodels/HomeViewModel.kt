@@ -25,18 +25,18 @@ class HomeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : BasePostViewModel(repository, dispatcher) {
 
-    private val _getUser = MutableLiveData<Event<Resource<User>>>()
-    val getUser: LiveData<Event<Resource<User>>> = _getUser
+    private val _getUserStatus = MutableLiveData<Event<Resource<User>>>()
+    val getUserStatus: LiveData<Event<Resource<User>>> = _getUserStatus
 
     val pagingFlow = Pager(PagingConfig(PAGE_SIZE)){
         FeedPostsPagingSource(FirebaseFirestore.getInstance())
     }.flow.cachedIn(viewModelScope)
 
     fun getUser(userId: String){
-        _getUser.postValue(Event(Resource.Loading()))
+        _getUserStatus.postValue(Event(Resource.Loading()))
         viewModelScope.launch(dispatcher) {
             val result = repository.getUser(userId)
-            _getUser.postValue(Event(result))
+            _getUserStatus.postValue(Event(result))
         }
     }
 
