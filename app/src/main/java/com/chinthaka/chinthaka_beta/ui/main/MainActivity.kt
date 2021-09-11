@@ -55,11 +55,11 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
         setSupportActionBar(activityMainBinding.appBarMain.toolbar)
         activityMainBinding.appBarMain.toolbar.background =
-            AppCompatResources.getDrawable(this, R.color.black)
+            AppCompatResources.getDrawable(this, R.color.white)
         activityMainBinding.appBarMain.toolbar.setTitleTextColor(
             AppCompatResources.getColorStateList(
                 this,
-                R.color.white
+                R.color.black
             )
         )
 

@@ -43,7 +43,7 @@
 
     <!--REQUIRED -->
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@android:color/white</item>
+        <item name="color">@android:color/black</item>
     </style>
 
     <!--REQUIRED -->
