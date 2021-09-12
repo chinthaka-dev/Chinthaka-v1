@@ -46,7 +46,8 @@ class DefaultMainRepository : MainRepository {
                 authorUId = userId,
                 text = text,
                 imageUrl = imageUrl,
-                date = System.currentTimeMillis()
+                date = System.currentTimeMillis(),
+                category = "Fun"
             )
             posts.document(postId).set(post).await()
             Resource.Success(Any())

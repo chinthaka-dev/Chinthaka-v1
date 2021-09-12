@@ -50,6 +50,7 @@
         <entry key="app/src/main/res/drawable/category_border.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/drawable/ic_answer_outline.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/drawable/ic_bookmark_outline.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/drawable/ic_create.xml" value="0.26927083333333335" />
         <entry key="app/src/main/res/drawable/ic_flag_filled.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.41333333333333333" />
         <entry key="app/src/main/res/drawable/ic_view_answer.xml" value="0.26979166666666665" />
@@ -74,7 +75,7 @@
         <entry key="app/src/main/res/layout/item_answer.xml" value="0.2726449275362319" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.2726449275362319" />
         <entry key="app/src/main/res/layout/item_post.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.22" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.22962962962962963" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/nav_drawer.xml" value="0.1" />

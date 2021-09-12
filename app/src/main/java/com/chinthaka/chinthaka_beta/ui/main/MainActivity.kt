@@ -150,10 +150,10 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
         return true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.main_menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
 
     override fun onUserDataChanged(user: User) {
         updateNavigationUserDetails(user)

@@ -58,12 +58,12 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
     private fun subscribeToObservers() {
         viewModel.getUserStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
-                fragmentHomeBinding.allPostsProgressBar.isVisible = false
+                fragmentHomeBinding.userProgressBar.isVisible = false
                 snackbar(it)
             },
-            onLoading = {fragmentHomeBinding.allPostsProgressBar.isVisible = true }
+            onLoading = {fragmentHomeBinding.userProgressBar.isVisible = true }
         ) { user ->
-            fragmentHomeBinding.allPostsProgressBar.isVisible = false
+            fragmentHomeBinding.userProgressBar.isVisible = false
             (requireActivity() as NavigationUpdateListener).onUserDataChanged(user)
         })
     }

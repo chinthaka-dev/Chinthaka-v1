@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_post_text"
+            android:textColor="@color/black"
             android:inputType="textMultiLine"
             android:maxLength="200"
             android:maxLines="5" />
