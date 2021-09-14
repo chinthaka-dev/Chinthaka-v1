@@ -98,6 +98,7 @@ abstract class BasePostFragment(
                 ViewAnswerDialog().apply {
                     setPositiveListener {
                         basePostViewModel.updateAnswerViewedByForPost(post)
+                        findNavController().popBackStack()
                         findNavController().navigate(
                             R.id.globalActionToViewAnswerFragment,
                             Bundle().apply {
