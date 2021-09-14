@@ -86,7 +86,7 @@ open class AuthActivity : AppCompatActivity() {
             .createSignInIntentBuilder()
             .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
-            .setLogo(R.drawable.ic_dashboard_black_24dp) // Set logo drawable
+            .setLogo(R.drawable.sign_in_screen_image) // Set logo drawable
             .setTheme(R.style.noActionBarTheme) // Set theme
             .build()
         signInLauncher.launch(signInIntent)

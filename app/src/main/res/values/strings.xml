@@ -43,7 +43,7 @@
     <string name="no_description">No Description</string>
     <string name="description">Description</string>
     <string name="update_profile">Update Profile</string>
-    <string name="edit_your_profile">Edit your Profile</string>
+    <string name="view_profile">View Profile</string>
     <string name="view_or_edit_your_profile">View/Edit your Profile</string>
     <string name="profile_updated">Profile updated</string>
     <string name="answer_submitted">Answer Submitted</string>
