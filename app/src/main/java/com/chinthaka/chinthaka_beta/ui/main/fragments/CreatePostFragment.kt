@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.view.isVisible
@@ -67,7 +69,11 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
 
         fragmentCreatePostBinding = FragmentCreatePostBinding.bind(view)
 
+        fragmentCreatePostBinding.etPostCategory.inputType = InputType.TYPE_NULL
+
         subscribeToObservers()
+
+        viewModel.getAllCategories()
 
         fragmentCreatePostBinding.btnSetPostImage.setOnClickListener{
             cropContent.launch(null)
@@ -79,7 +85,12 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
 
         fragmentCreatePostBinding.btnPost.setOnClickListener {
             curImageUri?.let { uri ->
-                viewModel.createPost(uri, fragmentCreatePostBinding.etPostDescription.text.toString())
+                viewModel.createPost(uri,
+                    text = fragmentCreatePostBinding.etPostText.text.toString(),
+                    category = fragmentCreatePostBinding.etPostCategory.text.toString(),
+                    answerText = fragmentCreatePostBinding.etPostAnswer.text.toString(),
+                    answerDescription = fragmentCreatePostBinding.etAnswerDescription.text.toString()
+                    )
             } ?: snackbar(getString(R.string.error_no_image_chosen))
         }
     }
@@ -103,6 +114,19 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
         ) {
             fragmentCreatePostBinding.createPostProgressBar.isVisible = false
             findNavController().popBackStack() // Once a post has been created, there is no point the user needs to stay in this fragment
+        })
+
+        viewModel.getCategoriesStatus.observe(viewLifecycleOwner, EventObserver(
+            onError = {
+                fragmentCreatePostBinding.createPostProgressBar.isVisible = false
+                snackbar(it)
+            },
+            onLoading = {
+                fragmentCreatePostBinding.createPostProgressBar.isVisible = true
+            }
+        ) { categories ->
+            fragmentCreatePostBinding.createPostProgressBar.isVisible = false
+            fragmentCreatePostBinding.etPostCategory.setAdapter(ArrayAdapter(requireContext(), R.layout.dropdown_item, categories.map { category -> category.categoryName }))
         })
     }
 }

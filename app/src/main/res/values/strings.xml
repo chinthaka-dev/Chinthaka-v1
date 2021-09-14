@@ -36,7 +36,10 @@
     <string name="error_invalid_credentials">The E-Mail or password is incorrect</string>
     <string name="error_unknown">An unknown error occurred</string>
     <string name="choose_image">Choose image</string>
-    <string name="enter_post_text">Enter post text...</string>
+    <string name="enter_post_text">Enter post text</string>
+    <string name="enter_post_answer">Enter post answer</string>
+    <string name="choose_post_category">Choose post category</string>
+    <string name="enter_answer_description">Enter answer description (optional)</string>
     <string name="post">Post</string>
     <string name="error_invalid_file">The chosen image is invalid</string>
     <string name="username">Username</string>

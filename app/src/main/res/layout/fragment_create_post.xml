@@ -4,66 +4,145 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivPostImage"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/lightBackground"
-        app:layout_constraintDimensionRatio="16:9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:padding="10dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSetPostImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/choose_image"
-        app:layout_constraintEnd_toEndOf="@id/ivPostImage"
-        app:layout_constraintStart_toStartOf="@id/ivPostImage"
-        app:layout_constraintTop_toTopOf="@id/ivPostImage"
-        app:layout_constraintBottom_toBottomOf="@id/ivPostImage"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPostText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImage">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPostDescription"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_post_text"
-            android:textColor="@color/black"
-            android:inputType="textMultiLine"
-            android:maxLength="200"
-            android:maxLines="5" />
+            android:layout_marginBottom="50dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/ivPostImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/lightBackground"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/createPostProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilPostText" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSetPostImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_image"
+                app:layout_constraintBottom_toBottomOf="@id/ivPostImage"
+                app:layout_constraintEnd_toEndOf="@id/ivPostImage"
+                app:layout_constraintStart_toStartOf="@id/ivPostImage"
+                app:layout_constraintTop_toTopOf="@id/ivPostImage" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/post"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilPostText" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPostCategory"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/choose_post_category"
+                app:boxStrokeColor="@drawable/edit_text_box_border"
+                android:textColorHint="@color/darkBackground"
+                app:startIconTint="@color/darkBackground"
+                app:layout_constraintTop_toBottomOf="@+id/ivPostImage">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/etPostCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPostText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tilPostCategory">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPostText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_post_text"
+                    android:inputType="textMultiLine"
+                    android:maxLength="200"
+                    android:maxLines="5"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPostAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tilPostText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPostAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_post_answer"
+                    android:inputType="textMultiLine"
+                    android:maxLength="200"
+                    android:maxLines="5"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilAnswerDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tilPostAnswer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAnswerDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_answer_description"
+                    android:inputType="textMultiLine"
+                    android:maxLength="200"
+                    android:maxLines="5"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                android:id="@+id/createPostProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilAnswerDescription" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/post"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilAnswerDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

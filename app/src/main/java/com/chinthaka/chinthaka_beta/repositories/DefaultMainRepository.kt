@@ -35,7 +35,7 @@ class DefaultMainRepository : MainRepository {
     private val posts = firestore.collection("posts")
     private val comments = firestore.collection("comments")
 
-    override suspend fun createPost(imageUri: Uri, text: String) = withContext(Dispatchers.IO) {
+    override suspend fun createPost(imageUri: Uri, text: String, category: String, answerText: String, answerDescription: String) = withContext(Dispatchers.IO) {
         safeCall {
             val userId = auth.uid!!
             val postId = UUID.randomUUID().toString()
@@ -47,7 +47,8 @@ class DefaultMainRepository : MainRepository {
                 text = text,
                 imageUrl = imageUrl,
                 date = System.currentTimeMillis(),
-                category = "Fun"
+                category = category,
+                answer = mapOf("description" to answerDescription, "imageUrl" to imageUrl, "text" to answerText)
             )
             posts.document(postId).set(post).await()
             Resource.Success(Any())
