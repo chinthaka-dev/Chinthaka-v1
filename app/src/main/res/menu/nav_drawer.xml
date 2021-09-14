@@ -8,8 +8,8 @@
 
         <item
             android:id="@id/settingsFragment"
-            android:icon="@drawable/ic_edit"
-            android:title="@string/view_or_edit_your_profile" />
+            android:icon="@drawable/ic_person"
+            android:title="@string/view_profile" />
 
         <item
             android:id="@id/privacyPolicyFragment"
