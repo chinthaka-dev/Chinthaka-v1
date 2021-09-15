@@ -54,8 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
         setContentView(activityMainBinding.root)
 
         setSupportActionBar(activityMainBinding.appBarMain.toolbar)
-        activityMainBinding.appBarMain.toolbar.background =
-            AppCompatResources.getDrawable(this, R.color.white)
+        activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.white)
         activityMainBinding.appBarMain.toolbar.setTitleTextColor(
             AppCompatResources.getColorStateList(
                 this,
@@ -64,8 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
         )
 
         // This is being done as we are having a FragmentContainerView, not a direct Fragment
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)
-                as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         val drawerLayout: DrawerLayout = activityMainBinding.drawerLayout
         val navView: NavigationView = activityMainBinding.navigationView
         actionBarDrawerToggle = ActionBarDrawerToggle(
@@ -91,11 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment,
-                R.id.profileFragment,
-                R.id.settingsFragment,
-                R.id.bookmarksFragment,
-                R.id.othersProfileFragment
+                R.id.homeFragment
             ), drawerLayout
         )
 
