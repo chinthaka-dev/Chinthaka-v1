@@ -184,6 +184,12 @@
         <argument
             android:name="currentIndex"
             app:argType="integer" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
     </fragment>
     <dialog
         android:id="@+id/commentDialog"

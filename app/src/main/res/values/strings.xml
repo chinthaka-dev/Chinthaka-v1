@@ -44,7 +44,7 @@
     <string name="error_invalid_file">The chosen image is invalid</string>
     <string name="username">Username</string>
     <string name="no_description">No Description</string>
-    <string name="description">Description</string>
+    <string name="short_bio">About You</string>
     <string name="update_profile">Update Profile</string>
     <string name="view_profile">View Profile</string>
     <string name="view_or_edit_your_profile">View/Edit your Profile</string>
@@ -66,6 +66,7 @@
     <string name="view_answer_dialog_message">Once you view the answer, you’ll no longer be able to submit your answer for this post. Would you like to proceed?</string>
     <string name="view_answer_dialog_positive">Yes</string>
     <string name="view_answer_dialog_negative">No</string>
+    <string name="view_answer_from_submit_answer_dialog_message">Would you like to check out the explanation for the correct answer?</string>
     <string name="unfollow">Unfollow</string>
     <string name="follow">Follow</string>
     <string name="liked_by_dialog_title">Liked by</string>

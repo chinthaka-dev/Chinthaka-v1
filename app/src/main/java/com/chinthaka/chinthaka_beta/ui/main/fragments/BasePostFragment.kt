@@ -78,6 +78,8 @@ abstract class BasePostFragment(
                         putString("answer", post.answer.getValue("text"))
                         putString("postId", post.id)
                         putInt("currentIndex", curAnsweredIndex!!)
+                        putString("description", post.answer.getValue("description"))
+                        putString("imageUrl", post.answer.getValue("imageUrl"))
                     },
                 )
             }

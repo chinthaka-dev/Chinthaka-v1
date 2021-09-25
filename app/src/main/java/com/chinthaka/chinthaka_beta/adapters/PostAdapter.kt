@@ -88,6 +88,12 @@ class PostAdapter @Inject constructor(
                 } else R.drawable.ic_thumbs_up
             )
 
+            tvLike.setText(
+                if (post.isLiked) {
+                    "Unlike"
+                } else "Like"
+            )
+
             ibExpandPost.setImageResource(
                 if (post.isBookmarked) {
                     R.drawable.ic_bookmark_filled

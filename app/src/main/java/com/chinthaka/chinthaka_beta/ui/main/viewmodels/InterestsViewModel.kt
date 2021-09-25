@@ -1,7 +1,5 @@
 package com.chinthaka.chinthaka_beta.ui.main.viewmodels
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,7 +41,6 @@ class InterestsViewModel @Inject constructor(
     }
 
     fun updateInterests(categoryUpdate: CategoryUpdate) {
-        _submitInterestsStatus.postValue(Event(Resource.Loading()))
         viewModelScope.launch(dispatcher) {
             val result = repository.updateInterestsForAUser(categoryUpdate)
             _submitInterestsStatus.postValue(Event(result))

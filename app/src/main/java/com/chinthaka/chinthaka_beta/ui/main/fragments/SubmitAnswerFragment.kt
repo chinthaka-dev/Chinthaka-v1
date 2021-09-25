@@ -2,30 +2,29 @@ package com.chinthaka.chinthaka_beta.ui.main.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.chinthaka.chinthaka_beta.R
+import com.chinthaka.chinthaka_beta.data.entities.Metric
 import com.chinthaka.chinthaka_beta.databinding.FragmentSubmitAnswerBinding
 import com.chinthaka.chinthaka_beta.other.EventObserver
+import com.chinthaka.chinthaka_beta.repositories.MetricRepository
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.ViewAnswerFromSubmitAnswerDialog
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.SubmitAnswerViewModel
 import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
-import android.view.Gravity
-import androidx.core.content.ContextCompat.getSystemService
-import com.chinthaka.chinthaka_beta.data.entities.Metric
-import com.chinthaka.chinthaka_beta.repositories.MetricRepository
 
 
 @AndroidEntryPoint
@@ -78,9 +77,11 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                 )
                 if (userAnswer.equals(answer, ignoreCase = true)) {
                     hideSoftKeyboard(requireActivity())
-                    submitAnswerFragmentBinding.etUserAnswer.inputType = InputType.TYPE_NULL
+                    submitAnswerFragmentBinding.etUserAnswer.isEnabled = false
+                    submitAnswerFragmentBinding.btnGetHint.isClickable = false
                     viewModel.submitAnswerForPost(postId = args.postId)
                     metricRepository.recordClicksOnMetric(Metric.NUMBER_OF_ANSWERS_SUBMITTED)
+                    navigateToViewAnswerFragment()
                 }
             }
 
@@ -119,6 +120,11 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        hideSoftKeyboard(requireActivity())
+    }
+
     private fun prepareTextForCorrectAnswer(correctAnswer: String, userAnswer: String): String? {
         val sb = StringBuilder()
         var i = 0
@@ -151,7 +157,7 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
             Activity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
-        if (inputMethodManager.isAcceptingText) {
+        if (inputMethodManager.isAcceptingText && submitAnswerFragmentBinding.etUserAnswer.isEnabled) {
             inputMethodManager.hideSoftInputFromWindow(
                 activity.currentFocus!!.windowToken,
                 0
@@ -201,8 +207,23 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
             }
         ) { isAnswered ->
             submitAnswerFragmentBinding.submitAnswerProgressBar.isVisible = false
-            snackbar(requireContext().getString(R.string.answer_submitted))
         })
+    }
+
+    private fun navigateToViewAnswerFragment(){
+        ViewAnswerFromSubmitAnswerDialog().apply {
+            setPositiveListener {
+                findNavController().popBackStack()
+                findNavController().navigate(
+                    R.id.globalActionToViewAnswerFragment,
+                    Bundle().apply {
+                        putString("answer", args.answer)
+                        putString("description", args.description)
+                        putString("imageUrl", args.imageUrl)
+                    }
+                )
+            }
+        }.show(childFragmentManager, null)
     }
 
     val userId: String
