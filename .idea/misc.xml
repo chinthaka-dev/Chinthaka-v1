@@ -54,6 +54,7 @@
         <entry key="app/src/main/res/drawable/ic_flag_filled.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.41333333333333333" />
         <entry key="app/src/main/res/drawable/ic_view_answer.xml" value="0.26979166666666665" />
+        <entry key="app/src/main/res/drawable/signin_background.xml" value="0.26510416666666664" />
         <entry key="app/src/main/res/drawable/splash_image.xml" value="0.41333333333333333" />
         <entry key="app/src/main/res/layout-v23/fragment_submit_answer.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/activity_choose_interests.xml" value="0.25" />

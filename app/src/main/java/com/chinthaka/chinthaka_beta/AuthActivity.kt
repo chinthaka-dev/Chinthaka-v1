@@ -77,8 +77,7 @@ open class AuthActivity : AppCompatActivity() {
         // [START auth_fui_create_intent]
         // Choose authentication providers
         val providers = arrayListOf(
-            AuthUI.IdpConfig.GoogleBuilder().build(),
-            AuthUI.IdpConfig.FacebookBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
         // Create and launch sign-in intent
