@@ -152,12 +152,12 @@ abstract class BasePostFragment(
             )
         }
 
-        postAdapter.setOnAuthorImageClickListener { post ->
+        /*postAdapter.setOnAuthorImageClickListener { post ->
             findNavController().navigate(
                 R.id.globalActionToOthersProfileFragment,
                 Bundle().apply { putString("userId", post.authorUId) }
             )
-        }
+        }*/
     }
 
     private fun subscribeToObservers() {
