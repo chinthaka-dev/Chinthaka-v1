@@ -32,17 +32,20 @@ class CreatePostViewModel @Inject constructor(
     private val _curImageUri = MutableLiveData<Uri>()
     val curImageUri: LiveData<Uri> = _curImageUri
 
+    private val _curAnswerImageUri = MutableLiveData<Uri>()
+    val curAnswerImageUri: LiveData<Uri> = _curAnswerImageUri
+
     private val _getCategoriesStatus = MutableLiveData<Event<Resource<List<Category>>>>()
     val getCategoriesStatus: LiveData<Event<Resource<List<Category>>>> = _getCategoriesStatus
 
-    fun createPost(imageUri : Uri, text : String, category: String, answerText: String, answerDescription: String){
+    fun createPost(imageUri : Uri, text : String, category: String, answerText: String, answerDescription: String, answerImageUri: Uri?){
         if(text.isEmpty() || category.isEmpty() || answerText.isEmpty()){
             val error = applicationContext.getString(R.string.error_input_empty)
             _createPostStatus.postValue(Event(Resource.Error(error)))
         } else{
             _createPostStatus.postValue(Event(Resource.Loading()))
             viewModelScope.launch(dispatcher){
-                val result = repository.createPost(imageUri, text, category, answerText, answerDescription)
+                val result = repository.createPost(imageUri, text, category, answerText, answerDescription, answerImageUri)
                 _createPostStatus.postValue(Event(result))
             }
         }
@@ -50,6 +53,10 @@ class CreatePostViewModel @Inject constructor(
 
     fun setCurImageUri(uri : Uri){
         _curImageUri.postValue(uri)
+    }
+
+    fun setCurAnswerImageUri(uri : Uri){
+        _curAnswerImageUri.postValue(uri)
     }
 
     fun getAllCategories(){

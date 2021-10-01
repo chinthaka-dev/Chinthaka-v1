@@ -1,7 +1,6 @@
 package com.chinthaka.chinthaka_beta.repositories
 
 import android.net.Uri
-import android.util.Log
 import com.chinthaka.chinthaka_beta.data.entities.Comment
 import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
@@ -35,12 +34,14 @@ class DefaultMainRepository : MainRepository {
     private val posts = firestore.collection("posts")
     private val comments = firestore.collection("comments")
 
-    override suspend fun createPost(imageUri: Uri, text: String, category: String, answerText: String, answerDescription: String) = withContext(Dispatchers.IO) {
+    override suspend fun createPost(imageUri: Uri, text: String, category: String, answerText: String, answerDescription: String, answerImageUri: Uri?) = withContext(Dispatchers.IO) {
         safeCall {
             val userId = auth.uid!!
             val postId = UUID.randomUUID().toString()
             val imageUploadResult = storage.getReference(postId).putFile(imageUri).await()
             val imageUrl = imageUploadResult?.metadata?.reference?.downloadUrl?.await().toString()
+            val answerImageUploadResult = if(answerImageUri != null) storage.getReference(postId).putFile(answerImageUri).await() else null
+            val answerImageUrl = if(answerImageUploadResult != null) answerImageUploadResult?.metadata?.reference?.downloadUrl?.await().toString() else null
             val post = Post(
                 id = postId,
                 authorUId = userId,
@@ -48,7 +49,7 @@ class DefaultMainRepository : MainRepository {
                 imageUrl = imageUrl,
                 date = System.currentTimeMillis(),
                 category = category,
-                answer = mapOf("description" to answerDescription, "imageUrl" to imageUrl, "text" to answerText)
+                answer = mapOf("description" to answerDescription, "imageUrl" to imageUrl, "text" to answerText, "answerImageUrl" to answerImageUrl)
             )
             posts.document(postId).set(post).await()
             Resource.Success(Any())
@@ -285,7 +286,6 @@ class DefaultMainRepository : MainRepository {
     override suspend fun toggleBookmarkForPost(postId: String) = withContext(Dispatchers.IO) {
         safeCall {
             var hasBookmarked = false
-            Log.i("MAIN_REPOSITORY", "Post : $postId is being bookmarked")
             firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
                 val currentUser =

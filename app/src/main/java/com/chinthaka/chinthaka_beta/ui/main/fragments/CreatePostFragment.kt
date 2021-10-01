@@ -36,7 +36,11 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
 
     private var curImageUri: Uri? = null
 
+    private var curAnswerImageUri: Uri? = null
+
     private lateinit var cropContent: ActivityResultLauncher<Any?>
+
+    private lateinit var cropAnswerContent: ActivityResultLauncher<Any?>
 
     private val cropActivityResultContract = object : ActivityResultContract<Any?, Uri?>(){
         override fun createIntent(context: Context, input: Any?): Intent {
@@ -62,6 +66,12 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
                 viewModel.setCurImageUri(it)
             }
         }
+
+        cropAnswerContent = registerForActivityResult(cropActivityResultContract){
+            it?.let{
+                viewModel.setCurAnswerImageUri(it)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,13 +93,22 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
             cropContent.launch(null)
         }
 
+        fragmentCreatePostBinding.btnSetAnswerImage.setOnClickListener {
+            cropAnswerContent.launch(null)
+        }
+
+        fragmentCreatePostBinding.ivAnswerImage.setOnClickListener {
+            cropAnswerContent.launch(null)
+        }
+
         fragmentCreatePostBinding.btnPost.setOnClickListener {
             curImageUri?.let { uri ->
                 viewModel.createPost(uri,
                     text = fragmentCreatePostBinding.etPostText.text.toString(),
                     category = fragmentCreatePostBinding.etPostCategory.text.toString(),
                     answerText = fragmentCreatePostBinding.etPostAnswer.text.toString(),
-                    answerDescription = fragmentCreatePostBinding.etAnswerDescription.text.toString()
+                    answerDescription = fragmentCreatePostBinding.etAnswerDescription.text.toString(),
+                    answerImageUri = curAnswerImageUri
                     )
             } ?: snackbar(getString(R.string.error_no_image_chosen))
         }
@@ -101,6 +120,12 @@ class CreatePostFragment : Fragment(R.layout.fragment_create_post) {
             curImageUri = it
             fragmentCreatePostBinding.btnSetPostImage.isVisible = false
             glide.load(curImageUri).into(fragmentCreatePostBinding.ivPostImage)
+        }
+
+        viewModel.curAnswerImageUri.observe(viewLifecycleOwner){
+            curAnswerImageUri = it
+            fragmentCreatePostBinding.btnSetAnswerImage.isVisible = false
+            glide.load(curAnswerImageUri).into(fragmentCreatePostBinding.ivAnswerImage)
         }
 
         viewModel.createPostStatus.observe(viewLifecycleOwner, EventObserver(

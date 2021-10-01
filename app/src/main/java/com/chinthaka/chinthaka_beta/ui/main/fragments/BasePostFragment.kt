@@ -2,6 +2,7 @@ package com.chinthaka.chinthaka_beta.ui.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -87,13 +88,14 @@ abstract class BasePostFragment(
 
         postAdapter.setOnViewAnswerClickListener { post, i ->
             curAnsweredIndex = i
+            Log.i("BASE_POST_FRAGMENT", "AnswerImageUrl : ${post.answer.getValue("answerImageUrl")}")
             if(userId in post.answerViewedBy){
                 findNavController().navigate(
                     R.id.globalActionToViewAnswerFragment,
                     Bundle().apply {
                         putString("answer", post.answer.getValue("text"))
                         putString("description", post.answer.getValue("description"))
-                        putString("imageUrl", post.answer.getValue("imageUrl"))
+                        putString("imageUrl", post.answer.getValue("answerImageUrl"))
                     }
                 )
             } else {
@@ -106,7 +108,7 @@ abstract class BasePostFragment(
                             Bundle().apply {
                                 putString("answer", post.answer.getValue("text"))
                                 putString("description", post.answer.getValue("description"))
-                                putString("imageUrl", post.answer.getValue("imageUrl"))
+                                putString("imageUrl", post.answer.getValue("answerImageUrl"))
                             }
                         )
                     }
@@ -134,6 +136,10 @@ abstract class BasePostFragment(
             }.show(childFragmentManager, null)
         }
 
+        /*
+        TODO : Check if the issue of automatic likedBy Counter is fixed.
+        Issue : If we click on LikedBy and come back, Likes automatically increases by 1
+
         postAdapter.setOnLikedByClickListener { post ->
             findNavController().navigate(
                 R.id.globalActionToUsersFragment,
@@ -151,6 +157,7 @@ abstract class BasePostFragment(
                 }
             )
         }
+         */
 
         /*postAdapter.setOnAuthorImageClickListener { post ->
             findNavController().navigate(

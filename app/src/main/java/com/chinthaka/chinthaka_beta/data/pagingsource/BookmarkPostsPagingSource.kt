@@ -42,8 +42,6 @@ class BookmarkPostsPagingSource(
                 // curPage -> Query Snapshot
 
                 val parsedPage = curPage!!.toObjects(Post::class.java).onEach { post ->
-
-                    Log.i("BOOKMARK_POSTS", "Post : $post")
                     val user = db.collection("users")
                         .document(post.authorUId).get().await().toObject(User::class.java)!!
                     post.authorProfilePictureUrl = user.profilePictureUrl

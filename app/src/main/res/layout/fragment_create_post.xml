@@ -122,6 +122,28 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/ivAnswerImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/lightBackground"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilAnswerDescription" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSetAnswerImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_answer_image"
+                app:layout_constraintBottom_toBottomOf="@id/ivAnswerImage"
+                app:layout_constraintEnd_toEndOf="@id/ivAnswerImage"
+                app:layout_constraintStart_toStartOf="@id/ivAnswerImage"
+                app:layout_constraintTop_toTopOf="@id/ivAnswerImage" />
+
             <ProgressBar
                 android:id="@+id/createPostProgressBar"
                 android:layout_width="wrap_content"
@@ -130,7 +152,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilAnswerDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/ivAnswerImage" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPost"
@@ -140,7 +162,8 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/post"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilAnswerDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/ivAnswerImage"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

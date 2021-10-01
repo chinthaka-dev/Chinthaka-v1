@@ -44,7 +44,7 @@ class ViewAnswerFragment: Fragment(R.layout.fragment_view_answer) {
         else {
             fragmentViewAnswerBinding.explanationAnswer.text = args.description
         }
-        if(args.imageUrl.isEmpty()){
+        if(args.imageUrl.isNullOrBlank()){
             fragmentViewAnswerBinding.explanationImage.isVisible = false
         } else glide.load(args.imageUrl).into(fragmentViewAnswerBinding.explanationImage)
     }

@@ -10,7 +10,7 @@ data class Post(
     @get:Exclude var authorUserName: String = "",
     @get:Exclude var authorProfilePictureUrl: String = "",
     val text: String = "",
-    val answer: Map<String, String> = mapOf(),
+    val answer: Map<String, String?> = mapOf(),
     val imageUrl: String = "",
     val date: Long = 0L,
     val category: String = "",

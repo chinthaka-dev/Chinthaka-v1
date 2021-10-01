@@ -10,7 +10,7 @@ import com.chinthaka.chinthaka_beta.other.Resource
 
 interface MainRepository {
 
-    suspend fun createPost(imageUri: Uri, text: String, category: String, answerText: String, answerDescription: String) : Resource<Any>
+    suspend fun createPost(imageUri: Uri, text: String, category: String, answerText: String, answerDescription: String, answerImageUri: Uri?) : Resource<Any>
 
     suspend fun getUsers(userIds: List<String>) : Resource<List<User>>
 
