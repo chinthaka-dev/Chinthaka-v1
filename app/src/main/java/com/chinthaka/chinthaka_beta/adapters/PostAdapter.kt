@@ -76,8 +76,8 @@ class PostAdapter @Inject constructor(
             tvPostText.text = post.text
             tvPostCategory.text = post.category
 
-            val likeCount = post.likedBy.size
-            val answeredByCount = post.answeredBy.size
+            val likeCount = post.likedBy.toSet().size
+            val answeredByCount = post.answeredBy.toSet().size
 
             tvLikedBy.text = likeCount.toString()
             tvAnsweredBy.text = answeredByCount.toString()

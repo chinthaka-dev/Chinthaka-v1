@@ -139,7 +139,7 @@ abstract class BasePostFragment(
         /*
         TODO : Check if the issue of automatic likedBy Counter is fixed.
         Issue : If we click on LikedBy and come back, Likes automatically increases by 1
-
+        */
         postAdapter.setOnLikedByClickListener { post ->
             findNavController().navigate(
                 R.id.globalActionToUsersFragment,
@@ -157,7 +157,7 @@ abstract class BasePostFragment(
                 }
             )
         }
-         */
+
 
         /*postAdapter.setOnAuthorImageClickListener { post ->
             findNavController().navigate(

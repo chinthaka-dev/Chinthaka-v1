@@ -22,11 +22,6 @@
             android:title="@string/submit_feedback" />
 
         <item
-            android:id="@id/privacyPolicyFragment"
-            android:icon="@drawable/ic_privacy_policy"
-            android:title="@string/privacy_policy" />
-
-        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
             android:title="@string/logout" />

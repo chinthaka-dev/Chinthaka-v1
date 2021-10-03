@@ -87,7 +87,10 @@ open class AuthActivity : AppCompatActivity() {
             .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .setLogo(R.drawable.sign_in_screen_image) // Set logo drawable
-            .setTheme(R.style.noActionBarTheme) // Set theme
+            .setTheme(R.style.LoginTheme) // Set theme
+            .setTosAndPrivacyPolicyUrls(
+                "https://joebirch.co/terms.html",
+                "https://joebirch.co/privacy.html")
             .build()
         signInLauncher.launch(signInIntent)
         // [END auth_fui_create_intent]
