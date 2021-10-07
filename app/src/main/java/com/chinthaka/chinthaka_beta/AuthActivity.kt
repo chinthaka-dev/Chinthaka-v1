@@ -2,6 +2,7 @@ package com.chinthaka.chinthaka_beta
 
 import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -43,8 +44,10 @@ open class AuthActivity : AppCompatActivity() {
 
         // Stay Loggedin Functionality
         if (FirebaseAuth.getInstance().currentUser != null) {
+            val appLinkAction: String? = intent?.action
+            val appLinkData: Uri? = intent?.data
             // This means that User is still logged in
-            Intent(this, MainActivity::class.java).also {
+            Intent(appLinkAction,appLinkData,this, MainActivity::class.java).also {
                 startActivity(it)
                 finish()
             }

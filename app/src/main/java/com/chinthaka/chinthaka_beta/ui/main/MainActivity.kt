@@ -1,24 +1,23 @@
 package com.chinthaka.chinthaka_beta.ui.main
 
 import android.content.Intent
-import android.media.Image
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.*
-import com.bumptech.glide.Glide
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
@@ -30,6 +29,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 
 
 @AndroidEntryPoint
@@ -46,6 +47,10 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_Chinthaka)
+
+        //TODO - Need to understand the consequences of this
+        val policy = ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
 
         val metricRepository = MetricRepository()
         metricRepository.recordDailyLogin()
@@ -128,6 +133,8 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
             background = null
             setupWithNavController(navHostFragment.findNavController())
         }
+
+        handleDeepLinkingIntent(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -162,6 +169,24 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
         val userName : TextView = activityMainBinding.navigationView.findViewById(R.id.tvProfileName)
         userName.text = user.userName
 
+    }
+
+    private fun handleDeepLinkingIntent(intent: Intent?) {
+        val appLinkAction: String? = intent?.action
+        val appLinkData: Uri? = intent?.data
+        redirectToViewPostFragmentForDeepLink(appLinkAction, appLinkData)
+    }
+
+    private fun redirectToViewPostFragmentForDeepLink(appLinkAction: String?, appLinkData: Uri?) {
+        if (Intent.ACTION_VIEW == appLinkAction && appLinkData != null) {
+            val postId = appLinkData.getQueryParameter("id")
+            if (postId.isNullOrBlank().not()) {
+                Log.d("post-id","" + postId)
+                navController.navigate(R.id.globalActionToViewPostFragment,Bundle().apply { putString("postId",postId) })
+            } else {
+                Log.d("post-id","Post Id is null")
+            }
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
 import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.other.Constants.ANSWERED_BY_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Constants.ANSWER_VIEWED_BY_WEIGHT
+import com.chinthaka.chinthaka_beta.other.Constants.ATTEMPTED_BY_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Constants.DEFAULT_PROFILE_PICTURE_URL
 import com.chinthaka.chinthaka_beta.other.Constants.LIKED_BY_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Constants.RECENTNESS_WEIGHT
@@ -350,11 +351,14 @@ class DefaultMainRepository : MainRepository {
             val totalUsers = users.get().await().size()
             firestore.runTransaction { transaction ->
                 val post = transaction.get(posts.document(postId)).toObject(Post::class.java)!!
-                val recentness = (System.currentTimeMillis() - post.date)/ (System.currentTimeMillis())
+                /*val recentness = (System.currentTimeMillis() - post.date)/ (System.currentTimeMillis())
                 val popularityIndexNumerator = ((RECENTNESS_WEIGHT * recentness) + (LIKED_BY_WEIGHT * post.likedBy.size) +
                         (ANSWERED_BY_WEIGHT * post.answeredBy.size) + (ANSWER_VIEWED_BY_WEIGHT * post.answerViewedBy.size))
                 val popularityIndexDenominator = 4 * totalUsers
-                val newPopularityIndex = (popularityIndexNumerator / popularityIndexDenominator)
+                val newPopularityIndex = (popularityIndexNumerator / popularityIndexDenominator)*/
+                val newPopularityIndex = ((LIKED_BY_WEIGHT * post.likedBy.size) +
+                        (ANSWERED_BY_WEIGHT * post.answeredBy.size) + (ANSWER_VIEWED_BY_WEIGHT * post.answerViewedBy.size)
+                        + (ATTEMPTED_BY_WEIGHT * post.attemptedBy.size))
                 if(!isPopularityIndexUpdated){
                     isPopularityIndexUpdated = true
                     transaction.update(

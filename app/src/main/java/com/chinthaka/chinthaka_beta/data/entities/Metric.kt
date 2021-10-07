@@ -19,5 +19,6 @@ class Metric {
         const val NUMBER_OF_LIKES = "numberOfLikes"
         const val CLICKS_ON_SHARE = "clicksOnShare"
         const val CLICKS_ON_BOOKMARK = "clicksOnBookmark"
+        const val CLICKS_ON_INVITE = "clicksOnInvite"
     }
 }

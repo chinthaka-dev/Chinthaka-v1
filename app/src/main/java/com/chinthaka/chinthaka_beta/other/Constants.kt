@@ -16,6 +16,7 @@ object Constants{
     const val LIKED_BY_WEIGHT = 0.3
     const val ANSWERED_BY_WEIGHT = 0.3
     const val ANSWER_VIEWED_BY_WEIGHT = 0.2
+    const val ATTEMPTED_BY_WEIGHT = 0.2
 
     const val ADMIN_USER_ID = "q38krcg2b3SnmZDctnnNgZc1rsC3"
 }

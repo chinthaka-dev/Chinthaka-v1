@@ -1,17 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageViewFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:paddingTop="20dp"
+        app:srcCompat="@drawable/feedback"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/feedbackTextView"/>
+
     <TextView
+        android:id="@+id/feedbackTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Feedback Fragment"
+        android:text="@string/feedback_description"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:textSize="19sp"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewFeedback"
         style="@style/CardView.Dark"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFeedbackEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Email"
+        android:drawableLeft="@drawable/fui_ic_mail_white_24dp"
+        android:drawableTint="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/feedbackTextView"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFeedbackPlayStore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Play Store"
+        android:drawableTint="@color/white"
+        android:drawableLeft="@drawable/ic_round_star_rate_24"
+        android:layout_gravity="center_horizontal"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnFeedbackEmail"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

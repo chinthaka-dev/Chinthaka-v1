@@ -107,7 +107,9 @@ class FeedPostsPagingSource(
                     post.isBookmarked = post.id in currentUser!!.bookmarks
                 }
 
-            resultList.addAll(parsedPage)
+            val map = parsedPage.associateBy({it.id}, {it})
+
+            finalListOfPostIds.forEach { postId -> map.get(postId)?.let { resultList.add(it) } }
 
             //Get the last Document of the current page
             val lastDocumentSnapshot = curPage.documents[curPage.size() - 1]

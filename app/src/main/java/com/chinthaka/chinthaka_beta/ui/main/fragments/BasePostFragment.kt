@@ -10,18 +10,30 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.adapters.PostAdapter
-import com.chinthaka.chinthaka_beta.adapters.UserAdapter
 import com.chinthaka.chinthaka_beta.data.entities.Metric
 import com.chinthaka.chinthaka_beta.other.EventObserver
 import com.chinthaka.chinthaka_beta.repositories.MetricRepository
-import com.chinthaka.chinthaka_beta.ui.main.dialogs.AnsweredByDialog
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.DeletePostDialog
-import com.chinthaka.chinthaka_beta.ui.main.dialogs.LikedByDialog
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.ViewAnswerDialog
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.BasePostViewModel
 import com.chinthaka.chinthaka_beta.ui.snackbar
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
+
+import android.graphics.Bitmap
+
+import android.net.Uri
+import android.graphics.BitmapFactory
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import android.provider.MediaStore.Images
+
+import android.content.ContentValues
+import java.io.OutputStream
+import java.lang.Exception
+
 
 abstract class BasePostFragment(
     layoutId: Int
@@ -74,13 +86,13 @@ abstract class BasePostFragment(
             }
             else {
                 findNavController().navigate(
-                    R.id.action_homeFragment_to_submitAnswerFragment,
+                    R.id.globalActionToSubmitAnswerFragment,
                     Bundle().apply {
                         putString("answer", post.answer.getValue("text"))
                         putString("postId", post.id)
                         putInt("currentIndex", curAnsweredIndex!!)
                         putString("description", post.answer.getValue("description"))
-                        putString("imageUrl", post.answer.getValue("imageUrl"))
+                        putString("imageUrl", post.answer.getValue("answerImageUrl"))
                     },
                 )
             }
@@ -117,15 +129,41 @@ abstract class BasePostFragment(
         }
 
         postAdapter.setOnShareClickListener { post ->
-            val intent: Intent = Intent(Intent.ACTION_SEND)
+            /*val intent: Intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(
-                Intent.EXTRA_TEXT,
-                "${post.authorUserName} has challenged you to answer the question."
-            )
-            intent.putExtra(Intent.EXTRA_TEXT, "http://play.google.com")
+            intent.putExtra(Intent.EXTRA_TEXT,
+                "${post.authorUserName} has challenged you to answer this question -> https://www.chinthaka.in/post?id="+post.id)
             metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
-            startActivity(Intent.createChooser(intent, "Share using"))
+            startActivity(Intent.createChooser(intent, "Share using"))*/
+
+            val icon: Bitmap = getBitmapFromURL(post.imageUrl)!!
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/jpeg"
+
+            val values = ContentValues()
+            values.put(Images.Media.TITLE, "title")
+            values.put(Images.Media.MIME_TYPE, "image/jpeg")
+            val uri: Uri? = context?.getContentResolver()?.insert(
+                Images.Media.EXTERNAL_CONTENT_URI,
+                values
+            )
+
+
+            val outstream: OutputStream
+            try {
+                outstream = uri?.let { context?.getContentResolver()?.openOutputStream(it) }!!
+                icon.compress(Bitmap.CompressFormat.JPEG, 100, outstream)
+                outstream.close()
+            } catch (e: Exception) {
+                System.err.println(e.toString())
+            }
+
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            intent.putExtra(Intent.EXTRA_TEXT,
+                "${FirebaseAuth.getInstance().currentUser?.displayName} has challenged you to " +
+                        "answer this question on Chinthaka > https://www.chinthaka.in/post?id="+post.id)
+            metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
+            startActivity(Intent.createChooser(intent, "Share Using"))
         }
 
         postAdapter.setOnDeletePostClickListener { post ->
@@ -246,6 +284,21 @@ abstract class BasePostFragment(
             }
         })
 
+    }
+
+    open fun getBitmapFromURL(src: String?): Bitmap? {
+        return try {
+            val url = URL(src)
+            val connection: HttpURLConnection = url
+                .openConnection() as HttpURLConnection
+            connection.setDoInput(true)
+            connection.connect()
+            val input: InputStream = connection.getInputStream()
+            BitmapFactory.decodeStream(input)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
     }
 
     open val userId: String
