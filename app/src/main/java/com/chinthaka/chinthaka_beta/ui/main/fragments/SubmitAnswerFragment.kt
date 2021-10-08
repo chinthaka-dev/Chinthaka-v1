@@ -97,7 +97,7 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                     hideSoftKeyboard(requireActivity())
                     submitAnswerFragmentBinding.etUserAnswer.isEnabled = false
                     submitAnswerFragmentBinding.btnGetHint.isClickable = false
-                    navigateToViewAnswerFragmentPostAttemptsExhausted()
+                    navigateToViewAnswerFragmentPostExhaustingAttempts()
 
                 }
                 attemptsRemaining--
@@ -232,7 +232,6 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
     private fun navigateToViewAnswerFragmentPostCorrectAnswer(){
         ViewAnswerFromSubmitAnswerDialog().apply {
             setPositiveListener {
-                viewModel.updateAnswerViewedByForPostId(args.postId)
                 findNavController().popBackStack()
                 findNavController().navigate(
                     R.id.globalActionToViewAnswerFragment,
@@ -243,13 +242,17 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                     }
                 )
             }
+            setNegativeListener {
+                findNavController().navigate(SubmitAnswerFragmentDirections.actionSubmitAnswerFragmentToHomeFragment())
+            }
         }.show(childFragmentManager, null)
     }
 
-    private fun navigateToViewAnswerFragmentPostAttemptsExhausted(){
+    private fun navigateToViewAnswerFragmentPostExhaustingAttempts(){
+        //TODO - Have a separate metric for exhausting attempts?
+        viewModel.updateAnswerViewedByForPostId(args.postId)
         AttemptsExhaustedSubmitAnswerDialog().apply {
             setPositiveListener {
-                viewModel.updateAnswerViewedByForPostId(args.postId)
                 findNavController().popBackStack()
                 findNavController().navigate(
                     R.id.globalActionToViewAnswerFragment,
@@ -259,6 +262,9 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                         putString("imageUrl", args.imageUrl)
                     }
                 )
+            }
+            setNegativeListener {
+                findNavController().navigate(SubmitAnswerFragmentDirections.actionSubmitAnswerFragmentToHomeFragment())
             }
         }.show(childFragmentManager, null)
     }

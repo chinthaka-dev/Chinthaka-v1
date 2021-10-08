@@ -10,8 +10,14 @@ class AttemptsExhaustedSubmitAnswerDialog: DialogFragment() {
 
     private var positiveListener: (() -> Unit)? = null
 
+    private var negativeListener: (() -> Unit)? = null
+
     fun setPositiveListener(listener: () -> Unit){
         positiveListener = listener
+    }
+
+    fun setNegativeListener(listener: () -> Unit){
+        negativeListener = listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -26,6 +32,9 @@ class AttemptsExhaustedSubmitAnswerDialog: DialogFragment() {
             }
             .setNegativeButton(R.string.view_answer_dialog_negative){ dialogInterface, _ ->
                 dialogInterface.cancel()
+                negativeListener?.let{ click ->
+                    click()
+                }
             }
             .create()
     }

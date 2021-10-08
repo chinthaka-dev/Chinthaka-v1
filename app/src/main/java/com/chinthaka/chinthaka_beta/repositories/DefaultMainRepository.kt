@@ -42,7 +42,7 @@ class DefaultMainRepository : MainRepository {
             val imageUploadResult = storage.getReference("$postId-q").putFile(imageUri).await()
             val imageUrl = imageUploadResult?.metadata?.reference?.downloadUrl?.await().toString()
             val answerImageUploadResult = if(answerImageUri != null) storage.getReference("$postId-a").putFile(answerImageUri).await() else null
-            val answerImageUrl = if(answerImageUploadResult != null) answerImageUploadResult?.metadata?.reference?.downloadUrl?.await().toString() else null
+            val answerImageUrl = if(answerImageUploadResult != null) answerImageUploadResult.metadata?.reference?.downloadUrl?.await().toString() else ""
             val post = Post(
                 id = postId,
                 authorUId = userId,
@@ -268,8 +268,9 @@ class DefaultMainRepository : MainRepository {
             firestore.runTransaction { transaction ->
                 val userId = FirebaseAuth.getInstance().uid!!
                 val postResult = transaction.get(posts.document(postId))
+                val answerViewedBy = postResult.toObject(Post::class.java)?.answerViewedBy ?: listOf()
                 val currentAnsweredBy = postResult.toObject(Post::class.java)?.answeredBy ?: listOf()
-                if (userId !in currentAnsweredBy) {
+                if (userId !in currentAnsweredBy && userId !in answerViewedBy) {
                     isAnswered = true
                     transaction.update(
                         posts.document(postId),
@@ -328,27 +329,25 @@ class DefaultMainRepository : MainRepository {
 
     override suspend fun updateAnswerViewedByForPostId(postId: String) = withContext(Dispatchers.IO) {
         safeCall {
-            val post = posts.document(postId)
-                .get()
-                .await()
-                .toObject(Post::class.java)
-
             var hasViewedAnswer = false
-
-            if(post != null) {
-                firestore.runTransaction { transaction ->
-                    val currentUserId = auth.uid!!
+            firestore.runTransaction { transaction ->
+                val post = transaction.get(posts.document(postId)).toObject(Post::class.java)
+                val currentUserId = auth.uid!!
+                if (post != null) {
                     hasViewedAnswer = currentUserId in post.answerViewedBy
-                    if (!hasViewedAnswer) {
+                }
+                if (!hasViewedAnswer) {
+                    if (post != null) {
                         hasViewedAnswer = true
                         transaction.update(
                             posts.document(post.id),
                             "answerViewedBy", post.answerViewedBy + currentUserId
                         )
                     }
-                }.await()
-                updatePopularityIndexForPost(post.id)
-            }
+                }
+            }.await()
+            updatePopularityIndexForPost(postId)
+
             Resource.Success(hasViewedAnswer)
         }
     }
