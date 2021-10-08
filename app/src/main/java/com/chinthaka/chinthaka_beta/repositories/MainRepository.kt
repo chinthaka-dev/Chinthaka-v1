@@ -49,4 +49,6 @@ interface MainRepository {
     suspend fun updatePopularityIndexForPost(postId: String): Resource<Boolean>
 
     suspend fun getBookmarksForUser(userId: String): Resource<List<Post>>
+
+    suspend fun updateAnswerViewedByForPostId(postId: String): Resource<Boolean>
 }

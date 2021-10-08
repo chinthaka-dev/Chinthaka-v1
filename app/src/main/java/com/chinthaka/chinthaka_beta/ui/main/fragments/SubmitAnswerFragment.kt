@@ -19,6 +19,7 @@ import com.chinthaka.chinthaka_beta.data.entities.Metric
 import com.chinthaka.chinthaka_beta.databinding.FragmentSubmitAnswerBinding
 import com.chinthaka.chinthaka_beta.other.EventObserver
 import com.chinthaka.chinthaka_beta.repositories.MetricRepository
+import com.chinthaka.chinthaka_beta.ui.main.dialogs.AttemptsExhaustedSubmitAnswerDialog
 import com.chinthaka.chinthaka_beta.ui.main.dialogs.ViewAnswerFromSubmitAnswerDialog
 import com.chinthaka.chinthaka_beta.ui.main.viewmodels.SubmitAnswerViewModel
 import com.chinthaka.chinthaka_beta.ui.snackbar
@@ -42,6 +43,8 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
 
     private var hintsRemaining: Int = 0
 
+    private var attemptsRemaining: Int = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,12 +58,19 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
         curAnsweredIndex = args.currentIndex
 
         hintsRemaining = answer.length / 3
+        attemptsRemaining = answer.length * 2
 
         submitAnswerFragmentBinding = FragmentSubmitAnswerBinding.bind(view)
 
         submitAnswerFragmentBinding.tvCorrectAnswer.text = prepareTextForCorrectAnswer(answer, "")
 
-        submitAnswerFragmentBinding.tvHintsRemaining.text = "Hints Remaining: $hintsRemaining"
+        if(hintsRemaining == 0) {
+            submitAnswerFragmentBinding.tvHintsRemaining.text = "Hints Available: $hintsRemaining"
+        } else {
+            submitAnswerFragmentBinding.tvHintsRemaining.text = "Hints Remaining: $hintsRemaining"
+        }
+
+        submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Attempts Remaining: $attemptsRemaining"
 
         submitAnswerFragmentBinding.etUserAnswer.requestFocus()
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -81,8 +91,17 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                     submitAnswerFragmentBinding.btnGetHint.isClickable = false
                     viewModel.submitAnswerForPost(postId = args.postId)
                     metricRepository.recordClicksOnMetric(Metric.NUMBER_OF_ANSWERS_SUBMITTED)
-                    navigateToViewAnswerFragment()
+                    navigateToViewAnswerFragmentPostCorrectAnswer()
                 }
+                if(attemptsRemaining == 0) {
+                    hideSoftKeyboard(requireActivity())
+                    submitAnswerFragmentBinding.etUserAnswer.isEnabled = false
+                    submitAnswerFragmentBinding.btnGetHint.isClickable = false
+                    navigateToViewAnswerFragmentPostAttemptsExhausted()
+
+                }
+                attemptsRemaining--
+                submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Attempts Remaining: $attemptsRemaining"
             }
 
             override fun afterTextChanged(editable: Editable) {}
@@ -210,9 +229,27 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
         })
     }
 
-    private fun navigateToViewAnswerFragment(){
+    private fun navigateToViewAnswerFragmentPostCorrectAnswer(){
         ViewAnswerFromSubmitAnswerDialog().apply {
             setPositiveListener {
+                viewModel.updateAnswerViewedByForPostId(args.postId)
+                findNavController().popBackStack()
+                findNavController().navigate(
+                    R.id.globalActionToViewAnswerFragment,
+                    Bundle().apply {
+                        putString("answer", args.answer)
+                        putString("description", args.description)
+                        putString("imageUrl", args.imageUrl)
+                    }
+                )
+            }
+        }.show(childFragmentManager, null)
+    }
+
+    private fun navigateToViewAnswerFragmentPostAttemptsExhausted(){
+        AttemptsExhaustedSubmitAnswerDialog().apply {
+            setPositiveListener {
+                viewModel.updateAnswerViewedByForPostId(args.postId)
                 findNavController().popBackStack()
                 findNavController().navigate(
                     R.id.globalActionToViewAnswerFragment,

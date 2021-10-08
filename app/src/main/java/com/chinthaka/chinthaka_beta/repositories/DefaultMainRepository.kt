@@ -39,9 +39,9 @@ class DefaultMainRepository : MainRepository {
         safeCall {
             val userId = auth.uid!!
             val postId = UUID.randomUUID().toString()
-            val imageUploadResult = storage.getReference(postId).putFile(imageUri).await()
+            val imageUploadResult = storage.getReference("$postId-q").putFile(imageUri).await()
             val imageUrl = imageUploadResult?.metadata?.reference?.downloadUrl?.await().toString()
-            val answerImageUploadResult = if(answerImageUri != null) storage.getReference(postId).putFile(answerImageUri).await() else null
+            val answerImageUploadResult = if(answerImageUri != null) storage.getReference("$postId-a").putFile(answerImageUri).await() else null
             val answerImageUrl = if(answerImageUploadResult != null) answerImageUploadResult?.metadata?.reference?.downloadUrl?.await().toString() else null
             val post = Post(
                 id = postId,
@@ -322,6 +322,33 @@ class DefaultMainRepository : MainRepository {
                 }
             }.await()
             updatePopularityIndexForPost(post.id)
+            Resource.Success(hasViewedAnswer)
+        }
+    }
+
+    override suspend fun updateAnswerViewedByForPostId(postId: String) = withContext(Dispatchers.IO) {
+        safeCall {
+            val post = posts.document(postId)
+                .get()
+                .await()
+                .toObject(Post::class.java)
+
+            var hasViewedAnswer = false
+
+            if(post != null) {
+                firestore.runTransaction { transaction ->
+                    val currentUserId = auth.uid!!
+                    hasViewedAnswer = currentUserId in post.answerViewedBy
+                    if (!hasViewedAnswer) {
+                        hasViewedAnswer = true
+                        transaction.update(
+                            posts.document(post.id),
+                            "answerViewedBy", post.answerViewedBy + currentUserId
+                        )
+                    }
+                }.await()
+                updatePopularityIndexForPost(post.id)
+            }
             Resource.Success(hasViewedAnswer)
         }
     }

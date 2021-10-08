@@ -58,7 +58,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         subscribeToObservers()
         val userId = FirebaseAuth.getInstance().uid!!
         viewModel.getUser(userId)
-        fragmentSettingsBinding.btnUpdateProfile.isEnabled = false
 
         fragmentSettingsBinding.etUsername.addTextChangedListener{
             if(fragmentSettingsBinding.etUsername.text!!.isNotEmpty() &&

@@ -29,4 +29,12 @@ class SubmitAnswerViewModel @Inject constructor(
             _answerPostStatus.postValue(Event(result))
         }
     }
+
+    fun updateAnswerViewedByForPostId(postId: String) {
+        _answerPostStatus.postValue(Event(Resource.Loading()))
+        viewModelScope.launch(dispatcher) {
+            val result = repository.updateAnswerViewedByForPostId(postId)
+            _answerPostStatus.postValue(Event(result))
+        }
+    }
 }

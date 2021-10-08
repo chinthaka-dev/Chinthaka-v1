@@ -14,6 +14,19 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAnswerDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="@string/sample_answer"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCorrectAnswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +40,7 @@
             android:breakStrategy="high_quality"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tvAnswerDetails" />
 
 
         <View
@@ -41,8 +54,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCorrectAnswer" />
 
+
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvAnswerDetails"
+            android:id="@+id/tvAttemptsRemaining"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
@@ -71,7 +85,7 @@
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAnswerDetails" />
+            app:layout_constraintTop_toBottomOf="@id/tvAttemptsRemaining" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGetHint"

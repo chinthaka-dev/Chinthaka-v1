@@ -68,6 +68,7 @@
     <string name="view_answer_dialog_positive">Yes</string>
     <string name="view_answer_dialog_negative">No</string>
     <string name="view_answer_from_submit_answer_dialog_message">Would you like to check out the explanation for the correct answer?</string>
+    <string name="attempts_exhausted_submit_answer_dialog_message">You have exhausted the available attempts and can no longer submit the answer. Would you like to check out the correct answer?</string>
     <string name="unfollow">Unfollow</string>
     <string name="follow">Follow</string>
     <string name="liked_by_dialog_title">Liked by</string>
