@@ -84,8 +84,8 @@ class PostAdapter @Inject constructor(
 
             iblike.setImageResource(
                 if (post.isLiked) {
-                    R.drawable.ic_thumbs_up_filled
-                } else R.drawable.ic_thumbs_up
+                    R.drawable.ic_baseline_favorite_24
+                } else R.drawable.ic_baseline_favorite_border_24
             )
 
             tvLike.setText(
