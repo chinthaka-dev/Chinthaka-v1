@@ -70,7 +70,7 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
             submitAnswerFragmentBinding.tvHintsRemaining.text = "Hints Remaining: $hintsRemaining"
         }
 
-        submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Attempts Remaining: $attemptsRemaining"
+        submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Tries Remaining: $attemptsRemaining"
 
         submitAnswerFragmentBinding.etUserAnswer.requestFocus()
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -100,8 +100,10 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                     navigateToViewAnswerFragmentPostExhaustingAttempts()
 
                 }
-                attemptsRemaining--
-                submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Attempts Remaining: $attemptsRemaining"
+                if(i2 > i1) {
+                    attemptsRemaining--
+                    submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Tries Remaining: $attemptsRemaining"
+                }
             }
 
             override fun afterTextChanged(editable: Editable) {}
