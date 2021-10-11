@@ -67,13 +67,17 @@ class InterestsFragment : Fragment(R.layout.fragment_interests) {
                 fragmentInterestsBinding.allInterestsProgressBar.isVisible = false
                 snackbar(it)
             },
-            onLoading = { fragmentInterestsBinding.allInterestsProgressBar.isVisible = true }
+            onLoading = {
+                // hide done button , when data still loading
+                fragmentInterestsBinding.btnDone.isVisible=false;
+                fragmentInterestsBinding.allInterestsProgressBar.isVisible = true }
         ) { interests ->
+            fragmentInterestsBinding.btnDone.isVisible=true;
             fragmentInterestsBinding.allInterestsProgressBar.isVisible = false
             categoryAdapter.categories = interests
         })
 
-        viewModel.submitInterestsStatus.observe(this, EventObserver(
+        viewModel.submitInterestsStatus.observe(viewLifecycleOwner, EventObserver(
             onError = { snackbar(it) },
             onLoading = { fragmentInterestsBinding.allInterestsProgressBar.isVisible = true }
         ) {
