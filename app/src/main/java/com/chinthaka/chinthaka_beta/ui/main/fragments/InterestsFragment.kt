@@ -72,6 +72,7 @@ class InterestsFragment : Fragment(R.layout.fragment_interests) {
                 fragmentInterestsBinding.btnDone.isVisible=false;
                 fragmentInterestsBinding.allInterestsProgressBar.isVisible = true }
         ) { interests ->
+            // show done button , once data has loaded
             fragmentInterestsBinding.btnDone.isVisible=true;
             fragmentInterestsBinding.allInterestsProgressBar.isVisible = false
             categoryAdapter.categories = interests
