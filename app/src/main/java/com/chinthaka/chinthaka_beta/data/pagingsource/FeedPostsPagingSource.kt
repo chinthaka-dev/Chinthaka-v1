@@ -88,35 +88,43 @@ class FeedPostsPagingSource(
 
             val resultList = mutableListOf<Post>()
 
-            var curPage = params.key ?: db.collection("posts")
-                .whereIn("id", finalListOfPostIds.toList())
-                .get()
-                .await()
+            val postIdsChunks = finalListOfPostIds.chunked(10)
 
-            // curPage -> Query Snapshot
+            var curPage = params.key
 
-            val parsedPage = curPage!!.toObjects(Post::class.java)
-                .onEach { post ->
+            postIdsChunks.forEach { chunk ->
+                curPage = params.key ?: db.collection("posts")
+                    .whereIn("id", chunk)
+                    .get()
+                    .await()
 
-                    val user = db.collection("users")
-                        .document(post.authorUId).get().await().toObject(User::class.java)!!
 
-                    post.authorProfilePictureUrl = user.profilePictureUrl
-                    post.authorUserName = user.userName
-                    post.isLiked = uid in post.likedBy
-                    post.isBookmarked = post.id in currentUser!!.bookmarks
-                }
+                // curPage -> Query Snapshot
 
-            val map = parsedPage.associateBy({it.id}, {it})
+                val parsedPage = curPage!!.toObjects(Post::class.java)
+                    .onEach { post ->
 
-            finalListOfPostIds.forEach { postId -> map.get(postId)?.let { resultList.add(it) } }
+                        val user = db.collection("users")
+                            .document(post.authorUId).get().await().toObject(User::class.java)!!
+
+                        post.authorProfilePictureUrl = user.profilePictureUrl
+                        post.authorUserName = user.userName
+                        post.isLiked = uid in post.likedBy
+                        post.isBookmarked = post.id in currentUser!!.bookmarks
+                    }
+
+                val map = parsedPage.associateBy({it.id}, {it})
+
+                chunk.forEach { postId -> map.get(postId)?.let { resultList.add(it) } }
+
+            }
 
             //Get the last Document of the current page
-            val lastDocumentSnapshot = curPage.documents[curPage.size() - 1]
+            val lastDocumentSnapshot = curPage!!.documents[curPage!!.size() - 1]
 
             // And we load the nextPage using the lastDocument of the previous page
             val nextPage = db.collection("posts")
-                .whereIn("id", finalListOfPostIds.toList())
+                .whereIn("id", if(postIdsChunks.isNotEmpty()) postIdsChunks[0] else listOf())
                 .startAfter(lastDocumentSnapshot)
                 .get()
                 .await()
