@@ -290,8 +290,7 @@ class DefaultMainRepository : MainRepository {
             var hasBookmarked = false
             firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
-                val currentUser =
-                    transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
+                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 hasBookmarked = postId in currentUser.bookmarks
                 transaction.update(
                     users.document(currentUserId), "bookmarks",
@@ -313,12 +312,17 @@ class DefaultMainRepository : MainRepository {
             var hasViewedAnswer = false
             firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
+                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 hasViewedAnswer = currentUserId in post.answerViewedBy
                 if (!hasViewedAnswer) {
                     hasViewedAnswer = true
                     transaction.update(
                         posts.document(post.id),
                         "answerViewedBy", post.answerViewedBy + currentUserId
+                    )
+                    transaction.update(
+                        users.document(auth.uid!!),
+                        "postsAttempted", currentUser.postsAttempted + post.id
                     )
                 }
             }.await()
@@ -333,6 +337,7 @@ class DefaultMainRepository : MainRepository {
             firestore.runTransaction { transaction ->
                 val post = transaction.get(posts.document(postId)).toObject(Post::class.java)
                 val currentUserId = auth.uid!!
+                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 if (post != null) {
                     hasViewedAnswer = currentUserId in post.answerViewedBy
                 }
@@ -342,6 +347,10 @@ class DefaultMainRepository : MainRepository {
                         transaction.update(
                             posts.document(post.id),
                             "answerViewedBy", post.answerViewedBy + currentUserId
+                        )
+                        transaction.update(
+                            users.document(auth.uid!!),
+                            "postsAttempted", currentUser.postsAttempted + post.id
                         )
                     }
                 }
@@ -357,12 +366,17 @@ class DefaultMainRepository : MainRepository {
             var hasAttempted = false
             firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
+                val currentUser = transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 hasAttempted = currentUserId in post.attemptedBy
                 if (!hasAttempted) {
                     hasAttempted = true
                     transaction.update(
                         posts.document(post.id),
                         "attemptedBy", post.attemptedBy + currentUserId
+                    )
+                    transaction.update(
+                        users.document(auth.uid!!),
+                        "postsAnswered", currentUser.postsAnswered + post.id
                     )
                 }
             }.await()
