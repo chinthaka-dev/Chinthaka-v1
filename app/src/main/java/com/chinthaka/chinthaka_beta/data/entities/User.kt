@@ -15,5 +15,6 @@ data class User(
     var bookmarks: List<String> = listOf(),
     var postsAnswered: List<String> = listOf(),
     var postsAttempted: List<String> = listOf(),
+    val postsOfWhichAnswerHasBeenSeen: List<String> = listOf(),
     @get:Exclude var isFollowing: Boolean = false,
 )

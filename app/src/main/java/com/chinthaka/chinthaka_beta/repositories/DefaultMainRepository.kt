@@ -320,10 +320,10 @@ class DefaultMainRepository : MainRepository {
                         posts.document(post.id),
                         "answerViewedBy", post.answerViewedBy + currentUserId
                     )
-                    transaction.update(
-                        users.document(auth.uid!!),
-                        "postsAttempted", currentUser.postsAttempted + post.id
-                    )
+                    mutableMapOf(
+                        "postsAttempted" to currentUser.postsAttempted  + post.id,
+                        "postsOfWhichAnswerHasBeenSeen" to currentUser.postsOfWhichAnswerHasBeenSeen + post.id
+                    ).toMap()
                 }
             }.await()
             updatePopularityIndexForPost(post.id)
@@ -350,7 +350,10 @@ class DefaultMainRepository : MainRepository {
                         )
                         transaction.update(
                             users.document(auth.uid!!),
-                            "postsAttempted", currentUser.postsAttempted + post.id
+                            mutableMapOf(
+                                "postsAttempted" to currentUser.postsAttempted  + post.id,
+                                "postsOfWhichAnswerHasBeenSeen" to currentUser.postsOfWhichAnswerHasBeenSeen + post.id
+                            ).toMap()
                         )
                     }
                 }
@@ -376,7 +379,7 @@ class DefaultMainRepository : MainRepository {
                     )
                     transaction.update(
                         users.document(auth.uid!!),
-                        "postsAnswered", currentUser.postsAnswered + post.id
+                        "postsAttempted", currentUser.postsAttempted  + post.id,
                     )
                 }
             }.await()

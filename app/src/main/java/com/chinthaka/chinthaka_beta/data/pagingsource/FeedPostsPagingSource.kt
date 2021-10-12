@@ -42,8 +42,9 @@ class FeedPostsPagingSource(
             val postIdsAnsweredByCurrentUser = currentUser.postsAnswered
             val postIdsAttemptedByCurrentUser = currentUser.postsAttempted
             val interestsForCurrentUser = currentUser.selectedInterests
+            val postIdsForWhichAnswerHasAlreadyBeenViewed = currentUser.postsOfWhichAnswerHasBeenSeen
 
-            val attemptedButUnansweredPostIds = postIdsAttemptedByCurrentUser.filter { postId -> postId !in postIdsAnsweredByCurrentUser }
+            val attemptedButUnansweredPostIds = postIdsAttemptedByCurrentUser.filter { postId -> postId !in postIdsAnsweredByCurrentUser || postId !in postIdsForWhichAnswerHasAlreadyBeenViewed}
 
             val popularPostsForTopics = db.collection("posts")
                 .whereIn("category", interestsForCurrentUser)
