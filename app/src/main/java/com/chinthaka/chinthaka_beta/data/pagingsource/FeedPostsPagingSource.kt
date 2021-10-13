@@ -73,7 +73,7 @@ class FeedPostsPagingSource(
                 yieldAll(recentPosts)
             }.toList()
 
-            val unansweredCombinedPostIds = combinedPostIdsOfPopularAndRecentPosts.filter { post -> uid !in post.answeredBy }.map { post -> post.id }
+            val unansweredCombinedPostIds = combinedPostIdsOfPopularAndRecentPosts.filter { post -> uid !in post.answeredBy && uid !in post.answerViewedBy }.map { post -> post.id }
 
             val finalListOfPostIds = sequence {
                 val attemptedButUnansweredPosts = attemptedButUnansweredPostIds.iterator()
