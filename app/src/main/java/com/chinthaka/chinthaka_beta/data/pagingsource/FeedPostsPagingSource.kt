@@ -15,9 +15,6 @@ class FeedPostsPagingSource(
     private val db: FirebaseFirestore
 ) : PagingSource<QuerySnapshot, Post>() {
 
-    var firstLoad = true
-    lateinit var adminUser: User
-
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> {
         // Load the posts
         // Everytime the data is paginated
@@ -29,15 +26,6 @@ class FeedPostsPagingSource(
                 .get()
                 .await()
                 .toObject(User::class.java)!!
-
-            if (firstLoad) {
-                adminUser = db.collection("users")
-                    .document(Constants.ADMIN_USER_ID)
-                    .get()
-                    .await()
-                    .toObject(User::class.java)!!
-                firstLoad = false
-            }
 
             val postIdsAnsweredByCurrentUser = currentUser.postsAnswered
             val postIdsAttemptedByCurrentUser = currentUser.postsAttempted

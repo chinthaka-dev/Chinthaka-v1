@@ -44,10 +44,8 @@ open class AuthActivity : AppCompatActivity() {
 
         // Stay Loggedin Functionality
         if (FirebaseAuth.getInstance().currentUser != null) {
-            val appLinkAction: String? = intent?.action
-            val appLinkData: Uri? = intent?.data
             // This means that User is still logged in
-            Intent(appLinkAction,appLinkData,this, MainActivity::class.java).also {
+            Intent(this, MainActivity::class.java).also {
                 startActivity(it)
                 finish()
             }
@@ -81,7 +79,7 @@ open class AuthActivity : AppCompatActivity() {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build(),
-            AuthUI.IdpConfig.FacebookBuilder().build()
+//            AuthUI.IdpConfig.FacebookBuilder().build()
         )
 
         // Create and launch sign-in intent
