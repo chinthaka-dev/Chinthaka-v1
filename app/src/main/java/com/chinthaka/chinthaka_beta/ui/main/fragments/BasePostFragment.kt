@@ -31,8 +31,18 @@ import java.net.URL
 import android.provider.MediaStore.Images
 
 import android.content.ContentValues
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.io.OutputStream
 import java.lang.Exception
+import java.util.jar.Manifest
+import android.content.pm.PackageManager
+import com.chinthaka.chinthaka_beta.ui.main.MainActivity
+
+
+
+
 
 
 abstract class BasePostFragment(
@@ -57,10 +67,11 @@ abstract class BasePostFragment(
 
     val metricRepository = MetricRepository()
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeToObservers()
-
         postAdapter.setOnLikeClickListener { post, i ->
             curLikedIndex = i
             post.isLiked = !post.isLiked
@@ -127,14 +138,14 @@ abstract class BasePostFragment(
                 }.show(childFragmentManager, null)
             }
         }
-
-        postAdapter.setOnShareClickListener { post ->
+        postAdapter.setOnShareClickListener {
+            post->
             /*val intent: Intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT,
-                "${post.authorUserName} has challenged you to answer this question -> https://www.chinthaka.in/post?id="+post.id)
-            metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
-            startActivity(Intent.createChooser(intent, "Share using"))*/
+          intent.type = "text/plain"
+          intent.putExtra(Intent.EXTRA_TEXT,
+              "${post.authorUserName} has challenged you to answer this question -> https://www.chinthaka.in/post?id="+post.id)
+          metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
+          startActivity(Intent.createChooser(intent, "Share using"))*/
 
             val icon: Bitmap = getBitmapFromURL(post.imageUrl)!!
             val intent = Intent(Intent.ACTION_SEND)
@@ -142,6 +153,7 @@ abstract class BasePostFragment(
 
             val values = ContentValues()
             values.put(Images.Media.TITLE, "title")
+
             values.put(Images.Media.MIME_TYPE, "image/jpeg")
             val uri: Uri? = context?.getContentResolver()?.insert(
                 Images.Media.EXTERNAL_CONTENT_URI,
@@ -165,6 +177,51 @@ abstract class BasePostFragment(
             metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
             startActivity(Intent.createChooser(intent, "Share Using"))
         }
+
+       /*postAdapter.setOnShareClickListener { post ->
+          var flag= (activity as MainActivity?)?.storagePermissionChecked;
+            val intent: Intent = Intent(Intent.ACTION_SEND)
+            if(flag == true)
+            {
+                val icon: Bitmap = getBitmapFromURL(post.imageUrl)!!
+
+                intent.type = "image/jpeg"
+
+                val values = ContentValues()
+
+                values.put(Images.Media.TITLE, "title")
+
+                values.put(Images.Media.MIME_TYPE, "image/jpeg")
+                val uri: Uri? = context?.getContentResolver()?.insert(
+                    Images.Media.EXTERNAL_CONTENT_URI,
+                    values
+                )
+
+
+                val outstream: OutputStream
+                try {
+                    outstream = uri?.let { context?.getContentResolver()?.openOutputStream(it) }!!
+                    icon.compress(Bitmap.CompressFormat.JPEG, 100, outstream)
+                    outstream.close()
+                } catch (e: Exception) {
+                    System.err.println(e.toString())
+                }
+
+                intent.putExtra(Intent.EXTRA_STREAM, uri)
+                intent.putExtra(Intent.EXTRA_TEXT,
+                    "${FirebaseAuth.getInstance().currentUser?.displayName} has challenged you to " +
+                            "answer this question on Chinthaka > https://www.chinthaka.in/post?id="+post.id)
+            }
+            else
+            {
+
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_TEXT,
+                    "${post.authorUserName} has challenged you to answer this question -> https://www.chinthaka.in/post?id="+post.id)
+            }
+            metricRepository.recordClicksOnMetric(Metric.CLICKS_ON_SHARE)
+            startActivity(Intent.createChooser(intent, "Share Using"))
+        }*/
 
         postAdapter.setOnDeletePostClickListener { post ->
             DeletePostDialog().apply {

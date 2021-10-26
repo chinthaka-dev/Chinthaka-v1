@@ -1,6 +1,8 @@
 package com.chinthaka.chinthaka_beta.ui.main
 
 import android.content.Intent
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -31,10 +33,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.widget.Button
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationUpdateListener {
+
+    companion object {
+
+        const val STORAGE_PERMISSION_CODE = 100
+    }
 
     @Inject
     lateinit var glide: RequestManager
@@ -43,10 +55,12 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
+    public var storagePermissionChecked=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_Chinthaka)
+
 
         //TODO - Need to understand the consequences of this
         val policy = ThreadPolicy.Builder().permitAll().build()
@@ -57,7 +71,6 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-
         setSupportActionBar(activityMainBinding.appBarMain.toolbar)
         activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.white)
         activityMainBinding.appBarMain.toolbar.setTitleTextColor(
@@ -66,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
                 R.color.black
             )
         )
+        checkPermissions();
 
         // This is being done as we are having a FragmentContainerView, not a direct Fragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
@@ -157,7 +171,9 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 //    }
 
     override fun onUserDataChanged(user: User) {
-        updateNavigationUserDetails(user)
+        if(user!=null) {
+            updateNavigationUserDetails(user)
+        }
     }
 
     private fun updateNavigationUserDetails(user: User){
@@ -188,5 +204,49 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
             }
         }
     }
+    // Function to check and request permission.
+    private fun checkPermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@MainActivity, permission) == PackageManager.PERMISSION_DENIED) {
+
+            // Requesting the permission
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
+        } else {
+            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    // This function is called when the user accepts or decline the permission.
+    // Request Code is used to check which permission called this function.
+    // This request code is provided when the user is prompt for permission.
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+         if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                storagePermissionChecked=true
+                Toast.makeText(this@MainActivity, "Storage Permission Granted", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                Toast.makeText(this@MainActivity, "Storage Permission Denied", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    fun checkPermissions(){
+        checkPermission(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            STORAGE_PERMISSION_CODE)
+       // storage?.isVisible=false;
+        /*// Defining storage Button
+        val storage: Button? = findViewById(R.id.storage)
+        // Set Buttons on Click Listeners , check for storage permission
+        storage?.setOnClickListener {
+            */
+
+        }
+
 
 }

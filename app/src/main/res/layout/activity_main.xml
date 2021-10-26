@@ -29,5 +29,13 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/nav_drawer"
         />
-
+   <!-- &lt;!&ndash;Button to request storage permission&ndash;&gt;
+    <Button
+        android:id="@+id/storage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Storage"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:layout_centerHorizontal="true"/>-->
 </androidx.drawerlayout.widget.DrawerLayout>
