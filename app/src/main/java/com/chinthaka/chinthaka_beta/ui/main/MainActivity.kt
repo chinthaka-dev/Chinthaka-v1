@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
     companion object {
 
-        const val STORAGE_PERMISSION_CODE = 100
+        private const val STORAGE_PERMISSION_CODE = 100
     }
 
     @Inject
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-        setSupportActionBar(activityMainBinding.appBarMain.toolbar)
+       setSupportActionBar(activityMainBinding.appBarMain.toolbar)
         activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.white)
         activityMainBinding.appBarMain.toolbar.setTitleTextColor(
             AppCompatResources.getColorStateList(
@@ -79,7 +79,8 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
                 R.color.black
             )
         )
-        checkPermissions();
+     // check permission for share feature
+       checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
 
         // This is being done as we are having a FragmentContainerView, not a direct Fragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
@@ -235,18 +236,18 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
         }
     }
 
-    fun checkPermissions(){
-        checkPermission(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            STORAGE_PERMISSION_CODE)
-       // storage?.isVisible=false;
-        /*// Defining storage Button
-        val storage: Button? = findViewById(R.id.storage)
-        // Set Buttons on Click Listeners , check for storage permission
-        storage?.setOnClickListener {
-            */
-
-        }
+//    private  fun checkPermission(){
+//        checkPermission(
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//            STORAGE_PERMISSION_CODE)
+//       // storage?.isVisible=false;
+//        /*// Defining storage Button
+//        val storage: Button? = findViewById(R.id.storage)
+//        // Set Buttons on Click Listeners , check for storage permission
+//        storage?.setOnClickListener {
+//            */
+//
+//        }
 
 
 }
