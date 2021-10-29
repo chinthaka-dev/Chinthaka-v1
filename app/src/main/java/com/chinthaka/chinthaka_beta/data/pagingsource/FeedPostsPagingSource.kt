@@ -39,93 +39,54 @@ class FeedPostsPagingSource(
                 firstLoad = false
             }
 
-            val postIdsAnsweredByCurrentUser = currentUser.postsAnswered
-            val postIdsAttemptedByCurrentUser = currentUser.postsAttempted
             val interestsForCurrentUser = currentUser.selectedInterests
-
-            val attemptedButUnansweredPostIds = postIdsAttemptedByCurrentUser.filter { postId -> postId !in postIdsAnsweredByCurrentUser }
-
-            val popularPostsForTopics = db.collection("posts")
-                .whereIn("category", interestsForCurrentUser)
-                .orderBy("popularityIndex", Query.Direction.DESCENDING)
-                .get()
-                .await()
-                .toObjects(Post::class.java)
+            val resultSet: MutableSet<Post> = HashSet()
 
             val recentPostsForTopics =  db.collection("posts")
-                .whereIn("category", interestsForCurrentUser)
-                .orderBy("date", Query.Direction.DESCENDING)
-                .get()
-                .await()
-                .toObjects(Post::class.java)
+                    .whereIn("category", interestsForCurrentUser)
+                    //.whereNotIn("answerViewedBy", listOf(uid))
+                    //.whereNotIn("answeredBy", listOf(uid))
+                    .orderBy("date", Query.Direction.DESCENDING)
+                    .limit(15)
+                    .get()
+                    .await()
+                    .toObjects(Post::class.java)
 
-            // Combining Popular Posts And Recent Posts
-            val combinedPostIdsOfPopularAndRecentPosts = sequence {
-                val popularPosts = popularPostsForTopics.iterator()
-                val recentPosts = recentPostsForTopics.iterator()
-                while (popularPosts.hasNext() && recentPosts.hasNext()) {
-                    yield(popularPosts.next())
-                    yield(recentPosts.next())
+            val attemptedButUnansweredPosts =  db.collection("posts")
+                    .whereIn("attemptedBy", listOf(uid))
+                    .limit(5)
+                    .get()
+                    .await()
+                    .toObjects(Post::class.java)
+
+                resultSet.addAll(attemptedButUnansweredPosts)
+                resultSet.addAll(recentPostsForTopics)
+
+                val answeredPosts = mutableListOf<Post>()
+
+                resultSet.forEach { post ->
+                    if(post.answerViewedBy.contains(uid) || post.answeredBy.contains(uid)) {
+                        answeredPosts.add(post)
+                    }
                 }
 
-                yieldAll(popularPosts)
-                yieldAll(recentPosts)
-            }.toList()
+                resultSet.removeAll(answeredPosts)
 
-            val unansweredCombinedPostIds = combinedPostIdsOfPopularAndRecentPosts.filter { post -> uid !in post.answeredBy }.map { post -> post.id }
-
-            val finalListOfPostIds = sequence {
-                val attemptedButUnansweredPosts = attemptedButUnansweredPostIds.iterator()
-                val unansweredCombinedPosts = unansweredCombinedPostIds.iterator()
-                while (attemptedButUnansweredPosts.hasNext() && unansweredCombinedPosts.hasNext()) {
-                    yield(attemptedButUnansweredPosts.next())
-                    yield(unansweredCombinedPosts.next())
-                }
-
-                yieldAll(attemptedButUnansweredPosts)
-                yieldAll(unansweredCombinedPosts)
-            }.toSet()
-
-            val resultList = mutableListOf<Post>()
-
-            var curPage = params.key ?: db.collection("posts")
-                .whereIn("id", finalListOfPostIds.toList())
-                .get()
-                .await()
-
-            // curPage -> Query Snapshot
-
-            val parsedPage = curPage!!.toObjects(Post::class.java)
+            val parsedPage = resultSet
                 .onEach { post ->
-
                     val user = db.collection("users")
                         .document(post.authorUId).get().await().toObject(User::class.java)!!
-
                     post.authorProfilePictureUrl = user.profilePictureUrl
                     post.authorUserName = user.userName
                     post.isLiked = uid in post.likedBy
                     post.isBookmarked = post.id in currentUser!!.bookmarks
-                }
-
-            val map = parsedPage.associateBy({it.id}, {it})
-
-            finalListOfPostIds.forEach { postId -> map.get(postId)?.let { resultList.add(it) } }
-
-            //Get the last Document of the current page
-            val lastDocumentSnapshot = curPage.documents[curPage.size() - 1]
-
-            // And we load the nextPage using the lastDocument of the previous page
-            val nextPage = db.collection("posts")
-                .whereIn("id", finalListOfPostIds.toList())
-                .startAfter(lastDocumentSnapshot)
-                .get()
-                .await()
+                }.toList()
 
 
             LoadResult.Page(
-                resultList,
+                parsedPage,
                 null,
-                nextPage
+                null
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
