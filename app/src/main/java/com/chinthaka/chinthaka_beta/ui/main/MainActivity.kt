@@ -1,6 +1,8 @@
 package com.chinthaka.chinthaka_beta.ui.main
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +33,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.chinthaka.chinthaka_beta.repositories.DefaultMainRepository
+import com.chinthaka.chinthaka_beta.repositories.MainRepository
+import com.chinthaka.chinthaka_beta.ui.main.fragments.BasePostFragment
 
 
 @AndroidEntryPoint
@@ -43,6 +51,10 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
+
+    companion object {
+        private const val STORAGE_PERMISSION_CODE = 101
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,14 +118,14 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
                 Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
         }
 
-        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+        /*navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
             FirebaseAuth.getInstance().signOut()
             Intent(this, AuthActivity::class.java).also {
                 startActivity(it)
             }
             finish()
             true
-        }
+        }*/
 
         navView.menu.findItem(R.id.settingsFragment).setOnMenuItemClickListener {
             drawerLayout.close()
@@ -135,6 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
         }
 
         handleDeepLinkingIntent(intent)
+        requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,6 +200,25 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
                 Log.d("post-id","Post Id is null")
             }
         }
+    }
+
+
+    // Function to check and request permission.
+    private fun requestPermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)
+            == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
+        }
+    }
+
+
+    // This function is called when the user accepts or decline the permission.
+    // Request Code is used to check which permission called this function.
+    // This request code is provided when the user is prompt for permission.
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 }

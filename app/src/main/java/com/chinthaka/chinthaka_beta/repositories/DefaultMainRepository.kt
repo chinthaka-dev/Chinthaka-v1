@@ -270,6 +270,8 @@ class DefaultMainRepository : MainRepository {
                 val postResult = transaction.get(posts.document(postId))
                 val answerViewedBy = postResult.toObject(Post::class.java)?.answerViewedBy ?: listOf()
                 val currentAnsweredBy = postResult.toObject(Post::class.java)?.answeredBy ?: listOf()
+                val currentUser =
+                    transaction.get(users.document(userId)).toObject(User::class.java)!!
                 if (userId !in currentAnsweredBy && userId !in answerViewedBy) {
                     isAnswered = true
                     transaction.update(
@@ -277,7 +279,20 @@ class DefaultMainRepository : MainRepository {
                         "answeredBy",
                         currentAnsweredBy + userId
                     )
+                    transaction.update(
+                        posts.document(postId),
+                        "answerUniversalSet",
+                        currentAnsweredBy + userId
+                    )
                 }
+                if(postId in currentUser.postsAttempted) {
+                        currentUser.postsAttempted.remove(postId)
+                        transaction.update(
+                            users.document(userId),
+                            "postsAttempted", currentUser.postsAttempted
+                        )
+                }
+
             }.await()
 
             updatePopularityIndexForPost(postId)
@@ -313,12 +328,26 @@ class DefaultMainRepository : MainRepository {
             var hasViewedAnswer = false
             firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
+                val currentUser =
+                    transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 hasViewedAnswer = currentUserId in post.answerViewedBy
                 if (!hasViewedAnswer) {
                     hasViewedAnswer = true
                     transaction.update(
                         posts.document(post.id),
                         "answerViewedBy", post.answerViewedBy + currentUserId
+                    )
+                    transaction.update(
+                        posts.document(post.id),
+                        "answerUniversalSet",
+                        post.answerViewedBy + currentUserId
+                    )
+                }
+                if(post.id in currentUser.postsAttempted) {
+                    currentUser.postsAttempted.remove(post.id)
+                    transaction.update(
+                        users.document(currentUserId),
+                        "postsAttempted", currentUser.postsAttempted
                     )
                 }
             }.await()
@@ -333,6 +362,8 @@ class DefaultMainRepository : MainRepository {
             firestore.runTransaction { transaction ->
                 val post = transaction.get(posts.document(postId)).toObject(Post::class.java)
                 val currentUserId = auth.uid!!
+                val currentUser =
+                    transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 if (post != null) {
                     hasViewedAnswer = currentUserId in post.answerViewedBy
                 }
@@ -342,6 +373,20 @@ class DefaultMainRepository : MainRepository {
                         transaction.update(
                             posts.document(post.id),
                             "answerViewedBy", post.answerViewedBy + currentUserId
+                        )
+                        transaction.update(
+                            posts.document(post.id),
+                            "answerUniversalSet",
+                            post.answerViewedBy + currentUserId
+                        )
+                    }
+                }
+                if (post != null) {
+                    if(post.id in currentUser.postsAttempted) {
+                        currentUser.postsAttempted.remove(post.id)
+                        transaction.update(
+                            users.document(currentUserId),
+                            "postsAttempted", currentUser.postsAttempted
                         )
                     }
                 }
@@ -357,12 +402,20 @@ class DefaultMainRepository : MainRepository {
             var hasAttempted = false
             firestore.runTransaction { transaction ->
                 val currentUserId = auth.uid!!
+                val currentUser =
+                    transaction.get(users.document(currentUserId)).toObject(User::class.java)!!
                 hasAttempted = currentUserId in post.attemptedBy
                 if (!hasAttempted) {
                     hasAttempted = true
                     transaction.update(
                         posts.document(post.id),
                         "attemptedBy", post.attemptedBy + currentUserId
+                    )
+                }
+                if(post.id !in currentUser.postsAttempted) {
+                    transaction.update(
+                        users.document(currentUserId),
+                        "postsAttempted", currentUser.postsAttempted + post.id
                     )
                 }
             }.await()

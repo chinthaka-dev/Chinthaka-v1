@@ -14,6 +14,6 @@ data class User(
     val selectedInterests: List<String> = listOf(),
     var bookmarks: List<String> = listOf(),
     var postsAnswered: List<String> = listOf(),
-    var postsAttempted: List<String> = listOf(),
+    var postsAttempted: MutableList<String> = mutableListOf(),
     @get:Exclude var isFollowing: Boolean = false,
 )

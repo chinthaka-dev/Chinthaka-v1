@@ -7,16 +7,12 @@ import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.other.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 class FeedPostsPagingSource(
     private val db: FirebaseFirestore
 ) : PagingSource<QuerySnapshot, Post>() {
-
-    var firstLoad = true
-    lateinit var adminUser: User
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> {
         // Load the posts
@@ -30,47 +26,44 @@ class FeedPostsPagingSource(
                 .await()
                 .toObject(User::class.java)!!
 
-            if (firstLoad) {
-                adminUser = db.collection("users")
-                    .document(Constants.ADMIN_USER_ID)
-                    .get()
-                    .await()
-                    .toObject(User::class.java)!!
-                firstLoad = false
-            }
-
             val interestsForCurrentUser = currentUser.selectedInterests
             val resultSet: MutableSet<Post> = HashSet()
 
-            val recentPostsForTopics =  db.collection("posts")
-                    .whereIn("category", interestsForCurrentUser)
-                    //.whereNotIn("answerViewedBy", listOf(uid))
-                    //.whereNotIn("answeredBy", listOf(uid))
-                    .orderBy("date", Query.Direction.DESCENDING)
-                    .limit(15)
-                    .get()
-                    .await()
-                    .toObjects(Post::class.java)
+            val recentPosts = db.collection("posts")
+                .whereIn("category", interestsForCurrentUser)
+                .limit(20)
+                .get()
+                .await()
+                .toObjects(Post::class.java)
 
-            val attemptedButUnansweredPosts =  db.collection("posts")
-                    .whereIn("attemptedBy", listOf(uid))
+            val attemptedButUnansweredPostIds = currentUser.postsAttempted
+
+            val top5AttemptedPostIds = mutableListOf<String>()
+            var i = 0
+            while(i <= 5 && attemptedButUnansweredPostIds.size > i){
+                top5AttemptedPostIds.add(attemptedButUnansweredPostIds[i])
+                i++
+            }
+
+            if(top5AttemptedPostIds.size != 0){
+                val attemptedButUnansweredPosts = db.collection("posts")
+                    .whereIn("id", top5AttemptedPostIds)
                     .limit(5)
                     .get()
                     .await()
                     .toObjects(Post::class.java)
 
                 resultSet.addAll(attemptedButUnansweredPosts)
-                resultSet.addAll(recentPostsForTopics)
+            }
 
-                val answeredPosts = mutableListOf<Post>()
-
-                resultSet.forEach { post ->
-                    if(post.answerViewedBy.contains(uid) || post.answeredBy.contains(uid)) {
-                        answeredPosts.add(post)
-                    }
+            val answeredPosts = mutableListOf<Post>()
+            recentPosts.forEach { post ->
+                if(post.answerViewedBy.contains(uid) || post.answeredBy.contains(uid)) {
+                    answeredPosts.add(post)
                 }
-
-                resultSet.removeAll(answeredPosts)
+            }
+            recentPosts.removeAll(answeredPosts)
+            resultSet.addAll(recentPosts)
 
             val parsedPage = resultSet
                 .onEach { post ->

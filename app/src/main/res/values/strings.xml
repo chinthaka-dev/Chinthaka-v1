@@ -3,8 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="facebook_application_id">422023309607742</string>
-    <string name="facebook_login_protocol_scheme">fb422023309607742</string>
+    <string name="facebook_application_id">1052509235547991</string>
+    <string name="facebook_app_id">1052509235547991</string>
+    <string name="fb_login_protocol_scheme">fb1052509235547991</string>
     <string name="google_client_id">394317677096-e7cagni6v3tcvp1l5ke0ec4mjptbfub9.apps.googleusercontent.com</string>
     <string name="profile">Profile</string>
     <string name="home">Home</string>

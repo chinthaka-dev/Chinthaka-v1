@@ -26,6 +26,7 @@ data class Post(
     @get:Exclude var isAttempting: Boolean = false,
     var attemptedBy: List<String> = listOf(),
     @get:Exclude var isViewingAnswer:Boolean = false,
-    var answerViewedBy: List<String> = listOf()
+    var answerViewedBy: List<String> = listOf(),
+    var answerUniversalSet: List<String> = listOf()
 
 )
