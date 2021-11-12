@@ -37,8 +37,10 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.chinthaka.chinthaka_beta.repositories.DefaultMainRepository
+import com.chinthaka.chinthaka_beta.repositories.LogRepository
 import com.chinthaka.chinthaka_beta.repositories.MainRepository
 import com.chinthaka.chinthaka_beta.ui.main.fragments.BasePostFragment
+import java.lang.Exception
 
 
 @AndroidEntryPoint
@@ -51,74 +53,83 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
+    private val logRepository = LogRepository()
 
     companion object {
         private const val STORAGE_PERMISSION_CODE = 101
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_Chinthaka)
+        try {
+            super.onCreate(savedInstanceState)
+            setTheme(R.style.Theme_Chinthaka)
 
-        //TODO - Need to understand the consequences of this
-        val policy = ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+            logRepository.recordLog("Inside MainActivity")
 
-        val metricRepository = MetricRepository()
-        metricRepository.recordDailyLogin()
+            //TODO - Need to understand the consequences of this
+            val policy = ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
 
-        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding.root)
+            val metricRepository = MetricRepository()
+            metricRepository.recordDailyLogin()
 
-        setSupportActionBar(activityMainBinding.appBarMain.toolbar)
-        activityMainBinding.appBarMain.toolbar.background = AppCompatResources.getDrawable(this, R.color.white)
-        activityMainBinding.appBarMain.toolbar.setTitleTextColor(
-            AppCompatResources.getColorStateList(
-                this,
-                R.color.black
+            activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(activityMainBinding.root)
+
+            setSupportActionBar(activityMainBinding.appBarMain.toolbar)
+            activityMainBinding.appBarMain.toolbar.background =
+                AppCompatResources.getDrawable(this, R.color.white)
+            activityMainBinding.appBarMain.toolbar.setTitleTextColor(
+                AppCompatResources.getColorStateList(
+                    this,
+                    R.color.black
+                )
             )
-        )
 
-        // This is being done as we are having a FragmentContainerView, not a direct Fragment
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
-        val drawerLayout: DrawerLayout = activityMainBinding.drawerLayout
-        val navView: NavigationView = activityMainBinding.navigationView
-        actionBarDrawerToggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            activityMainBinding.appBarMain.toolbar,
-            R.string.start,
-            R.string.close
-        )
-        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+            // This is being done as we are having a FragmentContainerView, not a direct Fragment
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+            val drawerLayout: DrawerLayout = activityMainBinding.drawerLayout
+            val navView: NavigationView = activityMainBinding.navigationView
+            actionBarDrawerToggle = ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                activityMainBinding.appBarMain.toolbar,
+                R.string.start,
+                R.string.close
+            )
+            drawerLayout.addDrawerListener(actionBarDrawerToggle)
 
-        actionBarDrawerToggle.syncState()
+            actionBarDrawerToggle.syncState()
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        navController = navHostFragment.findNavController()
+            navController = navHostFragment.findNavController()
 
-        val extras = intent.extras?.get(R.string.is_new_user.toString())
+            val extras = intent.extras?.get(R.string.is_new_user.toString())
 
-        if (extras == true) {
-            navController.navigate(R.id.globalActionToSettingsFragment)
-        }
+            if (extras == true) {
+                navController.navigate(R.id.globalActionToSettingsFragment)
+            }
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.homeFragment
-            ), drawerLayout
-        )
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.homeFragment
+                ), drawerLayout
+            )
 
-        activityMainBinding.appBarMain.toolbar.setupWithNavController(navController, drawerLayout)
+            activityMainBinding.appBarMain.toolbar.setupWithNavController(
+                navController,
+                drawerLayout
+            )
 
-        navView.getHeaderView(0).setOnClickListener {
-            drawerLayout.close()
-            navController.navigate(R.id.action_homeFragment_to_settingsFragment,
-                Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
-        }
+            navView.getHeaderView(0).setOnClickListener {
+                drawerLayout.close()
+                navController.navigate(R.id.action_homeFragment_to_settingsFragment,
+                    Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
+            }
 
-        /*navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+            /*navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
             FirebaseAuth.getInstance().signOut()
             Intent(this, AuthActivity::class.java).also {
                 startActivity(it)
@@ -127,27 +138,32 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
             true
         }*/
 
-        navView.menu.findItem(R.id.settingsFragment).setOnMenuItemClickListener {
-            drawerLayout.close()
-            navController.navigate(R.id.action_homeFragment_to_settingsFragment,
-                Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
-            true
-        }
+            navView.menu.findItem(R.id.settingsFragment).setOnMenuItemClickListener {
+                drawerLayout.close()
+                navController.navigate(R.id.action_homeFragment_to_settingsFragment,
+                    Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
+                true
+            }
 
-        // Accessing Drawer Header Views
+            // Accessing Drawer Header Views
 //        val ivProfileImage = navView.getHeaderView(0).findViewById<ImageView>(R.id.ivProfileImage)
 //        val tvProfileName = navView.getHeaderView(0).findViewById<TextView>(R.id.tvProfileName)
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+            setupActionBarWithNavController(navController, appBarConfiguration)
+            navView.setupWithNavController(navController)
 
-        activityMainBinding.appBarMain.bottomNavigationView.apply {
-            background = null
-            setupWithNavController(navHostFragment.findNavController())
+            activityMainBinding.appBarMain.bottomNavigationView.apply {
+                background = null
+                setupWithNavController(navHostFragment.findNavController())
+            }
+
+            handleDeepLinkingIntent(intent)
+            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+        } catch (e:Exception) {
+            logRepository.recordLog("Main Activity - " + e.localizedMessage)
+            e.message?.let { logRepository.recordLog(it) }
+            logRepository.recordLog(e.stackTrace.toString())
         }
-
-        handleDeepLinkingIntent(intent)
-        requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -205,6 +221,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
     // Function to check and request permission.
     private fun requestPermission(permission: String, requestCode: Int) {
+        logRepository.recordLog("Inside requestPermission")
         if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)
             == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)

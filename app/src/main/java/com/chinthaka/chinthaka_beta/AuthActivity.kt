@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.chinthaka.chinthaka_beta.databinding.ActivityAuthBinding
 import com.chinthaka.chinthaka_beta.other.EventObserver
+import com.chinthaka.chinthaka_beta.repositories.LogRepository
 import com.chinthaka.chinthaka_beta.ui.auth.AuthViewModel
 import com.chinthaka.chinthaka_beta.ui.main.MainActivity
 import com.firebase.ui.auth.AuthUI
@@ -26,6 +27,8 @@ open class AuthActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AuthViewModel
 
+    private val logRepository = LogRepository()
+
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
     ) { res ->
@@ -34,6 +37,8 @@ open class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        logRepository.recordLog("Inside AuthActivity")
 
         activityAuthBinding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(activityAuthBinding.root)
@@ -46,6 +51,7 @@ open class AuthActivity : AppCompatActivity() {
         if (FirebaseAuth.getInstance().currentUser != null) {
             val appLinkAction: String? = intent?.action
             val appLinkData: Uri? = intent?.data
+            logRepository.recordLog("Authentication Successful")
             // This means that User is still logged in
             Intent(appLinkAction,appLinkData,this, MainActivity::class.java).also {
                 startActivity(it)
@@ -72,6 +78,10 @@ open class AuthActivity : AppCompatActivity() {
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
+            if (response != null) {
+                logRepository.recordLog("Inside AuthActivity - "+ (response.getError()?.getErrorCode()
+                    ?: "error while signing-in"))
+            }
             Toast.makeText(this, "Google sign in failed:(", Toast.LENGTH_LONG).show()
         }
     }

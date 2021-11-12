@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "394317677096-891q1fpnmf91sss9cevc1c6lpf6oukip.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chinthaka.chinthaka_beta",
+            "certificate_hash": "6d1d6a30aa22ebb75261523cdd0466756b200968"
+          }
+        },
+        {
           "client_id": "394317677096-8etpkuk4a20todok3vbjq9ldu3ku2bgh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

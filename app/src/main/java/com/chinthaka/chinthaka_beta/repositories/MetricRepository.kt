@@ -3,7 +3,6 @@ package com.chinthaka.chinthaka_beta.repositories
 import android.util.Log
 import dagger.hilt.android.scopes.ActivityScoped
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import java.text.SimpleDateFormat
@@ -53,10 +52,10 @@ class MetricRepository {
             if (task.isSuccessful) {
                 val document = task.result
                 if (!document.exists()) {
-                    val clicksOnViewSolutionsMap: MutableMap<String, Any> = HashMap()
-                    clicksOnViewSolutionsMap[metricName] = 1
+                    val metricsMap: MutableMap<String, Any> = HashMap()
+                    metricsMap[metricName] = 1
                     firebaseFirestore.collection("metrics").document(todaysDate)
-                        .set(clicksOnViewSolutionsMap)
+                        .set(metricsMap)
                 }
             } else {
                 Log.d("Firebase Firestore", "get failed with ", task.exception)
