@@ -7,7 +7,7 @@
             android:title="@string/create_new_post" />-->
 
         <item
-            android:id="@id/settingsFragment"
+            android:id="@id/profileFragment"
             android:icon="@drawable/ic_person"
             android:title="@string/view_profile" />
 

@@ -18,18 +18,13 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
         <action
-            android:id="@+id/action_homeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment"
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
     </fragment>
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SearchFragment"
@@ -41,12 +36,12 @@
         android:label="Create Post"
         tools:layout="@layout/fragment_create_post" />
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/fragment_settings">
+        android:id="@+id/profileFragment"
+        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
         <action
-            android:id="@+id/action_settingsFragment_to_InterestsFragment"
+            android:id="@+id/action_profileFragment_to_InterestsFragment"
             app:destination="@id/interestsFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
@@ -147,20 +142,8 @@
     </fragment>
 
     <action
-        android:id="@+id/globalActionToOthersProfileFragment"
-        app:destination="@id/othersProfileFragment" />
-
-    <action
         android:id="@+id/globalActionToCreatePostFragment"
         app:destination="@id/createPostFragment" />
-
-    <!--    <action-->
-    <!--        android:id="@+id/globalActionToCommentDialog"-->
-    <!--        app:destination="@id/commentDialog" />-->
-
-    <!--    <action-->
-    <!--        android:id="@+id/globalActionToSubmitAnswerFragment"-->
-    <!--        app:destination="@id/submitAnswerFragment" />-->
 
     <action
         android:id="@+id/globalActionToViewAnswerDialog"
@@ -175,8 +158,8 @@
         app:destination="@id/interestsFragment" />
 
     <action
-        android:id="@+id/globalActionToSettingsFragment"
-        app:destination="@id/settingsFragment" />
+        android:id="@+id/globalActionToProfileFragment"
+        app:destination="@id/profileFragment" />
 
     <action
         android:id="@+id/globalActionToUsersFragment"
@@ -189,15 +172,6 @@
     <action
         android:id="@+id/globalActionToSubmitAnswerFragment"
         app:destination="@id/submitAnswerFragment" />
-
-    <fragment
-        android:id="@+id/othersProfileFragment"
-        android:name="com.chinthaka.chinthaka_beta.ui.main.fragments.OthersProfileFragment"
-        android:label="OthersProfile">
-        <argument
-            android:name="userId"
-            app:argType="string" />
-    </fragment>
 
     <fragment
         android:id="@+id/submitAnswerFragment"
@@ -236,14 +210,6 @@
             app:argType="string" />
     </fragment>
 
-    <dialog
-        android:id="@+id/commentDialog"
-        android:name="com.chinthaka.chinthaka_beta.ui.main.dialogs.CommentDialog"
-        android:label="CommentDialog">
-        <argument
-            android:name="postId"
-            app:argType="string" />
-    </dialog>
     <dialog
         android:id="@+id/viewAnswerDialog"
         android:name="com.chinthaka.chinthaka_beta.ui.main.dialogs.ViewAnswerDialog"

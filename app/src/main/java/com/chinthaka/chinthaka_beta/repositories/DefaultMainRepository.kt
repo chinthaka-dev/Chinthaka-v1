@@ -10,7 +10,6 @@ import com.chinthaka.chinthaka_beta.other.Constants.ANSWER_VIEWED_BY_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Constants.ATTEMPTED_BY_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Constants.DEFAULT_PROFILE_PICTURE_URL
 import com.chinthaka.chinthaka_beta.other.Constants.LIKED_BY_WEIGHT
-import com.chinthaka.chinthaka_beta.other.Constants.RECENTNESS_WEIGHT
 import com.chinthaka.chinthaka_beta.other.Resource
 import com.chinthaka.chinthaka_beta.other.safeCall
 import com.google.firebase.auth.FirebaseAuth

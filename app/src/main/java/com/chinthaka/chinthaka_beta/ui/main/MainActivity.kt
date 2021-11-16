@@ -16,30 +16,21 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.RequestManager
-import com.chinthaka.chinthaka_beta.AuthActivity
 import com.chinthaka.chinthaka_beta.R
 import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.databinding.ActivityMainBinding
 import com.chinthaka.chinthaka_beta.repositories.MetricRepository
 import com.chinthaka.chinthaka_beta.ui.main.listeners.NavigationUpdateListener
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.chinthaka.chinthaka_beta.repositories.DefaultMainRepository
+import androidx.navigation.ui.*
 import com.chinthaka.chinthaka_beta.repositories.LogRepository
-import com.chinthaka.chinthaka_beta.repositories.MainRepository
-import com.chinthaka.chinthaka_beta.ui.main.fragments.BasePostFragment
 import java.lang.Exception
 
 
@@ -109,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
             val extras = intent.extras?.get(R.string.is_new_user.toString())
 
             if (extras == true) {
-                navController.navigate(R.id.globalActionToSettingsFragment)
+                navController.navigate(R.id.globalActionToProfileFragment)
             }
 
             appBarConfiguration = AppBarConfiguration(
@@ -125,7 +116,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
 
             navView.getHeaderView(0).setOnClickListener {
                 drawerLayout.close()
-                navController.navigate(R.id.action_homeFragment_to_settingsFragment,
+                navController.navigate(R.id.action_homeFragment_to_profileFragment,
                     Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
             }
 
@@ -138,16 +129,12 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
             true
         }*/
 
-            navView.menu.findItem(R.id.settingsFragment).setOnMenuItemClickListener {
+            navView.menu.findItem(R.id.profileFragment).setOnMenuItemClickListener {
                 drawerLayout.close()
-                navController.navigate(R.id.action_homeFragment_to_settingsFragment,
+                navController.navigate(R.id.action_homeFragment_to_profileFragment,
                     Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
                 true
             }
-
-            // Accessing Drawer Header Views
-//        val ivProfileImage = navView.getHeaderView(0).findViewById<ImageView>(R.id.ivProfileImage)
-//        val tvProfileName = navView.getHeaderView(0).findViewById<TextView>(R.id.tvProfileName)
 
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)

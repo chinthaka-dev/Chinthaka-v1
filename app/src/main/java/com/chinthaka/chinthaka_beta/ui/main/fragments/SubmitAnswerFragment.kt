@@ -100,7 +100,7 @@ class SubmitAnswerFragment : Fragment(R.layout.fragment_submit_answer) {
                     navigateToViewAnswerFragmentPostExhaustingAttempts()
 
                 }
-                if(i2 > i1) {
+                if(i2 > i1 && userAnswer[userAnswer.length - 1] != ' ') {
                     attemptsRemaining--
                     submitAnswerFragmentBinding.tvAttemptsRemaining.text = "Tries Remaining: $attemptsRemaining"
                 }

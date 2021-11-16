@@ -1,24 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Chinthaka" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
+    <style name="Theme.Chinthaka" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/black</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="bottomAppBarStyle">@style/BottomAppBarStyle</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle</item>
-        <item name="android:windowBackground">@color/darkBackground</item>
-        <item name="actionBarStyle">@style/ToolbarStyle</item>
+        <item name="android:windowBackground">@color/grayBackground</item>
+        <item name="android:actionBarStyle">@style/ToolbarStyle</item>
         <item name="cardViewStyle">@style/CardViewStyle</item>
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:textColorHint">@color/colorPrimary</item>
-        <item name="startIconTint">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/darkBackground</item>
+        <item name="startIconTint">@color/darkBackground</item>
+        <item name="background">@color/darkBackground</item>
         <item name="boxStrokeColor">@drawable/edit_text_box_border</item>
         <item name="boxCornerRadiusTopEnd">0dp</item>
         <item name="boxCornerRadiusBottomEnd">0dp</item>
@@ -27,34 +31,64 @@
     </style>
 
     <style name="CardViewStyle" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@color/mediumDarkBackground</item>
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
-    <style name="ToolbarStyle" parent="Widget.MaterialComponents.ActionBar.Primary">
-        <item name="background">@color/mediumDarkBackground</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Light.ActionBar.Solid">
+    </style>
+
+    <!--REQUIRED -->
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/black</item>
+    </style>
+
+    <!--REQUIRED -->
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_logout</item>
+        <item name="android:background">?android:attr/actionBarItemBackground</item>
+    </style>
+
+    <!--REQUIRED -->
+    <style name="AlertDialogCustom" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--REQUIRED -->
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/grayBackground</item>
+    </style>
+
+    <!--REQUIRED -->
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="LoginTheme" parent="FirebaseUI">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:background">@color/tonedDownBlack</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="BottomAppBarStyle" parent="Widget.MaterialComponents.BottomAppBar">
-        <item name="backgroundTint">@color/mediumDarkBackground</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="color">@android:color/black</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/roboto_regular</item>
-        <item name="cornerRadius">0dp</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
-    <style name="RedButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="cornerRadius">0dp</item>
-        <item name="backgroundTint">#FF0000</item>
+        <item name="cornerRadius">10dp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="FloatingActionButtonStyle" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">@color/colorPrimary</item>
-        <!--<item name="shapeAppearanceOverlay">@style/FabDiamondOverlay</item>-->
+        <item name="backgroundTint">@color/white</item>
     </style>
 
     <style name="FabDiamondOverlay" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -69,7 +103,18 @@
     </style>
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="fontFamily">@font/roboto_light</item>
     </style>
+
+    <style name="Theme.DrawerLayout.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DrawerLayout.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_image</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
 </resources>

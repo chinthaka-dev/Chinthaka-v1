@@ -25,7 +25,8 @@ class LogRepository {
     fun recordLog(logMessage: String) {
         val todaysDate = todaysDateAsString
         val docRef = firebaseFirestore.collection("logs").document(todaysDate)
-        val userName = FirebaseAuth.getInstance().currentUser!!.displayName
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userName: String = currentUser?.displayName ?: "TempUser"
         docRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val document = task.result
@@ -33,7 +34,7 @@ class LogRepository {
                     val loginsObjectMap: MutableMap<String, Any> = HashMap()
                     val logs: MutableList<String?> = ArrayList()
                     logs.add(logMessage)
-                    loginsObjectMap[userName.toString()] = logs
+                    loginsObjectMap[userName] = logs
                     firebaseFirestore.collection("logs").document(todaysDate)
                         .set(loginsObjectMap)
                 }
@@ -41,10 +42,8 @@ class LogRepository {
                 Log.d("Firebase Firestore", "get failed with ", task.exception)
             }
         }
-        if (userName != null) {
-            docRef.update(userName, FieldValue.arrayUnion(
-                logMessage
-            ))
-        }
+        docRef.update(userName, FieldValue.arrayUnion(
+            logMessage
+        ))
     }
 }
