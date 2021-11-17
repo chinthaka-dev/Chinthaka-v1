@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Chinthaka</string>
+    <string name="app_tagline">Answer, Learn &amp; Share</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -94,6 +95,7 @@
     <string name="is_new_user_false">FALSE</string>
     <string name="invite_friends_description">Dear Chinthaka,\nThank you for taking time to invite your friends to the Chinthaka community. We greatly appreciate your help in building a strong Chinthaka community.\n- Team Chinthaka </string>
     <string name="feedback_description">Dear Chinthaka,\nWe believe that you are the best person to receive feedback from! Thank you for taking time to provide us your valuable feedback.\n- Team Chinthaka </string>
+    <string name="sign_out">Sign Out</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

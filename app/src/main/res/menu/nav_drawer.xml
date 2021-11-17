@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--        <item
+        <item
             android:id="@id/createPostFragment"
             android:icon="@drawable/ic_create"
-            android:title="@string/create_new_post" />-->
+            android:title="@string/create_new_post" />
 
         <item
             android:id="@id/profileFragment"
@@ -21,8 +21,8 @@
             android:icon="@drawable/ic_feedback"
             android:title="@string/submit_feedback" />
 
-<!--        <item
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
-            android:title="@string/logout" />-->
+            android:title="@string/logout" />
 </menu>

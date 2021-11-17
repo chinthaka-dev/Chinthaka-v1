@@ -30,6 +30,8 @@ import android.os.StrictMode.ThreadPolicy
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.ui.*
+import com.chinthaka.chinthaka_beta.GoogleSignInActivity
+import com.chinthaka.chinthaka_beta.repositories.DefaultMainRepository
 import com.chinthaka.chinthaka_beta.repositories.LogRepository
 import java.lang.Exception
 
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
     private val logRepository = LogRepository()
+    private val mainRepository = DefaultMainRepository()
 
     companion object {
         private const val STORAGE_PERMISSION_CODE = 101
@@ -120,14 +123,14 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
                     Bundle().apply { putBoolean("is_navigated_from_drawer", true) })
             }
 
-            /*navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
-            FirebaseAuth.getInstance().signOut()
-            Intent(this, AuthActivity::class.java).also {
-                startActivity(it)
+            navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+                Intent(this, GoogleSignInActivity::class.java).also {
+                    it.putExtra(R.string.sign_out.toString(), true)
+                    startActivity(it)
+                }
+                finish()
+                true
             }
-            finish()
-            true
-        }*/
 
             navView.menu.findItem(R.id.profileFragment).setOnMenuItemClickListener {
                 drawerLayout.close()
@@ -177,14 +180,15 @@ class MainActivity : AppCompatActivity(), NavigationUpdateListener {
     }
 
     private fun updateNavigationUserDetails(user: User){
-
         val ivDrawerImage : ImageView = activityMainBinding.navigationView.findViewById(R.id.ivProfileImage)
-
         glide.load(user.profilePictureUrl).into(ivDrawerImage)
 
         val userName : TextView = activityMainBinding.navigationView.findViewById(R.id.tvProfileName)
         userName.text = user.userName
 
+        if(!user.creator) {
+            activityMainBinding.navigationView.menu.removeItem(R.id.createPostFragment)
+        }
     }
 
     private fun handleDeepLinkingIntent(intent: Intent?) {

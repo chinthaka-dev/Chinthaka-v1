@@ -15,5 +15,6 @@ data class User(
     var bookmarks: List<String> = listOf(),
     var postsAnswered: List<String> = listOf(),
     var postsAttempted: MutableList<String> = mutableListOf(),
+    var creator: Boolean = false,
     @get:Exclude var isFollowing: Boolean = false,
 )
