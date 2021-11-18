@@ -7,17 +7,19 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.chinthaka.chinthaka_beta.R
+import com.chinthaka.chinthaka_beta.data.entities.Category
 import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.databinding.ItemPostBinding
 import javax.inject.Inject
 
 class PostAdapter @Inject constructor(
     private val glide: RequestManager
-) : PagingDataAdapter<Post, PostAdapter.PostViewHolder>(Companion) {
+) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
         val ivPostImage: ImageView = binding.ivPostImage
@@ -44,7 +46,7 @@ class PostAdapter @Inject constructor(
         val rlShare: RelativeLayout = binding.rlShare
     }
 
-    companion object : DiffUtil.ItemCallback<Post>() {
+    private val diffCallback =  object : DiffUtil.ItemCallback<Post>() {
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
@@ -54,6 +56,12 @@ class PostAdapter @Inject constructor(
             return oldItem.id == newItem.id
         }
     }
+
+    private val differ = AsyncListDiffer(this, diffCallback)
+
+    var posts: List<Post>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = ItemPostBinding.inflate(
@@ -67,7 +75,7 @@ class PostAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
 
-        val post = getItem(position) ?: return
+        val post = posts[position]
 
         holder.apply {
             glide.load(post.imageUrl).into(ivPostImage)
@@ -258,6 +266,10 @@ class PostAdapter @Inject constructor(
 
     fun setOnExpandClickListener(listener: (Post, Int) -> Unit) {
         onExpandClickListener = listener
+    }
+
+    override fun getItemCount(): Int {
+        return posts.size
     }
 
 }

@@ -31,7 +31,7 @@ class BookmarksFragment : BasePostFragment(R.layout.fragment_bookmarks) {
 
         setUpRecyclerView()
 
-        //Paging is being integrated
+       /* //Paging is being integrated
         lifecycleScope.launch {
             viewModel.pagingFlow.collect {
                 postAdapter.submitData(it)
@@ -44,7 +44,7 @@ class BookmarksFragment : BasePostFragment(R.layout.fragment_bookmarks) {
                 fragmentBookmarksBinding.bookmarksPostsProgressBar?.isVisible =
                     it.refresh is LoadState.Loading || it.append is LoadState.Loading
             }
-        }
+        }*/
 
         postAdapter.setOnExpandClickListener{ post, i ->
             curBookmarkedIndex = i

@@ -1,6 +1,7 @@
 package com.chinthaka.chinthaka_beta.repositories
 
 import android.net.Uri
+import android.util.Log
 import com.chinthaka.chinthaka_beta.data.entities.Comment
 import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.data.entities.ProfileUpdate
@@ -22,6 +23,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.collections.LinkedHashSet
+import kotlin.math.log
 
 
 @ActivityScoped     // @ActivityScoped is used to make sure we always pick the single instance always.
@@ -88,23 +91,113 @@ class DefaultMainRepository : MainRepository {
         }
     }
 
-    override suspend fun getPostsForFollows() = withContext(Dispatchers.IO) {
+    override suspend fun getRecentPosts() = withContext(Dispatchers.IO) {
         safeCall {
-            val userId = FirebaseAuth.getInstance().uid!!
-//            val follows = getUser(userId).data!!.follows
-//            val allPosts = posts.whereIn("authorUId", follows)
+            val resultSet: MutableSet<Post> = LinkedHashSet()
+            val currentUserId = FirebaseAuth.getInstance().uid!!
+            val currentUser = users.document(currentUserId).get().await().toObject(User::class.java)
+                ?: throw IllegalStateException()
             val allPosts = posts
                 .orderBy("date", Query.Direction.DESCENDING)
+                .limit(20)
                 .get()
                 .await()
                 .toObjects(Post::class.java)
-                .onEach { post ->
-                    val user = getUser(post.authorUId).data!!
-                    post.authorProfilePictureUrl = user.profilePictureUrl
-                    post.authorUserName = user.userName
-                    post.isLiked = userId in post.likedBy
+
+            val attemptedButUnansweredPostIds = currentUser.postsAttempted
+
+            val top5AttemptedPostIds = mutableListOf<String>()
+            var i = 0
+            while(i <= 5 && attemptedButUnansweredPostIds.size > i){
+                top5AttemptedPostIds.add(attemptedButUnansweredPostIds[i])
+                i++
+            }
+
+            Log.d("top5AttemptedPostIds",top5AttemptedPostIds.toString())
+
+            val attemptedButUnansweredPosts : MutableList<Post> = mutableListOf()
+            if(top5AttemptedPostIds.size != 0){
+                attemptedButUnansweredPosts.addAll(posts
+                    .whereIn("id", top5AttemptedPostIds)
+                    .limit(5)
+                    .get()
+                    .await()
+                    .toObjects(Post::class.java))
+            }
+
+            val answeredPosts = mutableListOf<Post>()
+            allPosts.forEach { post ->
+                if(post.answerViewedBy.contains(currentUserId) || post.answeredBy.contains(currentUserId)) {
+                    answeredPosts.add(post)
                 }
-            Resource.Success(allPosts)
+            }
+            allPosts.removeAll(answeredPosts)
+            resultSet.addAll(attemptedButUnansweredPosts)
+            resultSet.addAll(allPosts)
+
+            resultSet.onEach { post ->
+                val user = getUser(post.authorUId).data!!
+                post.authorProfilePictureUrl = user.profilePictureUrl
+                post.authorUserName = user.userName
+                post.isLiked = currentUserId in post.likedBy
+            }
+
+            Resource.Success(resultSet.toList())
+        }
+    }
+
+    override suspend fun getBookmarkedPosts() = withContext(Dispatchers.IO) {
+        safeCall {
+            val resultSet: MutableSet<Post> = LinkedHashSet()
+            val currentUserId = FirebaseAuth.getInstance().uid!!
+            val currentUser = users.document(currentUserId).get().await().toObject(User::class.java)
+                ?: throw IllegalStateException()
+            val allPosts = posts
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(20)
+                .get()
+                .await()
+                .toObjects(Post::class.java)
+
+            val attemptedButUnansweredPostIds = currentUser.postsAttempted
+
+            val top5AttemptedPostIds = mutableListOf<String>()
+            var i = 0
+            while(i <= 5 && attemptedButUnansweredPostIds.size > i){
+                top5AttemptedPostIds.add(attemptedButUnansweredPostIds[i])
+                i++
+            }
+
+            Log.d("top5AttemptedPostIds",top5AttemptedPostIds.toString())
+
+            val attemptedButUnansweredPosts : MutableList<Post> = mutableListOf()
+            if(top5AttemptedPostIds.size != 0){
+                attemptedButUnansweredPosts.addAll(posts
+                    .whereIn("id", top5AttemptedPostIds)
+                    .limit(5)
+                    .get()
+                    .await()
+                    .toObjects(Post::class.java))
+            }
+
+            val answeredPosts = mutableListOf<Post>()
+            allPosts.forEach { post ->
+                if(post.answerViewedBy.contains(currentUserId) || post.answeredBy.contains(currentUserId)) {
+                    answeredPosts.add(post)
+                }
+            }
+            allPosts.removeAll(answeredPosts)
+            resultSet.addAll(attemptedButUnansweredPosts)
+            resultSet.addAll(allPosts)
+
+            resultSet.onEach { post ->
+                val user = getUser(post.authorUId).data!!
+                post.authorProfilePictureUrl = user.profilePictureUrl
+                post.authorUserName = user.userName
+                post.isLiked = currentUserId in post.likedBy
+            }
+
+            Resource.Success(resultSet.toList())
         }
     }
 

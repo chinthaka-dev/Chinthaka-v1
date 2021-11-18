@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.chinthaka.chinthaka_beta.data.entities.Category
+import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.data.pagingsource.FeedPostsPagingSource
 import com.chinthaka.chinthaka_beta.other.Constants.PAGE_SIZE
@@ -31,6 +33,22 @@ class HomeViewModel @Inject constructor(
     val pagingFlow = Pager(PagingConfig(PAGE_SIZE)){
         FeedPostsPagingSource(FirebaseFirestore.getInstance())
     }.flow.cachedIn(viewModelScope)
+
+    private val _posts = MutableLiveData<Event<Resource<List<Post>>>>()
+    val posts: LiveData<Event<Resource<List<Post>>>>
+        get() = _posts
+
+    init {
+        loadPosts()
+    }
+
+    fun loadPosts(){
+        _posts.postValue(Event(Resource.Loading()))
+        viewModelScope.launch(dispatcher) {
+            val result = repository.getRecentPosts()
+            _posts.postValue(Event(result))
+        }
+    }
 
     fun getUser(userId: String){
         _getUserStatus.postValue(Event(Resource.Loading()))

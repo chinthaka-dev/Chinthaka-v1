@@ -218,21 +218,21 @@ abstract class BasePostFragment(
         basePostViewModel.likePostStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 curLikedIndex?.let { index ->
-                    postAdapter.peek(index)?.isLiking = false
+                    postAdapter.posts[index].isLiking = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)
             },
             onLoading = {
                 curLikedIndex?.let { index ->
-                    postAdapter.peek(index)?.isLiking = true
+                    postAdapter.posts[index].isLiking = true
                     postAdapter.notifyItemChanged(index)
                 }
             }
         ) { isLiked ->
             curLikedIndex?.let { index ->
                 val userId = FirebaseAuth.getInstance().uid!!
-                postAdapter.peek(index)?.apply {
+                postAdapter.posts[index].apply {
                     this.isLiked = isLiked
                     isLiking = false
                     if (isLiked) {
@@ -248,20 +248,20 @@ abstract class BasePostFragment(
         basePostViewModel.bookmarkPostStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 curBookmarkedIndex?.let { index ->
-                    postAdapter.peek(index)?.isBookmarking = false
+                    postAdapter.posts[index].isBookmarking = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)
             },
             onLoading = {
                 curBookmarkedIndex?.let { index ->
-                    postAdapter.peek(index)?.isBookmarking = true
+                    postAdapter.posts[index].isBookmarking = true
                     postAdapter.notifyItemChanged(index)
                 }
             }
         ) { isBookmarked ->
             curBookmarkedIndex?.let { index ->
-                postAdapter.peek(index)?.apply {
+                postAdapter.posts[index].apply {
                     this.isBookmarked = isBookmarked
                     isBookmarking = false
                 }
@@ -272,20 +272,20 @@ abstract class BasePostFragment(
         basePostViewModel.attemptedByUpdateStatus.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 curAnsweredIndex?.let { index ->
-                    postAdapter.peek(index)?.isAttempting = false
+                    postAdapter.posts[index].isAttempting = false
                     postAdapter.notifyItemChanged(index)
                 }
                 snackbar(it)
             },
             onLoading = {
                 curAnsweredIndex?.let { index ->
-                    postAdapter.peek(index)?.isAttempting = true
+                    postAdapter.posts[index]?.isAttempting = true
                     postAdapter.notifyItemChanged(index)
                 }
             }
         ) { isAttempted ->
             curAnsweredIndex?.let { index ->
-                postAdapter.peek(index)?.apply {
+                postAdapter.posts[index].apply {
                     isAttempting = false
                 }
                 postAdapter.notifyItemChanged(index)

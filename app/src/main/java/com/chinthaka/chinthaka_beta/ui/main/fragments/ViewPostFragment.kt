@@ -40,7 +40,7 @@ class ViewPostFragment : BasePostFragment(R.layout.fragment_view_post) {
         viewModel.postId = args.postId
         setUpRecyclerView()
 
-        //Paging is being integrated
+       /* //Paging is being integrated
         lifecycleScope.launch {
             viewModel.pagingFlow.collect {
                 postAdapter.submitData(it)
@@ -53,7 +53,7 @@ class ViewPostFragment : BasePostFragment(R.layout.fragment_view_post) {
                 fragmentBinding.viewPostProgressBar?.isVisible =
                     it.refresh is LoadState.Loading || it.append is LoadState.Loading
             }
-        }
+        }*/
 
         postAdapter.setOnExpandClickListener{ post, i ->
             curBookmarkedIndex = i

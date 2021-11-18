@@ -7,6 +7,7 @@ import com.chinthaka.chinthaka_beta.data.entities.User
 import com.chinthaka.chinthaka_beta.other.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
@@ -29,12 +30,27 @@ class FeedPostsPagingSource(
             val interestsForCurrentUser = currentUser.selectedInterests
             val resultSet: MutableSet<Post> = HashSet()
 
-            val recentPosts = db.collection("posts")
-                .whereIn("category", interestsForCurrentUser)
+            /*val recentPosts = db.collection("posts")
+                //.whereIn("category", interestsForCurrentUser)
+                .orderBy("id",Query.Direction.DESCENDING)
+                //.orderBy("popularityIndex",Query.Direction.DESCENDING)
                 .limit(20)
                 .get()
                 .await()
-                .toObjects(Post::class.java)
+                .toObjects(Post::class.java)*/
+
+            val recentPosts: MutableSet<Post> = HashSet()
+            val t1 = db.collection("posts")
+                .orderBy("date",Query.Direction.DESCENDING)
+                //.orderBy("popularityIndex",Query.Direction.DESCENDING)
+
+            t1.get().addOnSuccessListener { documents ->
+
+                for(document in documents){
+                    recentPosts.add(document.toObject(Post::class.java))
+                }
+
+            }
 
             val attemptedButUnansweredPostIds = currentUser.postsAttempted
 

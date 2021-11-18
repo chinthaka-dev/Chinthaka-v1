@@ -35,8 +35,9 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
         subscribeToObservers()
 
         viewModel.getUser(FirebaseAuth.getInstance().uid!!)
+        viewModel.loadPosts()
 
-        //Paging is being integrated
+/*        //Paging is being integrated
         lifecycleScope.launch {
             viewModel.pagingFlow.collect {
                 postAdapter.submitData(it)
@@ -49,7 +50,7 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
                 fragmentHomeBinding.allPostsProgressBar?.isVisible =
                     it.refresh is LoadState.Loading || it.append is LoadState.Loading
             }
-        }
+        }*/
 
     }
 
@@ -63,6 +64,18 @@ class HomeFragment : BasePostFragment(R.layout.fragment_home) {
         ) { user ->
             fragmentHomeBinding.userProgressBar.isVisible = false
             (requireActivity() as NavigationUpdateListener).onUserDataChanged(user)
+        })
+
+        viewModel.posts.observe(viewLifecycleOwner, EventObserver(
+            onError = {
+                fragmentHomeBinding.userProgressBar.isVisible = false
+                snackbar(it)
+            },
+            onLoading = {
+                fragmentHomeBinding.userProgressBar.isVisible = true }
+        ) { posts ->
+            postAdapter.posts = posts
+            fragmentHomeBinding.userProgressBar.isVisible = false
         })
     }
 
