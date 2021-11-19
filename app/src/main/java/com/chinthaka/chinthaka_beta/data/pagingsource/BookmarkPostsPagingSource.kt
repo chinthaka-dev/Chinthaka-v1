@@ -39,16 +39,24 @@ class BookmarkPostsPagingSource(
                     .get()
                     .await()
 
-                // curPage -> Query Snapshot
+                val userIdToUserMap: MutableMap<String,User> = mutableMapOf()
 
                 val parsedPage = curPage!!.toObjects(Post::class.java).onEach { post ->
-                    val user = db.collection("users")
-                        .document(post.authorUId).get().await().toObject(User::class.java)!!
-                    post.authorProfilePictureUrl = user.profilePictureUrl
-                    post.authorUserName = user.userName
-                    post.isLiked = uid in post.likedBy
-                    post.isBookmarked = post.id in currentUser.bookmarks
-//                    post.answer = answer
+                    if(userIdToUserMap.containsKey(post.authorUId)) {
+                        val user = userIdToUserMap.get(post.authorUId)
+                        post.authorProfilePictureUrl = user!!.profilePictureUrl
+                        post.authorUserName = user.userName
+                        post.isLiked = uid in post.likedBy
+                        post.isBookmarked = post.id in currentUser.bookmarks
+                    } else {
+                        val user = db.collection("users")
+                            .document(post.authorUId).get().await().toObject(User::class.java)!!
+                        post.authorProfilePictureUrl = user.profilePictureUrl
+                        post.authorUserName = user.userName
+                        post.isLiked = uid in post.likedBy
+                        post.isBookmarked = post.id in currentUser.bookmarks
+                        userIdToUserMap.put(post.authorUId,user)
+                    }
                 }
 
                 resultList.addAll(parsedPage)

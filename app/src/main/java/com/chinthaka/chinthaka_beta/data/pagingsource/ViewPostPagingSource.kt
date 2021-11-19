@@ -42,7 +42,6 @@ class ViewPostPagingSource(
                 post.isBookmarked = post.id in currentUser.bookmarks
             }
 
-
             resultList.add(post)
 
             LoadResult.Page(

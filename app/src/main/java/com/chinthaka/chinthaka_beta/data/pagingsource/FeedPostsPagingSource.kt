@@ -4,21 +4,27 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.chinthaka.chinthaka_beta.data.entities.Post
 import com.chinthaka.chinthaka_beta.data.entities.User
-import com.chinthaka.chinthaka_beta.other.Constants
+import com.chinthaka.chinthaka_beta.other.Resource
+import com.chinthaka.chinthaka_beta.other.safeCall
+import com.chinthaka.chinthaka_beta.other.safeCallFeed
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class FeedPostsPagingSource(
     private val db: FirebaseFirestore
 ) : PagingSource<QuerySnapshot, Post>() {
 
-    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> {
+    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> = withContext(
+        Dispatchers.IO) {
         // Load the posts
         // Everytime the data is paginated
 
-        return try {
+        safeCallFeed {
             val uid = FirebaseAuth.getInstance().uid!!
             val currentUser = db.collection("users")
                 .document(uid)
@@ -27,10 +33,11 @@ class FeedPostsPagingSource(
                 .toObject(User::class.java)!!
 
             val interestsForCurrentUser = currentUser.selectedInterests
-            val resultSet: MutableSet<Post> = HashSet()
+            val resultSet: MutableSet<Post> = LinkedHashSet()
 
             val recentPosts = db.collection("posts")
                 .whereIn("category", interestsForCurrentUser)
+                .orderBy("date",Query.Direction.DESCENDING)
                 .limit(20)
                 .get()
                 .await()
@@ -65,14 +72,25 @@ class FeedPostsPagingSource(
             recentPosts.removeAll(answeredPosts)
             resultSet.addAll(recentPosts)
 
+            val userIdToUserMap: MutableMap<String,User> = mutableMapOf()
+
             val parsedPage = resultSet
                 .onEach { post ->
-                    val user = db.collection("users")
-                        .document(post.authorUId).get().await().toObject(User::class.java)!!
-                    post.authorProfilePictureUrl = user.profilePictureUrl
-                    post.authorUserName = user.userName
-                    post.isLiked = uid in post.likedBy
-                    post.isBookmarked = post.id in currentUser!!.bookmarks
+                    if(userIdToUserMap.containsKey(post.authorUId)) {
+                        val user = userIdToUserMap.get(post.authorUId)
+                        post.authorProfilePictureUrl = user!!.profilePictureUrl
+                        post.authorUserName = user.userName
+                        post.isLiked = uid in post.likedBy
+                        post.isBookmarked = post.id in currentUser.bookmarks
+                    } else {
+                        val user = db.collection("users")
+                            .document(post.authorUId).get().await().toObject(User::class.java)!!
+                        post.authorProfilePictureUrl = user.profilePictureUrl
+                        post.authorUserName = user.userName
+                        post.isLiked = uid in post.likedBy
+                        post.isBookmarked = post.id in currentUser.bookmarks
+                        userIdToUserMap.put(post.authorUId,user)
+                    }
                 }.toList()
 
 
@@ -81,8 +99,6 @@ class FeedPostsPagingSource(
                 null,
                 null
             )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
         }
     }
 
