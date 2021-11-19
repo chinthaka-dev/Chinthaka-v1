@@ -19,12 +19,11 @@ class FeedPostsPagingSource(
     private val db: FirebaseFirestore
 ) : PagingSource<QuerySnapshot, Post>() {
 
-    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> = withContext(
-        Dispatchers.IO) {
+    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, Post> {
         // Load the posts
         // Everytime the data is paginated
 
-        safeCallFeed {
+        return try {
             val uid = FirebaseAuth.getInstance().uid!!
             val currentUser = db.collection("users")
                 .document(uid)
@@ -99,6 +98,8 @@ class FeedPostsPagingSource(
                 null,
                 null
             )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
         }
     }
 
