@@ -62,14 +62,14 @@ class FeedPostsPagingSource(
                 resultSet.addAll(attemptedButUnansweredPosts)
             }
 
+            resultSet.addAll(recentPosts)
             val answeredPosts = mutableListOf<Post>()
-            recentPosts.forEach { post ->
+            resultSet.forEach { post ->
                 if(post.answerViewedBy.contains(uid) || post.answeredBy.contains(uid)) {
                     answeredPosts.add(post)
                 }
             }
-            recentPosts.removeAll(answeredPosts)
-            resultSet.addAll(recentPosts)
+            resultSet.removeAll(answeredPosts)
 
             val userIdToUserMap: MutableMap<String,User> = mutableMapOf()
 
